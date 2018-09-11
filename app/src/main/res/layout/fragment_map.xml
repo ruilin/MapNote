@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        mapbox_cameraTargetLat="-36.84"
+        mapbox_cameraTargetLng="174.76"
+        mapbox_cameraZoom="10"
+        mapbox_cameraBearing="34.33"
+        mapbox_cameraTilt="50.25"
+        mapbox_styleUrl="@string/mapbox_style_satellite_streets"
+        mapbox_cameraZoomMax="12.41"
+        mapbox_cameraZoomMin="6"
+        mapbox_uiRotateGestures="false"
+        />
+</android.support.constraint.ConstraintLayout>

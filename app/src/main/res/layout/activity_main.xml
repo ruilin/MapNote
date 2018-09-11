@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.muyu.mapnote.map.activity.MainActivity">
+
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        mapbox_cameraTargetLat="-36.84"
+        mapbox_cameraTargetLng="174.76"
+        mapbox_cameraZoom="10"
+        mapbox_cameraBearing="34.33"
+        mapbox_cameraTilt="50.25"
+        mapbox_styleUrl="@string/mapbox_style_satellite_streets"
+        mapbox_cameraZoomMax="12.41"
+        mapbox_cameraZoomMin="6"
+        mapbox_uiRotateGestures="false"
+        />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/main_bt_nav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="导航"/>
+</android.support.constraint.ConstraintLayout>
