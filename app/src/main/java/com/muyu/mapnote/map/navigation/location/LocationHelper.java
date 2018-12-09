@@ -9,6 +9,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.CoordinateConverter;
 import com.muyu.mapnote.framework.util.PositionUtil;
+import com.muyu.mapnote.framework.util.Msg;
 
 import java.util.ArrayList;
 
@@ -78,11 +79,13 @@ public enum LocationHelper {
                 //定位回调监听器
                 int errorCode = aMapLocation.getErrorCode();
                 if (errorCode != AMapLocation.LOCATION_SUCCESS) {
+                    Msg.show("定位失败：" + errorCode);
                     return;
                 }
                 final double lat = aMapLocation.getLatitude();
                 final double lng = aMapLocation.getLongitude();
                 if (CoordinateConverter.isAMapDataAvailable(lat, lng)) {
+                    // 在中国
                     PositionUtil.Gps point = PositionUtil.gcj_To_Gps84(lat, lng);
                     aMapLocation.setLatitude(point.getWgLat());
                     aMapLocation.setLongitude(point.getWgLon());
@@ -105,6 +108,14 @@ public enum LocationHelper {
         // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
         //启动定位
         mLocationClient.startLocation();
+    }
+
+    public static boolean isInChina(double latitude, double longitude) {
+        CoordinateConverter converter  = new CoordinateConverter(MapApplication.getInstance());
+        //返回true代表当前位置在大陆、港澳地区，反之不在。
+        boolean isAMapDataAvailable = converter.isAMapDataAvailable(latitude,longitude);
+        //第一个参数为纬度，第二个为经度，纬度和经度均为高德坐标系。
+        return isAMapDataAvailable;
     }
 
     public static double[] checkChineseCoor(double lat, double lng) {

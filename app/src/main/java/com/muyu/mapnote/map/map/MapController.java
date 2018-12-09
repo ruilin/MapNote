@@ -36,6 +36,7 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.SupportMapFragment;
 import com.mapbox.mapboxsdk.maps.UiSettings;
 import com.mapbox.mapboxsdk.plugins.localization.LocalizationPlugin;
+import com.mapbox.mapboxsdk.plugins.localization.MapLocale;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.plugins.locationlayer.modes.RenderMode;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
@@ -98,12 +99,14 @@ public class MapController extends ActivityController implements PermissionsList
             permissionsManager.requestLocationPermissions(mActivity);
         }
 
-        LatLng patagonia = new LatLng(-52.6885, -70.1395);
+        // 默认设置
         MapboxMapOptions options = new MapboxMapOptions();
+        options.maxZoomPreference(19);
         options.styleUrl(Style.MAPBOX_STREETS);
+        LatLng paris = new LatLng(52.5173,13.3889);
         options.camera(new CameraPosition.Builder()
-                .target(patagonia)
-                .zoom(9)
+                .target(paris)
+                .zoom(2.2)
                 .build());
         // Create map fragment
         mMapFragment = SupportMapFragment.newInstance(options);
@@ -139,9 +142,10 @@ public class MapController extends ActivityController implements PermissionsList
         // 本地化
         try {
             LocalizationPlugin localizationPlugin = new LocalizationPlugin(mapView, mapboxMap);
-            localizationPlugin.matchMapLanguageWithDeviceDefault();
-            //localizationPlugin.setMapLanguage(MapLocale.SIMPLIFIED_CHINESE);
-            localizationPlugin.setCameraToLocaleCountry();
+//            localizationPlugin.matchMapLanguageWithDeviceDefault();
+            localizationPlugin.setMapLanguage(MapLocale.SIMPLIFIED_CHINESE);
+            // 镜头转移到所在国家
+            // localizationPlugin.setCameraToLocaleCountry();
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
@@ -280,8 +284,10 @@ public class MapController extends ActivityController implements PermissionsList
     }
 
     private void setCameraPosition(Location location) {
-        mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                new LatLng(location.getLatitude(), location.getLongitude()), 13));
+        if (!LocationHelper.isInChina(location.getLatitude(), location.getLongitude())) {
+            mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(location.getLatitude(), location.getLongitude()), 13));
+        }
     }
 
     @Override
