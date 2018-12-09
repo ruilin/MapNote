@@ -142,9 +142,10 @@ public class MapController extends ActivityController implements PermissionsList
             localizationPlugin.matchMapLanguageWithDeviceDefault();
             //localizationPlugin.setMapLanguage(MapLocale.SIMPLIFIED_CHINESE);
             localizationPlugin.setCameraToLocaleCountry();
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
+
 
         // UI设置
         UiSettings uiSettings = mapboxMap.getUiSettings();

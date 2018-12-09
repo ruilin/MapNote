@@ -10,6 +10,8 @@ buildscript {
         maven {
             url "http://mvn.leancloud.cn/nexus/content/repositories/public"
         }
+        //mapbox
+        maven { url "https://mapbox.bintray.com/mapbox" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.1'
@@ -30,6 +32,8 @@ allprojects {
         maven {
             url "http://mvn.leancloud.cn/nexus/content/repositories/public"
         }
+        //mapbox
+        maven { url "https://mapbox.bintray.com/mapbox" }
     }
 }
 
