@@ -1,9 +1,8 @@
-package com.muyu.mapnote.base;
+package com.muyu.mapnote.framework.controller;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.muyu.mapnote.map.navigation.location.LocationHelper;
+import android.support.annotation.NonNull;
 
 public abstract class ActivityController {
 
@@ -34,5 +33,8 @@ public abstract class ActivityController {
     }
 
     public void onRemoved() {
+    }
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
     }
 }

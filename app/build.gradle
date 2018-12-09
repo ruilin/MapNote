@@ -20,6 +20,24 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [
+                    APP_NAME      : "@string/app_name",
+                    APPLICATION_ID: "@string/application_id"
+            ]
+            ndk {
+                abiFilters "armeabi", "armeabi-v7a"
+            }
+        }
+        debug {
+            //为debug版本的包名添加.debug后缀
+            applicationIdSuffix ".debug"
+            manifestPlaceholders = [
+                    APP_NAME      : "@string/app_name_debug",
+                    APPLICATION_ID: "@string/application_id_debug"
+            ]
+            ndk {
+                abiFilters "armeabi", "armeabi-v7a", "x86"
+            }
         }
     }
     //为了解决部分第三方库重复打包了META-INF的问题
@@ -58,6 +76,11 @@ dependencies {
     }
     // 搜索
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places:0.4.0'
+    // China flavor dependency
+//    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-china:0.4.5'
+    // Global flavor dependency
+//    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-china-global:0.4.5'
+
 
     // LeanCloud 基础包
     compile 'cn.leancloud.android:avoscloud-sdk:v4.6.4'

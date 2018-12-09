@@ -2,13 +2,13 @@ package com.muyu.mapnote.map.navigation.location;
 
 import android.location.Location;
 
-import com.mapbox.geojson.Point;
 import com.muyu.mapnote.app.MapApplication;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.CoordinateConverter;
+import com.muyu.mapnote.framework.util.PositionUtil;
 
 import java.util.ArrayList;
 

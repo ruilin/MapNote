@@ -13,12 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.amap.api.location.CoordinateConverter;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
@@ -45,7 +40,6 @@ import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.plugins.locationlayer.modes.RenderMode;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
-import com.mapbox.mapboxsdk.plugins.places.common.PlaceConstants;
 import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
@@ -55,9 +49,8 @@ import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.muyu.mapnote.R;
-import com.muyu.mapnote.base.ActivityController;
-import com.muyu.mapnote.map.activity.MapActivity;
-import com.muyu.mapnote.map.fragment.MapFragment;
+import com.muyu.mapnote.framework.controller.ActivityController;
+import com.muyu.mapnote.framework.controller.BaseActivity;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 
 import java.util.List;
@@ -69,7 +62,7 @@ import retrofit2.Response;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textField;
 
 public class MapController extends ActivityController implements PermissionsListener, OnMapReadyCallback {
-    private static final String TAG = MapFragment.class.getSimpleName();
+    private static final String TAG = MapController.class.getSimpleName();
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
     private FragmentActivity mActivity;
     private PermissionsManager permissionsManager;
@@ -89,12 +82,14 @@ public class MapController extends ActivityController implements PermissionsList
     private View mLayout;
     private SupportMapFragment mMapFragment;
 
-    public MapController() {
+    private OnMapEventListener mListener;
 
+    public MapController(OnMapEventListener listener) {
+        this.mListener = listener;
     }
 
     @Override
-    public void init(FragmentActivity activity) {
+    public void onCreate(BaseActivity activity) {
         mActivity = activity;
         mLayout = mActivity.findViewById(R.id.map_content);
         permissionsManager = new PermissionsManager(this);
@@ -136,8 +131,8 @@ public class MapController extends ActivityController implements PermissionsList
         mapView = (MapView) mMapFragment.getView();
         initNavigation();
         initUi();
-        initSearch();
         enableLocationPlugin();
+        mListener.onMapCreated(mapboxMap, mapView);
     }
 
     private void initUi() {
@@ -154,8 +149,8 @@ public class MapController extends ActivityController implements PermissionsList
         // UI设置
         UiSettings uiSettings = mapboxMap.getUiSettings();
         uiSettings.setCompassEnabled(true);             //指南针
-        uiSettings.setTiltGesturesEnabled(true);        //设置是否可以调整地图倾斜角
-        uiSettings.setRotateGesturesEnabled(true);      //设置是否可以旋转地图
+        uiSettings.setTiltGesturesEnabled(false);        //设置是否可以调整地图倾斜角
+        uiSettings.setRotateGesturesEnabled(false);     //设置是否可以旋转地图
         uiSettings.setAttributionEnabled(false);        //设置是否显示那个提示按钮
         uiSettings.setLogoEnabled(false);               //隐藏logo
 
@@ -205,19 +200,6 @@ public class MapController extends ActivityController implements PermissionsList
         }
     }
 
-    private void initSearch() {
-        addUserLocations();
-        // Add the symbol layer icon to map for future use
-        Bitmap icon = BitmapFactory.decodeResource(
-                mActivity.getResources(), R.drawable.blue_marker_view);
-        mapboxMap.addImage(symbolIconId, icon);
-
-        // Create an empty GeoJSON source using the empty feature collection
-        setUpSource();
-
-        // Set up a new symbol layer for displaying the searched location's feature coordinates
-        setupLayer();
-    }
     private void getRoute(Point origin, Point destination) {
         NavigationRoute.builder(mActivity)
                 .accessToken(Mapbox.getAccessToken())
@@ -254,48 +236,6 @@ public class MapController extends ActivityController implements PermissionsList
                 });
     }
 
-    public CarmenFeature home;
-    public CarmenFeature work;
-    private void addUserLocations() {
-        home = CarmenFeature.builder().text("Mapbox SF Office")
-                .geometry(Point.fromLngLat(-122.399854, 37.7884400))
-                .placeName("85 2nd St, San Francisco, CA")
-                .id("mapbox-sf")
-                .properties(new JsonObject())
-                .build();
-
-        work = CarmenFeature.builder().text("Mapbox DC Office")
-                .placeName("740 15th Street NW, Washington DC")
-                .geometry(Point.fromLngLat(-77.0338348, 38.899750))
-                .id("mapbox-dc")
-                .properties(new JsonObject())
-                .build();
-    }
-
-    public void toSearhMode() {
-        Intent intent = new PlaceAutocomplete.IntentBuilder()
-                .accessToken(Mapbox.getAccessToken())
-                .placeOptions(PlaceOptions.builder()
-                        .backgroundColor(Color.parseColor("#EEEEEE"))
-                        .limit(10)
-                        .addInjectedFeature(home)
-                        .addInjectedFeature(work)
-                        .build(PlaceOptions.MODE_CARDS))
-                .build(mActivity);
-        mActivity.startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
-    }
-
-    private void setUpSource() {
-        GeoJsonSource geoJsonSource = new GeoJsonSource(geojsonSourceLayerId);
-        mapboxMap.addSource(geoJsonSource);
-    }
-
-    private void setupLayer() {
-        SymbolLayer selectedLocationSymbolLayer = new SymbolLayer("SYMBOL_LAYER_ID", geojsonSourceLayerId);
-        selectedLocationSymbolLayer.withProperties(PropertyFactory.iconImage(symbolIconId));
-        mapboxMap.addLayer(selectedLocationSymbolLayer);
-    }
-
     @SuppressWarnings( {"MissingPermission"})
     private void enableLocationPlugin() {
         // Check if permissions are enabled and if not request
@@ -314,29 +254,38 @@ public class MapController extends ActivityController implements PermissionsList
 
     @SuppressWarnings( {"MissingPermission"})
     private void initializeLocationEngine() {
-        LocationHelper.INSTANCE.init();
-        LocationHelper.INSTANCE.start();
-        LocationHelper.INSTANCE.addListener(new LocationHelper.OnLocationListener() {
-            @Override
-            public void onLocationUpdate(Location location) {
-                originLocation = location;
-                if (isFirst) {
-                    setCameraPosition(location);
-                    isFirst = false;
+        try {
+            LocationHelper.INSTANCE.init();
+            LocationHelper.INSTANCE.start();
+            LocationHelper.INSTANCE.addListener(new LocationHelper.OnLocationListener() {
+                @Override
+                public void onLocationUpdate(Location location) {
+                    originLocation = location;
+                    if (isFirst) {
+                        setCameraPosition(location);
+                        isFirst = false;
+                    }
+                    locationPlugin.forceLocationUpdate(location);
                 }
-                locationPlugin.forceLocationUpdate(location);
+            });
+            Location lastLocation = LocationHelper.INSTANCE.getLastLocation();
+            if (lastLocation != null) {
+                originLocation = lastLocation;
+                setCameraPosition(lastLocation);
             }
-        });
-        Location lastLocation = LocationHelper.INSTANCE.getLastLocation();
-        if (lastLocation != null) {
-            originLocation = lastLocation;
-            setCameraPosition(lastLocation);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void setCameraPosition(Location location) {
         mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                 new LatLng(location.getLatitude(), location.getLongitude()), 13));
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

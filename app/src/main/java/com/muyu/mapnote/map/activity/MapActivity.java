@@ -1,52 +1,31 @@
 package com.muyu.mapnote.map.activity;
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.amap.api.location.CoordinateConverter;
-import com.mapbox.android.core.permissions.PermissionsManager;
-import com.mapbox.api.geocoding.v5.models.CarmenFeature;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
-import com.mapbox.mapboxsdk.constants.Style;
-import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.android.telemetry.MapEventFactory;
+import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapbox.mapboxsdk.maps.SupportMapFragment;
-import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
-import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.muyu.mapnote.R;
-import com.muyu.mapnote.map.fragment.MapFragment;
+import com.muyu.mapnote.framework.controller.BaseActivity;
 import com.muyu.mapnote.map.map.MapController;
+import com.muyu.mapnote.map.map.OnMapEventListener;
+import com.muyu.mapnote.map.search.SearchPlaceController;
 
-public class MapActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MapActivity extends BaseActivity
+        implements OnMapEventListener, NavigationView.OnNavigationItemSelectedListener {
 
-    private SupportMapFragment mMapFragment;
-    private PermissionsManager permissionsManager;
-    private MapController mMapController = new MapController();
+    private MapController mMapController;
+    private SearchPlaceController mSearchPlaceController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,17 +52,18 @@ public class MapActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-        initFragment();
+        initController();
     }
 
-    private void initFragment() {
-        mMapController.init(this);
-//        FragmentManager fragmentManager = getFragmentManager();
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        mMapFragment = new MapFragment();
-//        transaction.add(R.id.map_content, mMapFragment);
-//        transaction.commit();
+    private void initController() {
+        mMapController = new MapController(this);
+        addController(mMapController);
+    }
+
+    @Override
+    public void onMapCreated(MapboxMap map, MapView mapView) {
+        mSearchPlaceController = new SearchPlaceController(map);
+        addController(mSearchPlaceController);
     }
 
     @Override
@@ -112,7 +92,8 @@ public class MapActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_search) {
-            mMapController.toSearhMode();
+            if (mSearchPlaceController != null)
+                mSearchPlaceController.toSearhMode();
             return true;
         } else if (id == R.id.action_settings) {
             return true;
@@ -144,11 +125,5 @@ public class MapActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        mMapController.onActivityResult(requestCode, resultCode, data);
     }
 }
