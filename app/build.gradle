@@ -83,6 +83,8 @@ dependencies {
     // Global flavor dependency
 //    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-china-global:0.4.5'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-china:1.1.0'
+    // 地图标签
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview:0.1.0'
 
     // LeanCloud 基础包
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'

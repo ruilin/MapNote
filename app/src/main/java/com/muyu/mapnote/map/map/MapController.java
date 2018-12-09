@@ -52,7 +52,9 @@ import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.framework.controller.ActivityController;
 import com.muyu.mapnote.framework.controller.BaseActivity;
+import com.muyu.mapnote.framework.controller.SubController;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
+import com.muyu.mapnote.map.poi.PoiController;
 
 import java.util.List;
 
@@ -79,11 +81,14 @@ public class MapController extends ActivityController implements PermissionsList
 
     private String geojsonSourceLayerId = "geojsonSourceLayerId";
     private String symbolIconId = "symbolIconId";
-    private MapView mapView;
     private View mLayout;
+    private MapView mapView;
     private SupportMapFragment mMapFragment;
 
     private OnMapEventListener mListener;
+
+    /* 插件 */
+    private PoiController mPoiController = new PoiController();
 
     public MapController(OnMapEventListener listener) {
         this.mListener = listener;
@@ -98,6 +103,8 @@ public class MapController extends ActivityController implements PermissionsList
             permissionsManager = new PermissionsManager(this);
             permissionsManager.requestLocationPermissions(mActivity);
         }
+
+        addController(activity, mPoiController);
 
         // 默认设置
         MapboxMapOptions options = new MapboxMapOptions();
@@ -119,6 +126,11 @@ public class MapController extends ActivityController implements PermissionsList
     }
 
     @Override
+    protected void onDestroy() {
+        mapView.onDestroy();
+    }
+
+    @Override
     public void onExplanationNeeded(List<String> permissionsToExplain) {
 
     }
@@ -136,6 +148,10 @@ public class MapController extends ActivityController implements PermissionsList
         initUi();
         enableLocationPlugin();
         mListener.onMapCreated(mapboxMap, mapView);
+
+        for (SubController controller : getSubControllers()) {
+            ((MapPluginController) controller).onMapCreated(mapboxMap, mapView);
+        }
     }
 
     private void initUi() {

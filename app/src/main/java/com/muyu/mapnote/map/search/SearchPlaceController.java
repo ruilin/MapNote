@@ -41,7 +41,7 @@ public class SearchPlaceController extends ActivityController {
         addUserLocations();
         // Add the symbol layer icon to map for future use
         Bitmap icon = BitmapFactory.decodeResource(
-                mActivity.getResources(), R.drawable.blue_marker_view);
+                mActivity.getResources(), R.drawable.blue_marker);
         mMap.addImage(symbolIconId, icon);
 
         // Create an empty GeoJSON source using the empty feature collection
