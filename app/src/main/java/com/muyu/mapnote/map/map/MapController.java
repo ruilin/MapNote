@@ -106,7 +106,7 @@ public class MapController extends ActivityController implements PermissionsList
         LatLng paris = new LatLng(52.5173,13.3889);
         options.camera(new CameraPosition.Builder()
                 .target(paris)
-                .zoom(2.3)
+                .zoom(2.4)
                 .build());
         // Create map fragment
         mMapFragment = SupportMapFragment.newInstance(options);

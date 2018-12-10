@@ -64,6 +64,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    // --------------------
+    // MapBox
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.4.0'
     //    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.7.2'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-core:0.2.1'
@@ -84,6 +87,9 @@ dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-china:1.1.0'
     // 地图标签
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview:0.1.0'
+    // --------------------
+
+    // --------------------
     // LeanCloud 基础包
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
     // 推送与实时聊天需要的包
@@ -99,6 +105,14 @@ dependencies {
     //    compile('com.sina.weibo.sdk:core:4.1.4:openDefaultRelease@aar')
     // LeanCloud 应用内搜索包
     implementation 'cn.leancloud.android:avoscloud-search:v4.6.4@aar'
+    // --------------------
+
+    // --------------------
+    // 高德定位
     implementation files('libs/AMap_Location_V4.4.0_20181122.jar')
+    // 极简框架
     implementation project(':minimalism')
+    // 导航栏控件
+    implementation 'com.ashokvarma.android:bottom-navigation-bar:2.1.0'
+    // --------------------
 }

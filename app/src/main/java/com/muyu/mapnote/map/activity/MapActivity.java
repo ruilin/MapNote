@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.ashokvarma.bottomnavigation.BottomNavigationBar;
+import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.mapnote.R;
@@ -25,6 +27,7 @@ public class MapActivity extends BaseActivity
 
     private MapController mMapController;
     private SearchPlaceController mSearchPlaceController;
+    private BottomNavigationBar bottomNavigationBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +36,15 @@ public class MapActivity extends BaseActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        initMenu();
+
         FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setVisibility(View.GONE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
 
@@ -57,6 +63,34 @@ public class MapActivity extends BaseActivity
     private void initController() {
         mMapController = new MapController(this);
         addController(mMapController);
+    }
+
+    private void initMenu() {
+        /*1.首先进行fvb*/
+        bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_nav_bar);
+        /*2.进行必要的设置*/
+        bottomNavigationBar.setBarBackgroundColor(R.color.mapbox_plugins_white);
+        bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
+        bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);//适应大小
+        /*3.添加Tab*/
+        bottomNavigationBar.addItem(new BottomNavigationItem(
+                R.drawable.ic_arrow_head_casing,R.string.mapbox_attributionsDialogTitle)
+                .setInactiveIconResource(R.drawable.ic_arrow_up)
+                .setActiveColorResource(R.color.colorPrimary))
+                .addItem(new BottomNavigationItem(
+                        R.drawable.ic_arrow_head_casing,R.string.action_search)
+                        .setInactiveIconResource(R.drawable.ic_close)
+                        .setActiveColorResource(R.color.colorPrimaryDark))
+                .addItem(new BottomNavigationItem(
+                        R.drawable.ic_arrow_head_casing,R.string.action_search)
+                        .setInactiveIconResource(R.drawable.ic_launcher_foreground)
+                        .setActiveColorResource(R.color.mapbox_navigation_route_alternative_congestion_yellow))
+                .addItem(new BottomNavigationItem(
+                        R.drawable.ic_arrow_head_casing,R.string.action_search)
+                        .setInactiveIconResource(R.drawable.ic_launcher_background)
+                        .setActiveColorResource(R.color.colorAccent))
+                .setFirstSelectedPosition(0)//默认显示面板
+                .initialise();//初始化
     }
 
     @Override
