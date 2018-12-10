@@ -1,22 +1,14 @@
 package com.muyu.mapnote.app;
 
-import android.app.Application;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.support.multidex.MultiDex;
-import android.util.Log;
 
-import com.avos.avoscloud.AVOSCloud;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.muyu.mapnote.framework.app.BaseApplication;
+import com.muyu.minimalism.framework.app.BaseApplication;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Locale;
 
 /**
- * Created by zzc on 2018/1/23.
+ * Created by ruilin on 2018/1/23.
  */
 
 public class MapApplication extends BaseApplication {

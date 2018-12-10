@@ -64,9 +64,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.4.0'
-//    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.7.2'
+    //    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.7.2'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-core:0.2.1'
     // 本地化
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization:0.5.0'
@@ -79,13 +78,12 @@ dependencies {
     // 搜索
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places:0.6.0'
     // China flavor dependency
-//    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-china:0.4.5'
+    //    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-china:0.4.5'
     // Global flavor dependency
-//    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-china-global:0.4.5'
+    //    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-china-global:0.4.5'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-china:1.1.0'
     // 地图标签
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview:0.1.0'
-
     // LeanCloud 基础包
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
     // 推送与实时聊天需要的包
@@ -102,4 +100,5 @@ dependencies {
     // LeanCloud 应用内搜索包
     implementation 'cn.leancloud.android:avoscloud-search:v4.6.4@aar'
     implementation files('libs/AMap_Location_V4.4.0_20181122.jar')
+    implementation project(':minimalism')
 }

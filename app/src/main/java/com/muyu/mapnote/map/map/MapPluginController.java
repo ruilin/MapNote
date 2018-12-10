@@ -2,7 +2,7 @@ package com.muyu.mapnote.map.map;
 
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.muyu.mapnote.framework.controller.SubController;
+import com.muyu.minimalism.framework.controller.SubController;
 
 public abstract class MapPluginController extends SubController {
 

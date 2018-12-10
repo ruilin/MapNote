@@ -1,10 +1,10 @@
-package com.muyu.mapnote.framework.controller;
+package com.muyu.minimalism.framework.controller;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import com.muyu.mapnote.framework.app.BaseActivity;
+import com.muyu.minimalism.framework.app.BaseActivity;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.muyu.mapnote.framework.util;
+package com.muyu.minimalism.framework.util;
 
 /**
  * Created by Ruilin on 2017/8/6.

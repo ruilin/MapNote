@@ -8,8 +8,8 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.plugins.markerview.MarkerViewManager;
 import com.muyu.mapnote.R;
-import com.muyu.mapnote.framework.app.BaseActivity;
 import com.muyu.mapnote.map.map.MapPluginController;
+import com.muyu.minimalism.framework.app.BaseActivity;
 
 public class PoiController extends MapPluginController {
     private MarkerViewManager markerViewManager;

@@ -1,16 +1,20 @@
-package com.muyu.mapnote.framework.app;
+package com.muyu.minimalism.framework.app;
 
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.support.multidex.MultiDex;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 
-public class BaseApplication extends Application {
+public abstract class BaseApplication extends Application {
+    protected static BaseApplication Instance;
+
+    public static BaseApplication getInstance() {
+        return Instance;
+    }
 
     @Override
     protected void attachBaseContext(Context base) {

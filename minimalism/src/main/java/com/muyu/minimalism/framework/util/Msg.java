@@ -1,13 +1,12 @@
-package com.muyu.mapnote.framework.util;
+package com.muyu.minimalism.framework.util;
 
 import android.widget.Toast;
-
-import com.muyu.mapnote.BuildConfig;
-import com.muyu.mapnote.app.MapApplication;
+import com.muyu.minimalism.BuildConfig;
+import com.muyu.minimalism.framework.app.BaseApplication;
 
 public class Msg {
     public static void show(final String text) {
-        Toast.makeText(MapApplication.getInstance(), text, Toast.LENGTH_SHORT).show();
+        Toast.makeText(BaseApplication.getInstance(), text, Toast.LENGTH_SHORT).show();
     }
 
     public static void showDebug(final String text) {

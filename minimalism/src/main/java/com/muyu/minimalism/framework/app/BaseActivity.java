@@ -1,4 +1,4 @@
-package com.muyu.mapnote.framework.app;
+package com.muyu.minimalism.framework.app;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.muyu.mapnote.framework.controller.ActivityController;
+import com.muyu.minimalism.framework.controller.ActivityController;
 
 import java.util.ArrayList;
 

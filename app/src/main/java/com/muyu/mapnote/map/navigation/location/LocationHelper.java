@@ -8,8 +8,8 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.CoordinateConverter;
-import com.muyu.mapnote.framework.util.GpsUtil;
-import com.muyu.mapnote.framework.util.Msg;
+import com.muyu.minimalism.framework.util.GpsUtil;
+import com.muyu.minimalism.framework.util.Msg;
 
 import java.util.ArrayList;
 
@@ -79,7 +79,7 @@ public enum LocationHelper {
                 //定位回调监听器
                 int errorCode = aMapLocation.getErrorCode();
                 if (errorCode != AMapLocation.LOCATION_SUCCESS) {
-                    Msg.show("定位失败：" + errorCode);
+                    Msg.showDebug("定位失败：" + errorCode);
                     return;
                 }
                 final double lat = aMapLocation.getLatitude();

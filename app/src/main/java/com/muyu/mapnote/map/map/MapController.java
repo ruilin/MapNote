@@ -43,11 +43,11 @@ import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.muyu.mapnote.R;
-import com.muyu.mapnote.framework.controller.ActivityController;
-import com.muyu.mapnote.framework.app.BaseActivity;
-import com.muyu.mapnote.framework.controller.SubController;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.map.poi.PoiController;
+import com.muyu.minimalism.framework.app.BaseActivity;
+import com.muyu.minimalism.framework.controller.ActivityController;
+import com.muyu.minimalism.framework.controller.SubController;
 
 import java.util.List;
 

@@ -15,10 +15,10 @@ import android.view.MenuItem;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.mapnote.R;
-import com.muyu.mapnote.framework.app.BaseActivity;
 import com.muyu.mapnote.map.map.MapController;
 import com.muyu.mapnote.map.map.OnMapEventListener;
 import com.muyu.mapnote.map.search.SearchPlaceController;
+import com.muyu.minimalism.framework.app.BaseActivity;
 
 public class MapActivity extends BaseActivity
         implements OnMapEventListener, NavigationView.OnNavigationItemSelectedListener {
