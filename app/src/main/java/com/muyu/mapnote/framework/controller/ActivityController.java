@@ -4,52 +4,54 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.muyu.mapnote.framework.app.BaseActivity;
+
 import java.util.ArrayList;
 
 public abstract class ActivityController {
 
     private ArrayList<SubController> mControllerList = new ArrayList<>();
 
-    protected void addController(BaseActivity activity, SubController controller) {
+    public void addController(@NonNull BaseActivity activity, @NonNull SubController controller) {
         if (!mControllerList.contains(controller)) {
             mControllerList.add(controller);
-            controller.onCreate(activity);
+            controller.onAttached(activity);
         }
     }
 
-    protected void removeController(ActivityController controller) {
+    public void removeController(@NonNull ActivityController controller) {
         mControllerList.remove(controller);
         controller.onRemoved();
     }
 
-    protected final ArrayList<SubController> getSubControllers() {
+    public final ArrayList<SubController> getSubControllers() {
         return mControllerList;
     }
 
     public abstract void onCreate(BaseActivity activity);
 
-    protected void onStart() {
+    public void onStart() {
     }
 
-    protected void onResume() {
+    public void onResume() {
         for (SubController controller : mControllerList) {
             controller.onResume();
         }
     }
 
-    protected void onPause() {
+    public void onPause() {
         for (SubController controller : mControllerList) {
             controller.onPause();
         }
     }
 
-    protected void onStop() {
+    public void onStop() {
     }
 
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
     }
 
-    protected void onDestroy() {
+    public void onDestroy() {
         onRemoved();
     }
 
@@ -61,7 +63,7 @@ public abstract class ActivityController {
 
     public void onRemoved() {
         for (SubController controller : mControllerList) {
-            controller.onRemoved();
+            controller.onDetached();
         }
         mControllerList.clear();
     }

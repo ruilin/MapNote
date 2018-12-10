@@ -1,5 +1,7 @@
 package com.muyu.mapnote.framework.controller;
 
+import com.muyu.mapnote.framework.app.BaseActivity;
+
 import java.util.ArrayList;
 
 public abstract class SubController {
@@ -9,7 +11,7 @@ public abstract class SubController {
     protected void addController(BaseActivity activity, SubController controller) {
         if (!mControllerList.contains(controller)) {
             mControllerList.add(controller);
-            controller.onCreate(activity);
+            controller.onAttached(activity);
         }
     }
 
@@ -18,7 +20,7 @@ public abstract class SubController {
         mControllerList.remove(controller);
     }
 
-    public abstract void onCreate(BaseActivity activity);
+    public abstract void onAttached(BaseActivity activity);
 
     protected void onResume() {
         for (SubController controller : mControllerList) {
@@ -32,9 +34,9 @@ public abstract class SubController {
         }
     }
 
-    public void onRemoved() {
+    public void onDetached() {
         for (SubController controller : mControllerList) {
-            controller.onRemoved();
+            controller.onDetached();
         }
         mControllerList.clear();
     }

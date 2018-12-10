@@ -2,9 +2,6 @@ package com.muyu.mapnote.map.map;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -13,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.gson.JsonObject;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
@@ -40,10 +36,7 @@ import com.mapbox.mapboxsdk.plugins.localization.MapLocale;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.plugins.locationlayer.modes.RenderMode;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
-import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
 import com.mapbox.mapboxsdk.style.layers.Layer;
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
-import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
@@ -51,7 +44,7 @@ import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.framework.controller.ActivityController;
-import com.muyu.mapnote.framework.controller.BaseActivity;
+import com.muyu.mapnote.framework.app.BaseActivity;
 import com.muyu.mapnote.framework.controller.SubController;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.map.poi.PoiController;
@@ -113,20 +106,20 @@ public class MapController extends ActivityController implements PermissionsList
         LatLng paris = new LatLng(52.5173,13.3889);
         options.camera(new CameraPosition.Builder()
                 .target(paris)
-                .zoom(2.2)
+                .zoom(2.3)
                 .build());
         // Create map fragment
         mMapFragment = SupportMapFragment.newInstance(options);
         // Add map fragment to parent container
         FragmentTransaction transaction = mActivity.getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.map_content, mMapFragment, "com.mapbox.map");
+        transaction.add(R.id.map_content, mMapFragment, "com.muyu.map");
         transaction.commit();
 
         mMapFragment.getMapAsync(this);
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         mapView.onDestroy();
     }
 

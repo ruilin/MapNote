@@ -17,7 +17,7 @@ import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.framework.controller.ActivityController;
-import com.muyu.mapnote.framework.controller.BaseActivity;
+import com.muyu.mapnote.framework.app.BaseActivity;
 
 public class SearchPlaceController extends ActivityController {
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;

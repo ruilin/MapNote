@@ -1,30 +1,21 @@
 package com.muyu.mapnote.map.poi;
 
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.widget.ImageView;
-
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.plugins.markerview.MarkerView;
 import com.mapbox.mapboxsdk.plugins.markerview.MarkerViewManager;
 import com.muyu.mapnote.R;
-import com.muyu.mapnote.app.MapApplication;
-import com.muyu.mapnote.framework.controller.ActivityController;
-import com.muyu.mapnote.framework.controller.BaseActivity;
-import com.muyu.mapnote.framework.controller.SubController;
+import com.muyu.mapnote.framework.app.BaseActivity;
 import com.muyu.mapnote.map.map.MapPluginController;
 
 public class PoiController extends MapPluginController {
     private MarkerViewManager markerViewManager;
     BaseActivity activity;
     @Override
-    public void onCreate(BaseActivity activity) {
+    public void onAttached(BaseActivity activity) {
         this.activity = activity;
     }
 
@@ -49,7 +40,7 @@ public class PoiController extends MapPluginController {
     }
 
     @Override
-    public void onRemoved() {
+    public void onDetached() {
         if (markerViewManager != null) {
             markerViewManager.onDestroy();
         }

@@ -12,11 +12,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.mapbox.android.telemetry.MapEventFactory;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.mapnote.R;
-import com.muyu.mapnote.framework.controller.BaseActivity;
+import com.muyu.mapnote.framework.app.BaseActivity;
 import com.muyu.mapnote.map.map.MapController;
 import com.muyu.mapnote.map.map.OnMapEventListener;
 import com.muyu.mapnote.map.search.SearchPlaceController;
