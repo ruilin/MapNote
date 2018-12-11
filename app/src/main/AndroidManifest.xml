@@ -33,9 +33,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
+        <!--高德-->
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="c9c158467f7e74fe8f8389b0133fbde5" />
+        <!--Google-->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAhtch79cMBtEXGT6j8fqMThaKo7A5UJQo"/>
 
         <activity
             android:name=".map.activity.MapActivity"

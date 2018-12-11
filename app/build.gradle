@@ -110,6 +110,8 @@ dependencies {
     // --------------------
     // 高德定位
     implementation files('libs/AMap_Location_V4.4.0_20181122.jar')
+    // Google 搜索
+    implementation 'com.google.android.gms:play-services-places:16.0.0'
     // 极简框架
     implementation project(':minimalism')
     // 导航栏控件
