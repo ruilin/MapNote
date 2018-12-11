@@ -92,4 +92,5 @@ public class SearchPlaceController extends ActivityController {
         selectedLocationSymbolLayer.withProperties(PropertyFactory.iconImage(symbolIconId));
         mMap.addLayer(selectedLocationSymbolLayer);
     }
+
 }

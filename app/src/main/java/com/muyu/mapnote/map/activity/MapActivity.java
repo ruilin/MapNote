@@ -19,6 +19,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.map.MapController;
 import com.muyu.mapnote.map.map.OnMapEventListener;
+import com.muyu.mapnote.map.search.GoogleSearchHelper;
 import com.muyu.mapnote.map.search.SearchPlaceController;
 import com.muyu.minimalism.framework.app.BaseActivity;
 
@@ -26,7 +27,7 @@ public class MapActivity extends BaseActivity
         implements OnMapEventListener, NavigationView.OnNavigationItemSelectedListener {
 
     private MapController mMapController;
-    private SearchPlaceController mSearchPlaceController;
+    private GoogleSearchHelper mSearchPlaceController;
     private BottomNavigationBar bottomNavigationBar;
 
     @Override
@@ -95,7 +96,7 @@ public class MapActivity extends BaseActivity
 
     @Override
     public void onMapCreated(MapboxMap map, MapView mapView) {
-        mSearchPlaceController = new SearchPlaceController(map);
+        mSearchPlaceController = new GoogleSearchHelper(map);
         addController(mSearchPlaceController);
     }
 
