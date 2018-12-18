@@ -1,8 +1,9 @@
 package com.muyu.mapnote.map.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -28,33 +29,32 @@ public class MapActivity extends BaseActivity
     private MapController mMapController;
     private SearchPlaceController mSearchPlaceController;
     private BottomNavigationBar bottomNavigationBar;
+    private DrawerLayout mLeftSideView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+
+        View searchView = findViewById(R.id.view_home_et);
+        searchView.setOnClickListener((View v) -> {
+            if (mSearchPlaceController != null)
+                mSearchPlaceController.toSearhMode();
+        });
 
         initMenu();
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setVisibility(View.GONE);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-            }
-        });
+        initFloatButton();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        mLeftSideView = findViewById(R.id.drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.addDrawerListener(toggle);
+//        toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         initController();
@@ -65,6 +65,9 @@ public class MapActivity extends BaseActivity
         addController(mMapController);
     }
 
+    /**
+     * 主菜单
+     */
     private void initMenu() {
         /*1.首先进行fvb*/
         bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_nav_bar);
@@ -74,27 +77,78 @@ public class MapActivity extends BaseActivity
         bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);//适应大小
         /*3.添加Tab*/
         bottomNavigationBar.addItem(new BottomNavigationItem(
-                R.drawable.ic_arrow_head_casing,R.string.mapbox_attributionsDialogTitle)
+                R.drawable.ic_launcher_foreground,R.string.main_menu_home)
                 .setInactiveIconResource(R.drawable.ic_arrow_up)
                 .setActiveColorResource(R.color.colorPrimary))
                 .addItem(new BottomNavigationItem(
-                        R.drawable.ic_arrow_head_casing,R.string.action_search)
+                        R.drawable.ic_arrow_head_casing,R.string.main_menu_route)
                         .setInactiveIconResource(R.drawable.ic_close)
                         .setActiveColorResource(R.color.colorPrimaryDark))
                 .addItem(new BottomNavigationItem(
-                        R.drawable.ic_arrow_head_casing,R.string.action_search)
+                        R.drawable.ic_arrow_head_casing,R.string.main_menu_discovery)
                         .setInactiveIconResource(R.drawable.ic_launcher_foreground)
                         .setActiveColorResource(R.color.mapbox_navigation_route_alternative_congestion_yellow))
                 .addItem(new BottomNavigationItem(
-                        R.drawable.ic_arrow_head_casing,R.string.action_search)
+                        R.drawable.ic_arrow_head_casing,R.string.main_menu_more)
                         .setInactiveIconResource(R.drawable.ic_launcher_background)
                         .setActiveColorResource(R.color.colorAccent))
                 .setFirstSelectedPosition(0)//默认显示面板
                 .initialise();//初始化
+
+        bottomNavigationBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(int position) {
+                switch (position) {
+                    case 3:
+                        changeLeftSideView();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(int position) {
+            }
+
+            @Override
+            public void onTabReselected(int position) {
+                switch (position) {
+                    case 3:
+                        changeLeftSideView();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+    }
+
+    public void changeLeftSideView(){
+        if (mLeftSideView.isDrawerOpen(Gravity.LEFT)) {
+            mLeftSideView.closeDrawer(Gravity.LEFT);
+        } else {
+            mLeftSideView.openDrawer(Gravity.LEFT);
+        }
+    }
+
+    /**
+     * 悬浮按钮
+     */
+    public void initFloatButton() {
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setVisibility(View.GONE);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+            }
+        });
     }
 
     @Override
-    public void onMapCreated(MapboxMap map, MapView mapView) {
+    public void onMapCreated(MapboxMap map, @SuppressLint("NotChinaMapView") MapView mapView) {
         mSearchPlaceController = new SearchPlaceController(map);
         addController(mSearchPlaceController);
     }
