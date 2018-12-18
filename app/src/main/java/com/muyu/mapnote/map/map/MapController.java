@@ -45,6 +45,7 @@ import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.map.poi.PoiController;
+import com.muyu.mapnote.map.search.MapSearchController;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.controller.ActivityController;
 import com.muyu.minimalism.framework.controller.SubController;
@@ -82,6 +83,7 @@ public class MapController extends ActivityController implements PermissionsList
 
     /* 插件 */
     private PoiController mPoiController = new PoiController();
+    private MapSearchController mMapSearchController = new MapSearchController();
 
     public MapController(OnMapEventListener listener) {
         this.mListener = listener;
@@ -98,6 +100,7 @@ public class MapController extends ActivityController implements PermissionsList
         }
 
         addController(activity, mPoiController);
+        addController(activity, mMapSearchController);
 
         // 默认设置
         MapboxMapOptions options = new MapboxMapOptions();
@@ -120,6 +123,8 @@ public class MapController extends ActivityController implements PermissionsList
 
     @Override
     public void onDestroy() {
+        LocationHelper.INSTANCE.stop();
+        super.onDestroy();
         mapView.onDestroy();
     }
 

@@ -75,8 +75,9 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        for (ActivityController controller : mControllerList)
-            controller.onDestroy();
+        for (int i = mControllerList.size() - 1; i > 0; --i) {
+            mControllerList.get(i).onDestroy();
+        }
     }
 
     @Override

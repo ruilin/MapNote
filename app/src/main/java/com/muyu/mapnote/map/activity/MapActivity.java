@@ -2,6 +2,7 @@ package com.muyu.mapnote.map.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.view.Gravity;
 import android.view.View;
@@ -25,7 +26,7 @@ import com.muyu.mapnote.map.search.SearchPlaceController;
 import com.muyu.minimalism.framework.app.BaseActivity;
 
 public class MapActivity extends BaseActivity
-        implements OnMapEventListener, NavigationView.OnNavigationItemSelectedListener {
+        implements OnMapEventListener {
 
     private MapController mMapController;
     private GoogleSearchHelper mSearchPlaceController;
@@ -36,8 +37,6 @@ public class MapActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
 
         View searchView = findViewById(R.id.view_home_et);
         searchView.setOnClickListener((View v) -> {
@@ -46,17 +45,8 @@ public class MapActivity extends BaseActivity
         });
 
         initMenu();
-
         initFloatButton();
-
-        mLeftSideView = findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        initLeftSizeMenu();
 
         initController();
     }
@@ -125,12 +115,43 @@ public class MapActivity extends BaseActivity
         });
     }
 
-    public void changeLeftSideView(){
+    private void changeLeftSideView(){
         if (mLeftSideView.isDrawerOpen(Gravity.LEFT)) {
             mLeftSideView.closeDrawer(Gravity.LEFT);
         } else {
             mLeftSideView.openDrawer(Gravity.LEFT);
         }
+    }
+
+    private void initLeftSizeMenu() {
+        mLeftSideView = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                // Handle navigation view item clicks here.
+                int id = item.getItemId();
+
+                if (id == R.id.nav_camera) {
+                    // Handle the camera action
+                } else if (id == R.id.nav_gallery) {
+
+                } else if (id == R.id.nav_slideshow) {
+
+                } else if (id == R.id.nav_manage) {
+
+                } else if (id == R.id.nav_share) {
+
+                } else if (id == R.id.nav_send) {
+
+                }
+
+                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
+
     }
 
     /**
@@ -165,53 +186,7 @@ public class MapActivity extends BaseActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.map, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_search) {
-            if (mSearchPlaceController != null)
-                mSearchPlaceController.toSearhMode();
-            return true;
-        } else if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
