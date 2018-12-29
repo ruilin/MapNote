@@ -1,35 +1,43 @@
-package com.muyu.mapnote.map.search;
+package com.muyu.mapnote.map.map.poi;
 
-import android.app.Activity;
 import android.util.Log;
 
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.controller.SubController;
 import com.tencent.lbssearch.TencentSearch;
 import com.tencent.lbssearch.httpresponse.BaseObject;
 import com.tencent.lbssearch.httpresponse.HttpResponseListener;
 import com.tencent.lbssearch.object.Location;
-import com.tencent.lbssearch.object.param.Address2GeoParam;
 import com.tencent.lbssearch.object.param.SearchParam;
 import com.tencent.lbssearch.object.result.SearchResultObject;
 
-public class MapSearchController extends SubController {
+public class MapSearchController extends MapPluginController {
     private MapSearchProvider mProvider;
-
+    private MapboxMap mMap;
+    private MapView mMapView;
 
     @Override
     public void onAttached(BaseActivity activity) {
-        searchPoi(activity, "广州");
+        searchPoi(activity, "娱乐");
+    }
+
+    @Override
+    protected void onMapCreated(MapboxMap map, MapView mapView) {
+        mMap = map;
+        mMapView = mapView;
     }
 
     /**
      * poi检索
      */
-    protected void searchPoi(BaseActivity activity, String keyWord) {
+    public void searchPoi(BaseActivity activity, String keyWord) {
         TencentSearch tencentSearch = new TencentSearch(activity);
         //城市搜索
         SearchParam.Region region = new SearchParam.Region()
-                .poi("北京")//设置搜索城市
+                .poi("广州")//设置搜索城市
                 .autoExtend(true);//设置搜索范围不扩大
         //圆形范围搜索
         Location location1 = new Location().lat(39.984154f).lng(116.307490f);
@@ -49,6 +57,7 @@ public class MapSearchController extends SubController {
             public void onFailure(int arg0, String arg1, Throwable arg2) {
                 // TODO Auto-generated method stub
                 Log.e("xxx", arg1);
+                arg2.printStackTrace();
             }
 
             @Override
@@ -64,7 +73,7 @@ public class MapSearchController extends SubController {
                 String result = "搜索poi\n";
                 for(SearchResultObject.SearchResultData data : obj.data){
                     Log.v("SearchDemo","title:"+data.title + ";" + data.address);
-                    result += data.address+"\n";
+                    result += data.title + " category:" + data.category + " type:" + data.type +"\n";
                 }
                 Log.e("xxx", result);
             }
@@ -75,4 +84,5 @@ public class MapSearchController extends SubController {
     public void onDetached() {
         super.onDetached();
     }
+
 }

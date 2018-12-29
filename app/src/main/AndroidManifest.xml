@@ -37,6 +37,12 @@
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="c9c158467f7e74fe8f8389b0133fbde5" />
+        <!-- 腾讯 -->
+        <meta-data
+            android:name="TencentMapSDK"
+            android:value="7DPBZ-S32H4-JCXU2-DANU7-EPX6H-VOB2V"/>
+        <!--7DPBZ-S32H4-JCXU2-DANU7-EPX6H-VOB2V-->
+        <!--L4MBZ-ZGOWS-6OWOV-6D3FN-B6YEJ-MCBIC-->
         <!--Google-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
