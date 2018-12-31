@@ -2,6 +2,7 @@ package com.muyu.mapnote.map.map;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.PointF;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -43,14 +44,20 @@ import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.map.activity.MainActivity;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.map.poi.PoiController;
 import com.muyu.mapnote.map.search.PoiSearchController;
+import com.muyu.mapnote.map.map.poi.MapSearchController;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.controller.ActivityController;
 import com.muyu.minimalism.framework.controller.SubController;
+import com.muyu.minimalism.framework.util.MLog;
+import com.muyu.minimalism.framework.util.Msg;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -84,6 +91,7 @@ public class MapController extends ActivityController implements PermissionsList
     /* 插件 */
     private PoiController mPoiController = new PoiController();
     private PoiSearchController mPoiSearchController = new PoiSearchController();
+    private MapSearchController mMapSearchController = new MapSearchController();
 
     public MapController(OnMapEventListener listener) {
         this.mListener = listener;
@@ -101,6 +109,7 @@ public class MapController extends ActivityController implements PermissionsList
 
         addController(activity, mPoiController);
         addController(activity, mPoiSearchController);
+        addController(activity, mMapSearchController);
 
         // 默认设置
         MapboxMapOptions options = new MapboxMapOptions();
@@ -119,10 +128,13 @@ public class MapController extends ActivityController implements PermissionsList
         transaction.commit();
 
         mMapFragment.getMapAsync(this);
+
     }
 
     @Override
     public void onDestroy() {
+        LocationHelper.INSTANCE.stop();
+        super.onDestroy();
         mapView.onDestroy();
     }
 
@@ -175,6 +187,55 @@ public class MapController extends ActivityController implements PermissionsList
         if (mapText != null) {
             mapText.setProperties(textField("{name_zh}"));
         }
+
+        /**
+         * Setting Map Events
+         */
+
+        mapboxMap.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(@NonNull LatLng point) {
+                final PointF screenPoint = mapboxMap.getProjection().toScreenLocation(point);
+                ArrayList<SubController> pluginList = MapController.this.getSubControllers();
+                for (SubController plugin : pluginList) {
+                    if (plugin instanceof MapPluginController) {
+                        ((MapPluginController) plugin).onMapClick(point, screenPoint);
+                    }
+                }
+            }
+        });
+
+        mapboxMap.addOnCameraMoveStartedListener(new MapboxMap.OnCameraMoveStartedListener() {
+
+            private final String[] REASONS = {"REASON_API_GESTURE", "REASON_DEVELOPER_ANIMATION", "REASON_API_ANIMATION"};
+
+            @Override
+            public void onCameraMoveStarted(int reason) {
+                String string = String.format(Locale.US, "OnCameraMoveStarted: %s", REASONS[reason - 1]);
+                MLog.d(string);
+            }
+        });
+
+        mapboxMap.addOnCameraMoveListener(new MapboxMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                MLog.d("onCameraMove");
+            }
+        });
+
+        mapboxMap.addOnCameraMoveCancelListener(new MapboxMap.OnCameraMoveCanceledListener() {
+            @Override
+            public void onCameraMoveCanceled() {
+                MLog.d("onCameraMoveCanceled");
+            }
+        });
+
+        mapboxMap.addOnCameraIdleListener(new MapboxMap.OnCameraIdleListener() {
+            @Override
+            public void onCameraIdle() {
+                MLog.d("onCameraIdle");
+            }
+        });
     }
 
     private void initNavigation() {

@@ -1,23 +1,36 @@
 package com.muyu.minimalism.framework.util;
 
 import android.util.Log;
+import android.app.Application;
+import android.content.Context;
 import android.widget.Toast;
 import com.muyu.minimalism.BuildConfig;
-import com.muyu.minimalism.framework.app.BaseApplication;
 
 public class Msg {
-    private final static String TAG = "MapNote";
+    private static Application sAppContext;
+
+    public static void setAppContext(Application appContext) {
+        sAppContext = appContext;
+    }
 
     public static void show(final String text) {
-        if (text != null)
-            Toast.makeText(BaseApplication.getInstance(), text, Toast.LENGTH_SHORT).show();
-        else
-            Log.e(TAG, "no text");
+        if (sAppContext != null) {
+            show(sAppContext, text);
+        } else {
+            throw new RuntimeException("Please invoke setAppContext() first when Application onCreated().");
+        }
     }
 
     public static void showDebug(final String text) {
         if (BuildConfig.DEBUG) {
             show(text);
         }
+    }
+
+    public static void show(final Context context, final String text) {
+        if (text != null)
+            Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+        else
+            MLog.e("text == null");
     }
 }

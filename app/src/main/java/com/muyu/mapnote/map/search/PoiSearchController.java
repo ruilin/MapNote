@@ -39,7 +39,7 @@ public class PoiSearchController extends SubController {
                         Log.i("xxx", String.format("Place '%s' has likelihood: %g",
                                 placeLikelihood.getPlace().getName(),
                                 placeLikelihood.getLikelihood()));
-                        Msg.showDebug("" + placeLikelihood.getPlace().getName());
+                        Msg.showDebug("xxx" + placeLikelihood.getPlace().getName());
                     }
                     likelyPlaces.release();
                 } catch (Exception e) {

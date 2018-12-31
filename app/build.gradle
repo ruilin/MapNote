@@ -66,55 +66,81 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     // --------------------
+
     // MapBox
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.4.0'
+
     //    implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.7.2'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-core:0.2.1'
+
     // 本地化
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-localization:0.5.0'
+
     // 定位
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.8.1'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-navigation:0.18.0'
     implementation('com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.18.0') {
         transitive = true
     }
+
     // 搜索
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places:0.6.0'
+
     // China flavor dependency
+
     //    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-china:0.4.5'
+
     // Global flavor dependency
+
     //    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-china-global:0.4.5'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-china:1.1.0'
+
     // 地图标签
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview:0.1.0'
+
     // --------------------
 
     // --------------------
+
     // LeanCloud 基础包
     implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
+
     // 推送与实时聊天需要的包
     implementation('cn.leancloud.android:avoscloud-push:v4.6.4@aar') { transitive = true }
+
     // LeanCloud 统计包
     implementation 'cn.leancloud.android:avoscloud-statistics:v4.6.4'
+
     // LeanCloud 用户反馈包
     implementation 'cn.leancloud.android:avoscloud-feedback:v4.6.4@aar'
+
     // avoscloud-sns：LeanCloud 第三方登录包
     implementation 'cn.leancloud.android:avoscloud-sns:v4.6.4@aar'
     implementation 'cn.leancloud.android:qq-sdk:1.6.1-leancloud'
+
     // 新浪微博 SDK
+
     //    compile('com.sina.weibo.sdk:core:4.1.4:openDefaultRelease@aar')
+
     // LeanCloud 应用内搜索包
     implementation 'cn.leancloud.android:avoscloud-search:v4.6.4@aar'
+
     // --------------------
 
     // --------------------
+
     // 高德定位
     implementation files('libs/AMap_Location_V4.4.0_20181122.jar')
+
     // Google 搜索
     implementation 'com.google.android.gms:play-services-places:16.0.0'
+
     // 极简框架
     implementation project(':minimalism')
+
     // 导航栏控件
     implementation 'com.ashokvarma.android:bottom-navigation-bar:2.1.0'
+
     // --------------------
+    implementation files('libs/TencentMapSearch_v1.1.7.1.3e04ee1.jar')
 }

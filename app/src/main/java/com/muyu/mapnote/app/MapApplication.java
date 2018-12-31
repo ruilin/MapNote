@@ -5,6 +5,7 @@ import android.support.multidex.MultiDex;
 
 import com.mapbox.mapboxsdk.Mapbox;
 import com.muyu.minimalism.framework.app.BaseApplication;
+import com.muyu.minimalism.framework.util.Msg;
 
 
 /**
@@ -24,6 +25,7 @@ public class MapApplication extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         Instance = this;
+        Msg.setAppContext(this);
         Mapbox.getInstance(getApplicationContext(), "sk.eyJ1IjoiemhlbmdydWlsaW4iLCJhIjoiY2pjbGp0emhvMGJqaDJ4cm5vcWY2aGpmbSJ9.9SbamWpiv5iegnxrwU1WWA");
 
 
