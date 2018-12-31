@@ -3,6 +3,7 @@ package com.muyu.mapnote.map.map;
 import android.graphics.PointF;
 import android.support.annotation.NonNull;
 
+import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -14,5 +15,9 @@ public abstract class MapPluginController extends SubController {
 
     public void onMapClick(@NonNull LatLng point, @NonNull PointF screenPoint) {
 
+    }
+
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        return false;
     }
 }

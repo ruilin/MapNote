@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public abstract class SubController {
 
+    private BaseActivity mActivity;
+
     private ArrayList<SubController> mControllerList = new ArrayList<>();
 
     protected void addController(BaseActivity activity, SubController controller) {
@@ -20,7 +22,10 @@ public abstract class SubController {
         mControllerList.remove(controller);
     }
 
-    public abstract void onAttached(BaseActivity activity);
+    public void onAttached(BaseActivity activity) {
+        mActivity = activity;
+    }
+
 
     protected void onResume() {
         for (SubController controller : mControllerList) {
@@ -39,5 +44,9 @@ public abstract class SubController {
             mControllerList.get(i).onDetached();
         }
         mControllerList.clear();
+    }
+
+    protected BaseActivity getActivity() {
+        return mActivity;
     }
 }

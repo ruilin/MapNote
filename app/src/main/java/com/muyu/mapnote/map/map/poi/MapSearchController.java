@@ -1,14 +1,15 @@
 package com.muyu.mapnote.map.map.poi;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.mapbox.mapboxsdk.annotations.Marker;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.minimalism.framework.app.BaseActivity;
+import com.muyu.minimalism.framework.util.Msg;
 import com.tencent.lbssearch.TencentSearch;
 import com.tencent.lbssearch.httpresponse.BaseObject;
 import com.tencent.lbssearch.httpresponse.HttpResponseListener;
@@ -23,16 +24,19 @@ public class MapSearchController extends MapPluginController {
     private MapSearchProvider mProvider;
     private MapboxMap mMap;
     private MapView mMapView;
-
-    @Override
-    public void onAttached(BaseActivity activity) {
-        searchPoi(activity, "娱乐");
-    }
+    private ArrayList<Marker> searchResult = new ArrayList<>();
 
     @Override
     protected void onMapCreated(MapboxMap map, MapView mapView) {
         mMap = map;
         mMapView = mapView;
+        searchPoi(getActivity(), "娱乐");
+    }
+
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        Msg.showDebug(marker.getTitle());
+        return super.onMarkerClick(marker);
     }
 
     /**
@@ -91,16 +95,20 @@ public class MapSearchController extends MapPluginController {
         super.onDetached();
     }
 
-
-    ArrayList<Marker> searchResult = new ArrayList<>();
     private void showPoiList(List<SearchResultObject.SearchResultData> data) {
         if (searchResult != null) {
             for (Marker poi : searchResult)
                 mMap.removeMarker(poi);
             searchResult.clear();
         }
+        boolean isFirst = true;
         for (SearchResultObject.SearchResultData item : data) {
-            Marker poi = mMap.addMarker(new MarkerOptions().position(new LatLng(item.location.lat, item.location.lng)));
+            byte poiType = PoiHelper.POI_TYPE_SEARCH_OTHER;
+            if (isFirst) {
+                poiType = PoiHelper.POI_TYPE_SEARCH_FIRST;
+                isFirst = false;
+            }
+            Marker poi = PoiHelper.showPoi(mMap, item.title, item.category, new LatLng(item.location.lat, item.location.lng), poiType);
             searchResult.add(poi);
         }
     }

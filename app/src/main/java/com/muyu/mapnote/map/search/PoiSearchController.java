@@ -15,27 +15,20 @@ import com.google.android.gms.tasks.Task;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.mapnote.map.map.MapPluginController;
-import com.muyu.minimalism.framework.app.BaseActivity;
-import com.muyu.minimalism.framework.controller.SubController;
+import com.muyu.minimalism.framework.util.MLog;
 import com.muyu.minimalism.framework.util.Msg;
 
 public class PoiSearchController extends MapPluginController {
     private PlaceDetectionClient mPlaceDetectionClient;
-    private BaseActivity mActivity;
-
-    @Override
-    public void onAttached(BaseActivity activity) {
-        mActivity = activity;
-    }
 
     @Override
     protected void onMapCreated(MapboxMap map, MapView mapView) {
 
-        if (ActivityCompat.checkSelfPermission(mActivity, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        mPlaceDetectionClient = Places.getPlaceDetectionClient(mActivity);
+        mPlaceDetectionClient = Places.getPlaceDetectionClient(getActivity());
         Task<PlaceLikelihoodBufferResponse> placeResult = mPlaceDetectionClient.getCurrentPlace(null);
         placeResult.addOnCompleteListener(new OnCompleteListener<PlaceLikelihoodBufferResponse>() {
             @Override
@@ -43,14 +36,14 @@ public class PoiSearchController extends MapPluginController {
                 try {
                     PlaceLikelihoodBufferResponse likelyPlaces = task.getResult();
                     for (PlaceLikelihood placeLikelihood : likelyPlaces) {
-                        Log.i("xxx", String.format("Place '%s' has likelihood: %g",
+                        MLog.e(String.format("Place '%s' has likelihood: %g",
                                 placeLikelihood.getPlace().getName(),
                                 placeLikelihood.getLikelihood()));
                         Msg.showDebug("xxx" + placeLikelihood.getPlace().getName());
                     }
                     likelyPlaces.release();
                 } catch (Exception e) {
-                    Msg.showDebug(e.toString());
+                    MLog.e(e.toString());
                 }
             }
         });

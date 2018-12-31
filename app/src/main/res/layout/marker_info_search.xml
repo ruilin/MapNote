@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.mapbox.mapboxsdk.annotations.BubbleLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="7dp"
+    android:clickable="false"
+    app:mapbox_bl_arrowDirection="bottom"
+    app:mapbox_bl_arrowHeight="8dp"
+    app:mapbox_bl_arrowPosition="16dp"
+    app:mapbox_bl_arrowWidth="8dp"
+    app:mapbox_bl_bubbleColor="@android:color/white"
+    app:mapbox_bl_cornersRadius="6dp"
+    app:mapbox_bl_strokeColor="@android:color/darker_gray"
+    app:mapbox_bl_strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/marker_info_search_img"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="4dp"
+            android:scaleType="centerCrop"
+            tool:src="@drawable/ic_menu_gallery"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/marker_info_search_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxEms="9"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:textSize="14sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                tool:text="但是广东省东莞市更好大圣归来精神独立国家" />
+
+            <TextView
+                android:id="@+id/marker_info_search_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:maxLines="4"
+                android:ellipsize="end"
+                android:maxEms="10"
+                android:layout_marginTop="4dp"
+                android:textSize="12sp"
+                tool:text="但是广东省东莞市更好大圣归来精神独立国家但是广东省东莞市更好大圣归来精神独立国家但是广东省东莞市更好大圣归来精神独立国家"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:minWidth="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginLeft="4dp"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_marker_info_button"
+                android:paddingVertical="2dp"
+                android:paddingHorizontal="20dp"
+                android:textColor="@color/textGray2"
+                android:textSize="14sp"
+                android:text="路线"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</com.mapbox.mapboxsdk.annotations.BubbleLayout>
+

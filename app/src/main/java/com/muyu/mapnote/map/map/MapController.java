@@ -1,7 +1,5 @@
 package com.muyu.mapnote.map.map;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.PointF;
 import android.location.Location;
 import android.support.annotation.NonNull;
@@ -15,9 +13,6 @@ import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.api.geocoding.v5.models.CarmenFeature;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Marker;
@@ -36,15 +31,12 @@ import com.mapbox.mapboxsdk.plugins.localization.LocalizationPlugin;
 import com.mapbox.mapboxsdk.plugins.localization.MapLocale;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.plugins.locationlayer.modes.RenderMode;
-import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
 import com.mapbox.mapboxsdk.style.layers.Layer;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.muyu.mapnote.R;
-import com.muyu.mapnote.map.activity.MainActivity;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.map.poi.PoiController;
 import com.muyu.mapnote.map.search.PoiSearchController;
@@ -53,7 +45,6 @@ import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.controller.ActivityController;
 import com.muyu.minimalism.framework.controller.SubController;
 import com.muyu.minimalism.framework.util.MLog;
-import com.muyu.minimalism.framework.util.Msg;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +71,6 @@ public class MapController extends ActivityController implements PermissionsList
     private DirectionsRoute currentRoute;
     private NavigationMapRoute navigationMapRoute;
 
-    private String geojsonSourceLayerId = "geojsonSourceLayerId";
-    private String symbolIconId = "symbolIconId";
     private View mLayout;
     private MapView mapView;
     private SupportMapFragment mMapFragment;
@@ -234,6 +223,19 @@ public class MapController extends ActivityController implements PermissionsList
             @Override
             public void onCameraIdle() {
                 MLog.d("onCameraIdle");
+            }
+        });
+
+        mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(@NonNull Marker marker) {
+                ArrayList<SubController> pluginList = MapController.this.getSubControllers();
+                for (SubController plugin : pluginList) {
+                    if (plugin instanceof MapPluginController) {
+                        ((MapPluginController) plugin).onMarkerClick(marker);
+                    }
+                }
+                return false;
             }
         });
     }
