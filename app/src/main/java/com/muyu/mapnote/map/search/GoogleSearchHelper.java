@@ -3,6 +3,8 @@ package com.muyu.mapnote.map.search;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,9 +18,23 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceDetectionClient;
+import com.google.android.gms.location.places.PlaceLikelihood;
+import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.mapbox.api.geocoding.v5.models.CarmenFeature;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Point;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.muyu.mapnote.R;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.controller.ActivityController;
 import com.muyu.minimalism.framework.util.Msg;
@@ -26,11 +42,14 @@ import com.muyu.minimalism.framework.util.Msg;
 public class GoogleSearchHelper extends ActivityController {
 
     private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 99;
+    private String geojsonSourceLayerId = "geojsonSourceLayerId";
+    private String symbolIconId = "symbolIconId";
     private GoogleApiClient mGoogleApiClient;
     private BaseActivity mActivity;
+    private MapboxMap mMap;
 
     public GoogleSearchHelper(MapboxMap map) {
-
+        mMap = map;
     }
 
     @Override
@@ -94,6 +113,21 @@ public class GoogleSearchHelper extends ActivityController {
             if (resultCode == mActivity.RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(mActivity, data);
                 Log.i("dd", "Place: " + place.getName());
+
+                double lat = place.getLatLng().latitude;
+                double lng = place.getLatLng().longitude;
+
+                // Move map camera to the selected location
+                CameraPosition newCameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(lat, lng))
+                        .zoom(14)
+                        .build();
+                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition), 4000);
+
+                Bitmap icon = BitmapFactory.decodeResource(
+                        mActivity.getResources(), R.drawable.blue_marker);
+                mMap.addImage(symbolIconId, icon);
+
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(mActivity, data);
                 // TODO: Handle the error.

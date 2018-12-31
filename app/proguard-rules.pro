@@ -22,3 +22,11 @@
 
 -keep class com.mapbox.mapboxsdk.style.functions.** { *; }
 -keep class com.mapbox.mapboxsdk.storage.** { *; }
+
+# 定位
+-keep class com.amap.api.location.**{*;}
+-keep class com.amap.api.fence.**{*;}
+-keep class com.autonavi.aps.amapapi.model.**{*;}
+
+# 搜索
+-keep   class com.amap.api.services.**{*;}

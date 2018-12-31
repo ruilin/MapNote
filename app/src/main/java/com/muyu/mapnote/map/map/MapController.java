@@ -45,6 +45,7 @@ import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.map.poi.PoiController;
+import com.muyu.mapnote.map.search.PoiSearchController;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.controller.ActivityController;
 import com.muyu.minimalism.framework.controller.SubController;
@@ -82,6 +83,7 @@ public class MapController extends ActivityController implements PermissionsList
 
     /* 插件 */
     private PoiController mPoiController = new PoiController();
+    private PoiSearchController mPoiSearchController = new PoiSearchController();
 
     public MapController(OnMapEventListener listener) {
         this.mListener = listener;
@@ -98,6 +100,7 @@ public class MapController extends ActivityController implements PermissionsList
         }
 
         addController(activity, mPoiController);
+        addController(activity, mPoiSearchController);
 
         // 默认设置
         MapboxMapOptions options = new MapboxMapOptions();
@@ -304,61 +307,4 @@ public class MapController extends ActivityController implements PermissionsList
         permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_AUTOCOMPLETE) {
-
-//            String json = data.getStringExtra(PlaceConstants.RETURNING_CARMEN_FEATURE);
-//            try {
-//
-//                JsonObject jsonObj = (JsonObject) new JsonParser().parse(json);
-//                JsonObject geoObj = jsonObj.getAsJsonObject("geometry");
-//                if (geoObj != null) {
-//                    JsonArray coorArr = geoObj.getAsJsonArray("coordinates");
-//                    if (coorArr != null) {
-//                        double[] newCoor = LocationHelper.checkChineseCoor((coorArr.get(1)).getAsDouble(), (coorArr.get(0)).getAsDouble());
-//                        coorArr.set(1, new JsonPrimitive(newCoor[0]));
-//                        coorArr.set(0, new JsonPrimitive(newCoor[1]));
-//                    }
-//                }
-//                JsonArray centerObj = jsonObj.getAsJsonArray("center");
-//                if (centerObj != null) {
-//                    double[] newCoor = LocationHelper.checkChineseCoor((centerObj.get(1)).getAsDouble(), (centerObj.get(0)).getAsDouble());
-//                    centerObj.set(1, new JsonPrimitive(newCoor[0]));
-//                    centerObj.set(0, new JsonPrimitive(newCoor[1]));
-//                }
-//                json = jsonObj.toString();
-//            } catch (JsonParseException e) {
-//                e.printStackTrace();
-//            }
-//            CarmenFeature selectedCarmenFeature = CarmenFeature.fromJson(json);
-
-            // Retrieve selected location's CarmenFeature
-            CarmenFeature selectedCarmenFeature = PlaceAutocomplete.getPlace(data);
-
-            double lat = ((Point) selectedCarmenFeature.geometry()).latitude();
-            double lng = ((Point) selectedCarmenFeature.geometry()).longitude();
-//            if (CoordinateConverter.isAMapDataAvailable(lat, lng)) {
-//                Log.e("xxx", ">>>  " + lat + ",  " + lng);
-//            }
-
-            // Create a new FeatureCollection and add a new Feature to it using selectedCarmenFeature above
-            FeatureCollection featureCollection = FeatureCollection.fromFeatures(
-                    new Feature[]{Feature.fromJson(selectedCarmenFeature.toJson())});
-
-            // Retrieve and update the source designated for showing a selected location's symbol layer icon
-            GeoJsonSource source = mapboxMap.getSourceAs(geojsonSourceLayerId);
-            if (source != null) {
-                source.setGeoJson(featureCollection);
-            }
-
-            // Move map camera to the selected location
-            CameraPosition newCameraPosition = new CameraPosition.Builder()
-                    .target(new LatLng(lat, lng))
-                    .zoom(14)
-                    .build();
-            mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition), 4000);
-        }
-    }
 }

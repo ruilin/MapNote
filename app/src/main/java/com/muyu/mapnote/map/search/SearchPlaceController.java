@@ -1,5 +1,6 @@
 package com.muyu.mapnote.map.search;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,8 +8,13 @@ import android.graphics.Color;
 
 import com.google.gson.JsonObject;
 import com.mapbox.api.geocoding.v5.models.CarmenFeature;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
@@ -93,4 +99,61 @@ public class SearchPlaceController extends ActivityController {
         mMap.addLayer(selectedLocationSymbolLayer);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_AUTOCOMPLETE) {
+
+//            String json = data.getStringExtra(PlaceConstants.RETURNING_CARMEN_FEATURE);
+//            try {
+//
+//                JsonObject jsonObj = (JsonObject) new JsonParser().parse(json);
+//                JsonObject geoObj = jsonObj.getAsJsonObject("geometry");
+//                if (geoObj != null) {
+//                    JsonArray coorArr = geoObj.getAsJsonArray("coordinates");
+//                    if (coorArr != null) {
+//                        double[] newCoor = LocationHelper.checkChineseCoor((coorArr.get(1)).getAsDouble(), (coorArr.get(0)).getAsDouble());
+//                        coorArr.set(1, new JsonPrimitive(newCoor[0]));
+//                        coorArr.set(0, new JsonPrimitive(newCoor[1]));
+//                    }
+//                }
+//                JsonArray centerObj = jsonObj.getAsJsonArray("center");
+//                if (centerObj != null) {
+//                    double[] newCoor = LocationHelper.checkChineseCoor((centerObj.get(1)).getAsDouble(), (centerObj.get(0)).getAsDouble());
+//                    centerObj.set(1, new JsonPrimitive(newCoor[0]));
+//                    centerObj.set(0, new JsonPrimitive(newCoor[1]));
+//                }
+//                json = jsonObj.toString();
+//            } catch (JsonParseException e) {
+//                e.printStackTrace();
+//            }
+//            CarmenFeature selectedCarmenFeature = CarmenFeature.fromJson(json);
+
+            // Retrieve selected location's CarmenFeature
+            CarmenFeature selectedCarmenFeature = PlaceAutocomplete.getPlace(data);
+
+            double lat = ((Point) selectedCarmenFeature.geometry()).latitude();
+            double lng = ((Point) selectedCarmenFeature.geometry()).longitude();
+//            if (CoordinateConverter.isAMapDataAvailable(lat, lng)) {
+//                Log.e("xxx", ">>>  " + lat + ",  " + lng);
+//            }
+
+            // Create a new FeatureCollection and add a new Feature to it using selectedCarmenFeature above
+            FeatureCollection featureCollection = FeatureCollection.fromFeatures(
+                    new Feature[]{Feature.fromJson(selectedCarmenFeature.toJson())});
+
+            // Retrieve and update the source designated for showing a selected location's symbol layer icon
+            GeoJsonSource source = mMap.getSourceAs(geojsonSourceLayerId);
+            if (source != null) {
+                source.setGeoJson(featureCollection);
+            }
+
+            // Move map camera to the selected location
+            CameraPosition newCameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(lat, lng))
+                    .zoom(14)
+                    .build();
+            mMap.animateCamera(CameraUpdateFactory.newCameraPosition(newCameraPosition), 4000);
+        }
+    }
 }

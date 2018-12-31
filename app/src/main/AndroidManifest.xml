@@ -39,6 +39,9 @@
             android:value="c9c158467f7e74fe8f8389b0133fbde5" />
         <!--Google-->
         <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAhtch79cMBtEXGT6j8fqMThaKo7A5UJQo"/>
 

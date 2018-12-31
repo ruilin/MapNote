@@ -4,6 +4,9 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.util.Log;
+
+import com.muyu.minimalism.BuildConfig;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -19,6 +22,16 @@ public abstract class BaseApplication extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Instance = this;
+
+        if (BuildConfig.DEBUG) {
+            Log.e("xxx", "sHA1: " + sHA1(this));
+        }
     }
 
     public static String sHA1(Context context) {
