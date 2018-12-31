@@ -61,7 +61,7 @@ public class MapActivity extends BaseActivity
      */
     private void initMenu() {
         /*1.首先进行fvb*/
-        bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_nav_bar);
+        bottomNavigationBar = findViewById(R.id.bottom_nav_bar);
         /*2.进行必要的设置*/
         bottomNavigationBar.setBarBackgroundColor(R.color.mapbox_plugins_white);
         bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);

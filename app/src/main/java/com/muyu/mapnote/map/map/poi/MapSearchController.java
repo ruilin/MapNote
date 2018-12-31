@@ -2,6 +2,9 @@ package com.muyu.mapnote.map.map.poi;
 
 import android.util.Log;
 
+import com.mapbox.mapboxsdk.annotations.Marker;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.mapnote.map.map.MapPluginController;
@@ -12,6 +15,9 @@ import com.tencent.lbssearch.httpresponse.HttpResponseListener;
 import com.tencent.lbssearch.object.Location;
 import com.tencent.lbssearch.object.param.SearchParam;
 import com.tencent.lbssearch.object.result.SearchResultObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapSearchController extends MapPluginController {
     private MapSearchProvider mProvider;
@@ -74,6 +80,7 @@ public class MapSearchController extends MapPluginController {
                     Log.v("SearchDemo","title:"+data.title + ";" + data.address);
                     result += data.title + " category:" + data.category + " type:" + data.type +"\n";
                 }
+                showPoiList(obj.data);
                 Log.e("xxx", result);
             }
         });
@@ -84,4 +91,17 @@ public class MapSearchController extends MapPluginController {
         super.onDetached();
     }
 
+
+    ArrayList<Marker> searchResult = new ArrayList<>();
+    private void showPoiList(List<SearchResultObject.SearchResultData> data) {
+        if (searchResult != null) {
+            for (Marker poi : searchResult)
+                mMap.removeMarker(poi);
+            searchResult.clear();
+        }
+        for (SearchResultObject.SearchResultData item : data) {
+            Marker poi = mMap.addMarker(new MarkerOptions().position(new LatLng(item.location.lat, item.location.lng)));
+            searchResult.add(poi);
+        }
+    }
 }

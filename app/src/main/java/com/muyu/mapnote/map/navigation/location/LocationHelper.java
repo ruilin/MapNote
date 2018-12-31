@@ -9,6 +9,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.CoordinateConverter;
 import com.muyu.minimalism.framework.util.GpsUtil;
+import com.muyu.minimalism.framework.util.MLog;
 import com.muyu.minimalism.framework.util.Msg;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public enum LocationHelper {
                 //定位回调监听器
                 int errorCode = aMapLocation.getErrorCode();
                 if (errorCode != AMapLocation.LOCATION_SUCCESS) {
-                    Msg.showDebug("定位失败：" + errorCode);
+                    MLog.d("定位失败：" + errorCode);
                     return;
                 }
                 final double lat = aMapLocation.getLatitude();
@@ -99,7 +100,7 @@ public enum LocationHelper {
         //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(2000);
+        mLocationOption.setInterval(3000);
         //设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
         // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
