@@ -35,8 +35,8 @@ public abstract class SubController {
     }
 
     public void onDetached() {
-        for (SubController controller : mControllerList) {
-            controller.onDetached();
+        for (int i = mControllerList.size() - 1; i > 0; --i) {
+            mControllerList.get(i).onDetached();
         }
         mControllerList.clear();
     }
