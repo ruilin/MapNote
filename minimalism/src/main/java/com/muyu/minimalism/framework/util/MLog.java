@@ -14,7 +14,7 @@ public class MLog {
 
     public static void d(String text) {
         if (BuildConfig.DEBUG)
-            Log.e(getTag(), text);
+            Log.d(getTag(), text);
     }
 
     public static void e(String text) {

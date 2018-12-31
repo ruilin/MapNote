@@ -6,7 +6,6 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.minimalism.framework.app.BaseActivity;
-import com.muyu.minimalism.framework.controller.SubController;
 import com.tencent.lbssearch.TencentSearch;
 import com.tencent.lbssearch.httpresponse.BaseObject;
 import com.tencent.lbssearch.httpresponse.HttpResponseListener;
@@ -67,11 +66,11 @@ public class MapSearchController extends MapPluginController {
                     return;
                 }
                 SearchResultObject obj = (SearchResultObject) arg1;
-                if(obj.data == null){
+                if(obj.data == null) {
                     return;
                 }
                 String result = "搜索poi\n";
-                for(SearchResultObject.SearchResultData data : obj.data){
+                for(SearchResultObject.SearchResultData data : obj.data) {
                     Log.v("SearchDemo","title:"+data.title + ";" + data.address);
                     result += data.title + " category:" + data.category + " type:" + data.type +"\n";
                 }

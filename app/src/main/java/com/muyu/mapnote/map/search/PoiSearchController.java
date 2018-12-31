@@ -12,17 +12,24 @@ import com.google.android.gms.location.places.PlaceLikelihoodBufferResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.controller.SubController;
 import com.muyu.minimalism.framework.util.Msg;
 
-public class PoiSearchController extends SubController {
+public class PoiSearchController extends MapPluginController {
     private PlaceDetectionClient mPlaceDetectionClient;
     private BaseActivity mActivity;
 
     @Override
     public void onAttached(BaseActivity activity) {
         mActivity = activity;
+    }
+
+    @Override
+    protected void onMapCreated(MapboxMap map, MapView mapView) {
 
         if (ActivityCompat.checkSelfPermission(mActivity, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
