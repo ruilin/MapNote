@@ -1,12 +1,20 @@
 package com.muyu.mapnote.map.map.poi;
 
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.plugins.markerview.MarkerViewManager;
+import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.util.Msg;
@@ -21,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapSearchController extends MapPluginController {
+    private MarkerViewManager markerViewManager;
     private MapSearchProvider mProvider;
     private MapboxMap mMap;
     private MapView mMapView;
@@ -30,7 +39,35 @@ public class MapSearchController extends MapPluginController {
     protected void onMapCreated(MapboxMap map, MapView mapView) {
         mMap = map;
         mMapView = mapView;
+        init();
         searchPoi(getActivity(), "娱乐");
+    }
+
+    private void init() {
+        mMap.setInfoWindowAdapter(new MapboxMap.InfoWindowAdapter() {
+            @Nullable
+            @Override
+            public View getInfoWindow(@NonNull Marker marker) {
+                View view = MapSearchController.this.getActivity().getLayoutInflater().inflate(R.layout.marker_info_search, null);
+                ((TextView) view.findViewById(R.id.marker_info_search_title)).setText(marker.getTitle());
+                ((TextView) view.findViewById(R.id.marker_info_search_content)).setText(marker.getSnippet());
+                ImageView imgView = view.findViewById(R.id.marker_info_search_img);
+                Icon icon = marker.getIcon();
+                Bitmap bitmap = null;
+                if (icon != null) {
+//                    bitmap = icon.getBitmap();
+                }
+                if (bitmap != null) {
+                    imgView.setImageBitmap(icon.getBitmap());
+                    imgView.setVisibility(View.VISIBLE);
+                } else {
+                    imgView.setVisibility(View.GONE);
+                }
+                return view;
+            }
+        });
+
+        markerViewManager = new MarkerViewManager(mMapView, mMap);
     }
 
     @Override
@@ -93,6 +130,9 @@ public class MapSearchController extends MapPluginController {
     @Override
     public void onDetached() {
         super.onDetached();
+        if (markerViewManager != null) {
+            markerViewManager.onDestroy();
+        }
     }
 
     private void showPoiList(List<SearchResultObject.SearchResultData> data) {

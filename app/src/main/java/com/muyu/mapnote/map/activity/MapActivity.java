@@ -159,12 +159,13 @@ public class MapActivity extends BaseActivity
      */
     public void initFloatButton() {
         FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setVisibility(View.GONE);
+        fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
+                mMapController.processLocation();
             }
         });
     }

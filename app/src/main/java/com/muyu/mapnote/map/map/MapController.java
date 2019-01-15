@@ -37,8 +37,8 @@ import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.map.map.location.LocationController;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
-import com.muyu.mapnote.map.poi.PoiController;
 import com.muyu.mapnote.map.search.PoiSearchController;
 import com.muyu.mapnote.map.map.poi.MapSearchController;
 import com.muyu.minimalism.framework.app.BaseActivity;
@@ -78,9 +78,9 @@ public class MapController extends ActivityController implements PermissionsList
     private OnMapEventListener mListener;
 
     /* 插件 */
-    private PoiController mPoiController = new PoiController();
     private PoiSearchController mPoiSearchController = new PoiSearchController();
     private MapSearchController mMapSearchController = new MapSearchController();
+    private LocationController mLocationController = new LocationController();
 
     public MapController(OnMapEventListener listener) {
         this.mListener = listener;
@@ -90,15 +90,10 @@ public class MapController extends ActivityController implements PermissionsList
     public void onCreate(BaseActivity activity) {
         mActivity = activity;
         mLayout = mActivity.findViewById(R.id.map_content);
-        permissionsManager = new PermissionsManager(this);
-        if (!PermissionsManager.areLocationPermissionsGranted(mActivity)) {
-            permissionsManager = new PermissionsManager(this);
-            permissionsManager.requestLocationPermissions(mActivity);
-        }
 
-        addController(activity, mPoiController);
         addController(activity, mPoiSearchController);
         addController(activity, mMapSearchController);
+        addController(activity, mLocationController);
 
         // 默认设置
         MapboxMapOptions options = new MapboxMapOptions();
@@ -117,7 +112,6 @@ public class MapController extends ActivityController implements PermissionsList
         transaction.commit();
 
         mMapFragment.getMapAsync(this);
-
     }
 
     @Override
@@ -134,7 +128,12 @@ public class MapController extends ActivityController implements PermissionsList
 
     @Override
     public void onPermissionResult(boolean granted) {
-
+        ArrayList<SubController> pluginList = MapController.this.getSubControllers();
+        for (SubController plugin : pluginList) {
+            if (plugin instanceof MapPluginController) {
+                ((MapPluginController) plugin).onRequestPermissionsResult(granted);
+            }
+        }
     }
 
     @Override
@@ -143,11 +142,20 @@ public class MapController extends ActivityController implements PermissionsList
         mapView = (MapView) mMapFragment.getView();
         initNavigation();
         initUi();
-        enableLocationPlugin();
+//        enableLocationPlugin();
+
         mListener.onMapCreated(mapboxMap, mapView);
 
         for (SubController controller : getSubControllers()) {
             ((MapPluginController) controller).onMapCreated(mapboxMap, mapView);
+        }
+
+        permissionsManager = new PermissionsManager(this);
+        if (!PermissionsManager.areLocationPermissionsGranted(mActivity)) {
+            permissionsManager = new PermissionsManager(this);
+            permissionsManager.requestLocationPermissions(mActivity);
+        } else {
+            onPermissionResult(true);
         }
     }
 
@@ -280,6 +288,16 @@ public class MapController extends ActivityController implements PermissionsList
         }
     }
 
+    public void processLocation() {
+        ArrayList<SubController> pluginList = MapController.this.getSubControllers();
+        for (SubController plugin : pluginList) {
+            if (plugin instanceof MapPluginController) {
+                if (((MapPluginController) plugin).onLocationClick())
+                    return;
+            }
+        }
+    }
+
     private void getRoute(Point origin, Point destination) {
         NavigationRoute.builder(mActivity)
                 .accessToken(Mapbox.getAccessToken())
@@ -314,55 +332,6 @@ public class MapController extends ActivityController implements PermissionsList
                         Log.e(TAG, "Error: " + throwable.getMessage());
                     }
                 });
-    }
-
-    @SuppressWarnings( {"MissingPermission"})
-    private void enableLocationPlugin() {
-        // Check if permissions are enabled and if not request
-        if (PermissionsManager.areLocationPermissionsGranted(mActivity)) {
-            // Create an instance of LOST location engine
-            initializeLocationEngine();
-
-            locationPlugin = new LocationLayerPlugin(mapView, mapboxMap);
-            locationPlugin.setLocationLayerEnabled(true);
-            locationPlugin.setRenderMode(RenderMode.COMPASS);
-        } else {
-            permissionsManager = new PermissionsManager(this);
-            permissionsManager.requestLocationPermissions(mActivity);
-        }
-    }
-
-    @SuppressWarnings( {"MissingPermission"})
-    private void initializeLocationEngine() {
-        try {
-            LocationHelper.INSTANCE.init();
-            LocationHelper.INSTANCE.start();
-            LocationHelper.INSTANCE.addListener(new LocationHelper.OnLocationListener() {
-                @Override
-                public void onLocationUpdate(Location location) {
-                    originLocation = location;
-                    if (isFirst) {
-                        setCameraPosition(location);
-                        isFirst = false;
-                    }
-                    locationPlugin.forceLocationUpdate(location);
-                }
-            });
-            Location lastLocation = LocationHelper.INSTANCE.getLastLocation();
-            if (lastLocation != null) {
-                originLocation = lastLocation;
-                setCameraPosition(lastLocation);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void setCameraPosition(Location location) {
-        if (!LocationHelper.isInChina(location.getLatitude(), location.getLongitude())) {
-            mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(location.getLatitude(), location.getLongitude()), 13));
-        }
     }
 
     @Override
