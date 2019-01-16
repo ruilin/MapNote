@@ -1,7 +1,10 @@
 package com.muyu.mapnote.map.map.location;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
@@ -13,6 +16,7 @@ import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.plugins.locationlayer.modes.RenderMode;
 import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
+import com.muyu.minimalism.framework.util.Msg;
 
 import java.util.List;
 
@@ -27,7 +31,7 @@ public class LocationController extends MapPluginController {
         super.onMapCreated(map, mapView);
     }
 
-    @SuppressWarnings( {"MissingPermission"})
+    @SuppressWarnings({"MissingPermission"})
     private void enableLocationPlugin() {
         // Create an instance of LOST location engine
         initializeLocationEngine();
@@ -44,7 +48,7 @@ public class LocationController extends MapPluginController {
         }
     }
 
-    @SuppressWarnings( {"MissingPermission"})
+    @SuppressWarnings({"MissingPermission"})
     private void initializeLocationEngine() {
         try {
             LocationHelper.INSTANCE.init();
@@ -71,15 +75,26 @@ public class LocationController extends MapPluginController {
     }
 
     private void setCameraPosition(Location location) {
-//        if (!LocationHelper.isInChina(location.getLatitude(), location.getLongitude())) {
+        if (location != null) {
             getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(location.getLatitude(), location.getLongitude()), 13));
-//        }
+        }
     }
 
     @Override
     public boolean onLocationClick() {
-        setCameraPosition(originLocation);
+        if (originLocation == null) {
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                Msg.show("无法获取定位权限");
+                return true;
+            }
+            originLocation = locationPlugin.getLastKnownLocation();
+        }
+        if (originLocation == null) {
+            Msg.show("无法获取定位");
+        } else {
+            setCameraPosition(originLocation);
+        }
         return true;
     }
 }

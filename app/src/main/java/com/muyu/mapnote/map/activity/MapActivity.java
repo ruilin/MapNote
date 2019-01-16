@@ -9,9 +9,6 @@ import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
@@ -22,7 +19,6 @@ import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.map.MapController;
 import com.muyu.mapnote.map.map.OnMapEventListener;
 import com.muyu.mapnote.map.search.GoogleSearchHelper;
-import com.muyu.mapnote.map.search.SearchPlaceController;
 import com.muyu.minimalism.framework.app.BaseActivity;
 
 public class MapActivity extends BaseActivity
@@ -158,13 +154,21 @@ public class MapActivity extends BaseActivity
      * 悬浮按钮
      */
     public void initFloatButton() {
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.map_fab_loc);
         fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
+                mMapController.processLocation();
+            }
+        });
+        fab = findViewById(R.id.map_fab_add);
+        fab.setVisibility(View.VISIBLE);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 mMapController.processLocation();
             }
         });

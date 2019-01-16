@@ -30,15 +30,19 @@ public enum LocationHelper {
     }
 
     public Location toLocation(AMapLocation amapLocation) {
-        Location location = new Location("AMap");
-        location.setTime(amapLocation.getTime());
-        location.setLatitude(amapLocation.getLatitude());
-        location.setLongitude(amapLocation.getLongitude());
-        location.setAltitude(amapLocation.getAltitude());
-        location.setSpeed(amapLocation.getSpeed());
-        location.setBearing(amapLocation.getBearing());
-        location.setAccuracy(amapLocation.getGpsAccuracyStatus());
-        return location;
+        if (amapLocation != null) {
+            Location location = new Location("AMap");
+            location.setTime(amapLocation.getTime());
+            location.setLatitude(amapLocation.getLatitude());
+            location.setLongitude(amapLocation.getLongitude());
+            location.setAltitude(amapLocation.getAltitude());
+            location.setSpeed(amapLocation.getSpeed());
+            location.setBearing(amapLocation.getBearing());
+            location.setAccuracy(amapLocation.getGpsAccuracyStatus());
+            return location;
+        } else {
+            return null;
+        }
     }
 
     public void start() {

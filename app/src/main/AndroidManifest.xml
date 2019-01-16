@@ -33,23 +33,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <!--高德-->
+
+        <!-- 高德 -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="c9c158467f7e74fe8f8389b0133fbde5" />
         <!-- 腾讯 -->
         <meta-data
             android:name="TencentMapSDK"
-            android:value="7DPBZ-S32H4-JCXU2-DANU7-EPX6H-VOB2V"/>
-        <!--7DPBZ-S32H4-JCXU2-DANU7-EPX6H-VOB2V-->
-        <!--L4MBZ-ZGOWS-6OWOV-6D3FN-B6YEJ-MCBIC-->
-        <!--Google-->
+            android:value="7DPBZ-S32H4-JCXU2-DANU7-EPX6H-VOB2V" />
+        <!-- 7DPBZ-S32H4-JCXU2-DANU7-EPX6H-VOB2V -->
+        <!-- L4MBZ-ZGOWS-6OWOV-6D3FN-B6YEJ-MCBIC -->
+        <!-- Google -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAhtch79cMBtEXGT6j8fqMThaKo7A5UJQo"/>
+            android:value="AIzaSyAhtch79cMBtEXGT6j8fqMThaKo7A5UJQo" />
 
         <activity
             android:name=".map.activity.MapActivity"
@@ -62,16 +63,18 @@
             </intent-filter>
         </activity>
 
-        <!--<activity android:name=".map.activity.MainActivity">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+        <!-- <activity android:name=".map.activity.MainActivity"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
+
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
 
         <service android:name="com.amap.api.location.APSService" />
 
+        <activity android:name=".map.activity.PublishActivity"></activity>
     </application>
 
 </manifest>
