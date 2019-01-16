@@ -1,4 +1,4 @@
-package com.muyu.mapnote.map.activity;
+package com.muyu.mapnote.note;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 26
@@ -145,4 +147,5 @@ dependencies {
 
     // --------------------
     implementation files('libs/TencentMapSearch_v1.1.7.1.3e04ee1.jar')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

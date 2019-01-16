@@ -19,6 +19,8 @@ import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.map.MapController;
 import com.muyu.mapnote.map.map.OnMapEventListener;
 import com.muyu.mapnote.map.search.GoogleSearchHelper;
+import com.muyu.mapnote.note.PublishActivity;
+import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
 
 public class MapActivity extends BaseActivity
@@ -130,6 +132,7 @@ public class MapActivity extends BaseActivity
 
                 if (id == R.id.nav_camera) {
                     // Handle the camera action
+                    startActivity(LoginActivity.class);
                 } else if (id == R.id.nav_gallery) {
 
                 } else if (id == R.id.nav_slideshow) {

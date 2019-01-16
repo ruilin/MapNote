@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".map.activity.PublishActivity">
+    tools:context=".note.PublishActivity">
 
     <com.muyu.minimalism.view.imagebox.ZzImageBox
         android:id="@+id/zz_image_box"

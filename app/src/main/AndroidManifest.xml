@@ -25,6 +25,11 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".app.MapApplication"
         android:allowBackup="true"
@@ -74,7 +79,10 @@
 
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".map.activity.PublishActivity"></activity>
+        <activity android:name=".note.PublishActivity" />
+        <activity
+            android:name=".user.activity.LoginActivity"
+            android:label="@string/title_activity_login" />
     </application>
 
 </manifest>
