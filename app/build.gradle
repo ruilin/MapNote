@@ -136,7 +136,9 @@ dependencies {
     implementation 'com.google.android.gms:play-services-places:16.0.0'
 
     // 极简框架
-    implementation project(':minimalism')
+    implementation(project(':minimalism')) {
+        transitive = true
+    }
 
     // 导航栏控件
     implementation 'com.ashokvarma.android:bottom-navigation-bar:2.1.0'

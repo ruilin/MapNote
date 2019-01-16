@@ -169,7 +169,7 @@ public class MapActivity extends BaseActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mMapController.processLocation();
+                startActivity(PublishActivity.class);
             }
         });
     }

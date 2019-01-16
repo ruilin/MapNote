@@ -20,6 +20,12 @@ public class BaseActivity extends AppCompatActivity {
         hasCreated = true;
     }
 
+    public void startActivity(@NonNull Class<?> cls) {
+        Intent intent = new Intent();
+        intent.setClass(this, cls);
+        startActivity(intent);
+    }
+
     protected void addController(ActivityController controller) {
         if (!mControllerList.contains(controller)) {
             mControllerList.add(controller);
