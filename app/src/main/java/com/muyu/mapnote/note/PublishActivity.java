@@ -1,14 +1,11 @@
 package com.muyu.mapnote.note;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.muyu.mapnote.R;
 import com.muyu.minimalism.framework.app.BaseActivity;
-import com.muyu.minimalism.framework.util.Msg;
 import com.muyu.minimalism.view.imagebox.ZzImageBox;
 
 public class PublishActivity extends BaseActivity {

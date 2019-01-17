@@ -8,9 +8,8 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.CoordinateConverter;
-import com.muyu.minimalism.framework.util.GpsUtil;
-import com.muyu.minimalism.framework.util.MLog;
-import com.muyu.minimalism.framework.util.Msg;
+import com.muyu.minimalism.util.GpsUtil;
+import com.muyu.minimalism.util.MLog;
 
 import java.util.ArrayList;
 

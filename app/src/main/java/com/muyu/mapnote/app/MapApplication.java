@@ -5,7 +5,7 @@ import android.support.multidex.MultiDex;
 
 import com.mapbox.mapboxsdk.Mapbox;
 import com.muyu.minimalism.framework.app.BaseApplication;
-import com.muyu.minimalism.framework.util.Msg;
+import com.muyu.minimalism.util.Msg;
 
 
 /**

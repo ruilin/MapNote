@@ -1,6 +1,5 @@
-package com.muyu.minimalism.framework.util;
+package com.muyu.minimalism.util;
 
-import android.util.Log;
 import android.app.Application;
 import android.content.Context;
 import android.widget.Toast;

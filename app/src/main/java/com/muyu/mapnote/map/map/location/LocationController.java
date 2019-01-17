@@ -3,10 +3,8 @@ package com.muyu.mapnote.map.map.location;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 
-import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -16,9 +14,7 @@ import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.plugins.locationlayer.modes.RenderMode;
 import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
-import com.muyu.minimalism.framework.util.Msg;
-
-import java.util.List;
+import com.muyu.minimalism.util.Msg;
 
 public class LocationController extends MapPluginController {
     private PermissionsManager permissionsManager;

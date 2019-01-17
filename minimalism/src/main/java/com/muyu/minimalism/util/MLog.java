@@ -1,4 +1,4 @@
-package com.muyu.minimalism.framework.util;
+package com.muyu.minimalism.util;
 
 import android.util.Log;
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">环球</string>
+    <string name="app_name">地图笔记</string>
     <string name="title_activity_map">MapActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -15,4 +15,16 @@
     <string name="main_menu_route">路线</string>
     <string name="main_menu_discovery">发现</string>
     <string name="main_menu_more">更多</string>
+
+    <!-- Strings related to login -->
+    <string name="title_activity_login">登录</string>
+    <string name="login_title">手机号码登录</string>
+    <string name="prompt_phone">手机号码</string>
+    <string name="prompt_password">密码(6~20位字母或数字)</string>
+    <string name="action_sign_in">快速登录</string>
+    <string name="action_sign_in_short">登录</string>
+    <string name="error_invalid_mobile">手机号码不正确</string>
+    <string name="error_invalid_password">密码长度不够</string>
+    <string name="error_incorrect_password">密码不正确</string>
+    <string name="error_field_required">不能为空</string>
 </resources>

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 
 import com.google.android.gms.location.places.PlaceDetectionClient;
 import com.google.android.gms.location.places.PlaceLikelihood;
@@ -16,8 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.mapnote.map.map.MapPluginController;
-import com.muyu.minimalism.framework.util.MLog;
-import com.muyu.minimalism.framework.util.Msg;
+import com.muyu.minimalism.util.MLog;
 
 public class PoiSearchController extends MapPluginController {
     private final static int M_MAX_ENTRIES = 10;
