@@ -14,7 +14,7 @@ import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.plugins.locationlayer.modes.RenderMode;
 import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
-import com.muyu.minimalism.util.Msg;
+import com.muyu.minimalism.utils.Msg;
 
 public class LocationController extends MapPluginController {
     private PermissionsManager permissionsManager;

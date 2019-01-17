@@ -1,8 +1,8 @@
-package com.muyu.minimalism.util;
+package com.muyu.minimalism.utils;
 
 import android.text.TextUtils;
 
-public class LoginUtil {
+public class LoginUtils {
 
     public static boolean isMobileNO(String mobileNums) {
         /**

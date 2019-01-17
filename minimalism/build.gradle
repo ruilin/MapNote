@@ -41,4 +41,7 @@ dependencies {
         exclude group: "com.android.support"
     }
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+
+    implementation 'com.google.code.gson:gson:2.8.5'
+
 }

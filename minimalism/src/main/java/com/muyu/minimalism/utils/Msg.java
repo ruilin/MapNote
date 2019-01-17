@@ -1,4 +1,4 @@
-package com.muyu.minimalism.util;
+package com.muyu.minimalism.utils;
 
 import android.app.Application;
 import android.content.Context;
@@ -8,7 +8,7 @@ import com.muyu.minimalism.BuildConfig;
 public class Msg {
     private static Application sAppContext;
 
-    public static void setAppContext(Application appContext) {
+    public static void create(Application appContext) {
         sAppContext = appContext;
     }
 

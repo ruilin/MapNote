@@ -42,7 +42,7 @@ import com.muyu.mapnote.map.map.poi.MapSearchController;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.controller.ActivityController;
 import com.muyu.minimalism.framework.controller.SubController;
-import com.muyu.minimalism.util.MLog;
+import com.muyu.minimalism.utils.MLog;
 
 import java.util.ArrayList;
 import java.util.List;

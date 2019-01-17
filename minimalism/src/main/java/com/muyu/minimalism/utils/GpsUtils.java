@@ -1,10 +1,10 @@
-package com.muyu.minimalism.util;
+package com.muyu.minimalism.utils;
 
 /**
  * Created by Ruilin on 2017/8/6.
  */
 
-public class GpsUtil {
+public class GpsUtils {
 
     public static final String BAIDU_LBS_TYPE = "bd09ll";
 
@@ -83,8 +83,8 @@ public class GpsUtil {
      */
     public static Gps bd09_To_Gps84(double bd_lat, double bd_lon) {
 
-        Gps gcj02 = GpsUtil.bd09_To_Gcj02(bd_lat, bd_lon);
-        Gps map84 = GpsUtil.gcj_To_Gps84(gcj02.getWgLat(),
+        Gps gcj02 = GpsUtils.bd09_To_Gcj02(bd_lat, bd_lon);
+        Gps map84 = GpsUtils.gcj_To_Gps84(gcj02.getWgLat(),
                 gcj02.getWgLon());
         return map84;
 

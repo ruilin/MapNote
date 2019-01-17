@@ -1,13 +1,10 @@
-package com.muyu.minimalism.util;
+package com.muyu.minimalism.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
-import com.muyu.minimalism.framework.app.BaseActivity;
-
-public class SysUtil {
+public class SysUtils {
 
     public static void showSoftInput(View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);

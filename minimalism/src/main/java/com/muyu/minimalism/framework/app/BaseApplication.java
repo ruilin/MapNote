@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.muyu.minimalism.BuildConfig;
+import com.muyu.minimalism.utils.Msg;
+import com.muyu.minimalism.utils.SPUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -32,6 +34,8 @@ public abstract class BaseApplication extends Application {
         if (BuildConfig.DEBUG) {
             Log.e("xxx", "sHA1: " + sHA1(this));
         }
+        Msg.create(this);
+        SPUtils.create(this);
     }
 
     public static String sHA1(Context context) {

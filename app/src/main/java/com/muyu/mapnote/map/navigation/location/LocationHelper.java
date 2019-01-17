@@ -8,8 +8,8 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.CoordinateConverter;
-import com.muyu.minimalism.util.GpsUtil;
-import com.muyu.minimalism.util.MLog;
+import com.muyu.minimalism.utils.GpsUtils;
+import com.muyu.minimalism.utils.MLog;
 
 import java.util.ArrayList;
 
@@ -90,7 +90,7 @@ public enum LocationHelper {
                 final double lng = aMapLocation.getLongitude();
                 if (CoordinateConverter.isAMapDataAvailable(lat, lng)) {
                     // 在中国
-                    GpsUtil.Gps point = GpsUtil.gcj_To_Gps84(lat, lng);
+                    GpsUtils.Gps point = GpsUtils.gcj_To_Gps84(lat, lng);
                     aMapLocation.setLatitude(point.getWgLat());
                     aMapLocation.setLongitude(point.getWgLon());
                 }
@@ -126,7 +126,7 @@ public enum LocationHelper {
         double newLat = lat;
         double newLng = lng;
         if (CoordinateConverter.isAMapDataAvailable(lat, lng)) {
-            GpsUtil.Gps point = GpsUtil.gcj_To_Gps84(lat, lng);
+            GpsUtils.Gps point = GpsUtils.gcj_To_Gps84(lat, lng);
             newLat = point.getWgLat();
             newLng = point.getWgLon();
         }

@@ -47,11 +47,10 @@
                         android:id="@+id/login_et_mobile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:theme="@style/EditText"
                         android:hint="@string/prompt_phone"
                         android:textColor="@color/black"
                         android:inputType="phone"
-                        android:backgroundTint="@color/colorPrimary"
-                        android:foregroundTint="@color/colorAccent"
                         android:maxLines="1"
                         android:singleLine="true" />
 
@@ -64,11 +63,10 @@
 
                     <EditText
                         android:id="@+id/login_et_password"
+                        android:theme="@style/EditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_password"
-                        android:backgroundTint="@color/colorPrimary"
-                        android:foregroundTint="@color/colorAccent"
                         android:textColor="@color/black"
                         android:imeActionId="6"
                         android:imeActionLabel="@string/action_sign_in_short"

@@ -10,6 +10,7 @@
     <color name="textGray0">#888</color>
     <color name="textGray1">#777</color>
     <color name="textGray2">#666</color>
+    <color name="textGray3">#aaa</color>
     <color name="lineGray">#aaa</color>
     <color name="bgGray">#eee</color>
 </resources>

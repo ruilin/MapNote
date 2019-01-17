@@ -15,7 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.mapnote.map.map.MapPluginController;
-import com.muyu.minimalism.util.MLog;
+import com.muyu.minimalism.utils.MLog;
 
 public class PoiSearchController extends MapPluginController {
     private final static int M_MAX_ENTRIES = 10;

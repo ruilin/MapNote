@@ -20,8 +20,9 @@ import android.widget.TextView;
 
 import com.muyu.mapnote.R;
 import com.muyu.minimalism.framework.app.BaseActivity;
-import com.muyu.minimalism.util.LoginUtil;
-import com.muyu.minimalism.util.SysUtil;
+import com.muyu.minimalism.utils.LoginUtils;
+import com.muyu.minimalism.utils.SPUtils;
+import com.muyu.minimalism.utils.SysUtils;
 
 /**
  * A login screen that offers login via email/password.
@@ -63,7 +64,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    SysUtil.hideSoftInput(textView);
+                    SysUtils.hideSoftInput(textView);
                     attemptLogin();
                     return true;
                 }
@@ -75,7 +76,7 @@ public class LoginActivity extends BaseActivity {
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                SysUtil.hideSoftInput(view);
+                SysUtils.hideSoftInput(view);
                 attemptLogin();
             }
         });
@@ -137,7 +138,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private boolean isMobileNumberValid(String mobile) {
-        return LoginUtil.isMobileNO(mobile);
+        return LoginUtils.isMobileNO(mobile);
     }
 
     private boolean isPasswordValid(String password) {
@@ -209,6 +210,7 @@ public class LoginActivity extends BaseActivity {
                 String[] pieces = credential.split(":");
                 if (pieces[0].equals(mMobile)) {
                     // Account exists, return true if the password matches.
+                    SPUtils.put("token", "xxxx");
                     return pieces[1].equals(mPassword);
                 }
             }
