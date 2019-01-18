@@ -1,10 +1,9 @@
 package com.muyu.mapnote.app.okayapi;
 
-import java.io.IOException;
 
-public class OkException extends IOException {
+public class OkException extends Exception {
 
-    public OkException() {
-
+    public OkException(String message) {
+        super(message);
     }
 }
