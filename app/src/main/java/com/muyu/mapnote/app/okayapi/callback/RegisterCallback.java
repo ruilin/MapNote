@@ -4,7 +4,7 @@ import com.muyu.mapnote.app.okayapi.OkException;
 
 import java.io.IOException;
 
-public interface SignUpCallback {
+public interface RegisterCallback {
 
     public void done(OkException e);
 }

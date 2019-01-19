@@ -4,23 +4,31 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 
-import android.os.AsyncTask;
-
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.app.okayapi.OkException;
+import com.muyu.mapnote.app.okayapi.OkUser;
+import com.muyu.mapnote.app.okayapi.callback.LoginCallback;
+import com.muyu.mapnote.app.okayapi.callback.RegisterCallback;
+import com.muyu.minimalism.Loading;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.LoginUtils;
+import com.muyu.minimalism.utils.Msg;
 import com.muyu.minimalism.utils.SPUtils;
 import com.muyu.minimalism.utils.SysUtils;
 
@@ -28,61 +36,57 @@ import com.muyu.minimalism.utils.SysUtils;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends BaseActivity {
+    private final static String SP_KEY_USERNAME = "SP_KEY_LOGIN_USERNAME";
 
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
-    private static final int REQUEST_READ_CONTACTS = 0;
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "13527881583:111111", "15915973956:111111"
-    };
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
-
-    // UI references.
     private AutoCompleteTextView mMobileView;
     private EditText mPasswordView;
-    private View mProgressView;
     private View mLoginFormView;
+    private Loading mLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        SysUtils.setStatusBarColor(this, getResources().getColor(R.color.bgGray));
         // Set up the login form.
-        mMobileView = (AutoCompleteTextView) findViewById(R.id.login_et_mobile);
-
-        mPasswordView = (EditText) findViewById(R.id.login_et_password);
+        mMobileView = findViewById(R.id.login_et_mobile);
+        if (SPUtils.contains(SP_KEY_USERNAME)) {
+            mMobileView.setText(SPUtils.get(SP_KEY_USERNAME, ""));
+        }
+        mPasswordView = findViewById(R.id.login_et_password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
                     SysUtils.hideSoftInput(textView);
-                    attemptLogin();
+                    attemptLogin(true);
                     return true;
                 }
                 return false;
             }
         });
+        initPasswordShow();
 
-        Button button = (Button) findViewById(R.id.login_bt_login);
-        button.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SysUtils.hideSoftInput(view);
-                attemptLogin();
-            }
+        Button button = findViewById(R.id.login_bt_login);
+        button.setOnClickListener(view -> {
+            SysUtils.hideSoftInput(view);
+            attemptLogin(true);
+        });
+
+        button = findViewById(R.id.login_bt_register);
+        button.setOnClickListener(view -> {
+            SysUtils.hideSoftInput(view);
+            attemptLogin(false);
         });
 
         mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+
+        mLoading = new Loading(this) {
+            @Override
+            public void cancle() {
+
+            }
+        };
     }
 
     /**
@@ -90,37 +94,33 @@ public class LoginActivity extends BaseActivity {
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
-
+    private void attemptLogin(boolean isLogin) {
         // Reset errors.
         mMobileView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mMobileView.getText().toString();
+        String mobile = mMobileView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
+        // Check for a valid mobile address.
+        if (TextUtils.isEmpty(mobile)) {
+//            mMobileView.setError(getString(R.string.error_field_required));
+            Msg.show(getString(R.string.error_field_required));
+            focusView = mMobileView;
+            cancel = true;
+        } else if (!isMobileNumberValid(mobile)) {
+//            mMobileView.setError(getString(R.string.error_invalid_mobile));
+            Msg.show(getString(R.string.error_invalid_mobile));
+            focusView = mMobileView;
+            cancel = true;
+        } else if (!isPasswordValid(password)) {
+//            mPasswordView.setError(getString(R.string.error_invalid_password));
+            Msg.show(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
-            cancel = true;
-        }
-
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
-            mMobileView.setError(getString(R.string.error_field_required));
-            focusView = mMobileView;
-            cancel = true;
-        } else if (!isMobileNumberValid(email)) {
-            mMobileView.setError(getString(R.string.error_invalid_mobile));
-            focusView = mMobileView;
             cancel = true;
         }
 
@@ -129,11 +129,51 @@ public class LoginActivity extends BaseActivity {
             // form field with an error.
             focusView.requestFocus();
         } else {
+            SPUtils.saveObject(SP_KEY_USERNAME, mobile);
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+
+            OkUser user = new OkUser();
+            user.setUsername(mobile);
+            user.setPassword(password);
+
+            if (isLogin) {
+                user.loginInBackground(new LoginCallback() {
+                    @Override
+                    public void done(OkUser user, OkException e) {
+                        SysUtils.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showProgress(false);
+                                if (e == null) {
+                                    Msg.show("登录成功!");
+                                    finish();
+                                } else {
+                                    Msg.show(e.getMessage());
+                                }
+                            }
+                        });
+                    }
+                });
+            } else {
+                user.registerInBackground(new RegisterCallback() {
+                    @Override
+                    public void done(OkException e) {
+                        SysUtils.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showProgress(false);
+                                if (e == null) {
+                                    Msg.show("注册成功，请登录！");
+                                } else {
+                                    Msg.show(e.getMessage());
+                                }
+                            }
+                        });
+                    }
+                });
+            }
         }
     }
 
@@ -150,91 +190,33 @@ public class LoginActivity extends BaseActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
+        if (show)
+            mLoading.show();
+        else
+            mLoading.dismiss();
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mMobile;
-        private final String mPassword;
-
-        UserLoginTask(String mobile, String password) {
-            mMobile = mobile;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mMobile)) {
-                    // Account exists, return true if the password matches.
-                    SPUtils.put("token", "xxxx");
-                    return pieces[1].equals(mPassword);
+    private void initPasswordShow() {
+        ((CheckBox) findViewById(R.id.cbDisplayPassword)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    //选择状态 显示明文--设置为可见的密码
+                    //mEtPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    /**
+                     * 第二种
+                     */
+                    mPasswordView.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else {
+                    //默认状态显示密码--设置文本 要一起写才能起作用 InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD
+                    //mEtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    /**
+                     * 第二种
+                     */
+                    mPasswordView.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 }
             }
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
+        });
     }
 }
 

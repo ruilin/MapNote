@@ -1,10 +1,25 @@
 package com.muyu.minimalism.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.annotation.ColorInt;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
+
+import com.githang.statusbar.StatusBarCompat;
 
 public class SysUtils {
+
+    public static boolean isMainThread() {
+        return Looper.getMainLooper() == Looper.myLooper();
+    }
+
+    public static void runOnUiThread(Runnable run) {
+        new Handler(Looper.getMainLooper()).post(run);
+    }
 
     public static void showSoftInput(View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -18,5 +33,9 @@ public class SysUtils {
         if (imm != null) {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0); //强制隐藏键盘
         }
+    }
+
+    public static void setStatusBarColor(Activity activity, @ColorInt int color) {
+        StatusBarCompat.setStatusBarColor(activity, color, true);
     }
 }

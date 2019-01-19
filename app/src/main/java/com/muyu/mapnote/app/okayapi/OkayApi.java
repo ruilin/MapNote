@@ -1,19 +1,49 @@
 package com.muyu.mapnote.app.okayapi;
 
-public class OkayApi {
+import android.support.annotation.NonNull;
 
-    private static String sHost = "";
-    private static String sAppKey = "";
-    private static String sAppSecret = "";
+import com.muyu.minimalism.utils.SPUtils;
+
+public class OkayApi {
+    private static final String SP_KEY_USER_TOKEN = "SP_KEY_USER_TOKEN";
+    private static final String SP_KEY_USER_UUID = "SP_KEY_USER_UUID";
+    private static final String SP_KEY_USER_NAME = "SP_KEY_USER_NAME";
+    private static final String SP_KEY_USER_PASSWORD = "SP_KEY_USER_PASSWORD";
+    private static OkayApi instance = null;
+    private String host = "";
+    private String appKey = "";
+    private String appSecret = "";
+    private OkUser user = null;
 
     public static void create(String host, String appKey, String appSecret) {
-        sHost = host;
-        sAppKey = appKey;
-        sAppSecret = appSecret;
+        instance = new OkayApi();
+        instance.host = host;
+        instance.appKey = appKey;
+        instance.appSecret = appSecret;
+
+        if (SPUtils.contains(SP_KEY_USER_TOKEN)) {
+            instance.user = new OkUser();
+            instance.user.setToken(SPUtils.get(SP_KEY_USER_TOKEN, ""));
+            instance.user.setUuid(SPUtils.get(SP_KEY_USER_UUID, ""));
+            instance.user.setUsername(SPUtils.get(SP_KEY_USER_NAME, ""));
+            instance.user.setPassword(SPUtils.get(SP_KEY_USER_PASSWORD, ""));
+        }
     }
 
-    protected static String getHost() { return sHost; }
-    protected static String getAppKey() { return sAppKey; }
-    protected static String getAppSecret() { return sAppSecret; }
+    public static OkayApi get() { return instance; }
+    public String getHost() { return host; }
+    public String getAppKey() { return appKey; }
+    public String getAppSecret() { return appSecret; }
 
+    public void setUser(@NonNull OkUser user) {
+        this.user = user;
+        SPUtils.put(SP_KEY_USER_TOKEN, user.getToken());
+        SPUtils.put(SP_KEY_USER_UUID, user.getUuid());
+        SPUtils.put(SP_KEY_USER_NAME, user.getUserName());
+        SPUtils.put(SP_KEY_USER_PASSWORD, user.getPassword());
+    }
+
+    public boolean isLogined() {
+        return instance.user != null;
+    }
 }

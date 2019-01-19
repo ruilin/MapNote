@@ -4,10 +4,17 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.muyu.mapnote.app.okayapi.callback.SignInCallback;
-import com.muyu.mapnote.app.okayapi.callback.SignUpCallback;
+import com.muyu.mapnote.app.okayapi.callback.LoginCallback;
+import com.muyu.mapnote.app.okayapi.callback.RegisterCallback;
+import com.muyu.mapnote.app.okayapi.utils.SignUtils;
+import com.muyu.minimalism.utils.MD5Utils;
+import com.muyu.minimalism.utils.MLog;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -16,40 +23,81 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class OkUser {
-    private static final String URL_SIGNUP = OkayApi.getHost() + "?s=App.User.Login";
-    private static final String URL_SIGNIN = OkayApi.getHost() + "?s=App.User.Register";
-    private String mUserName;
-    private String mPassword;
-    private String mUuid;
-    private String mToken;
+    private String userName;
+    private String password;
+    private String uuid;
+    private String token;
 
     public OkUser() {}
 
     public void setUsername(String username) {
-        mUserName = username;
+        this.userName = username;
     }
 
     public void setPassword(String password) {
-        mPassword = password;
+        this.password = password;
     }
 
-    private void setUuid(String uuid) {
-        mUuid = uuid;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
-    private void setToken(String token) {
-        mToken = token;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    protected String getCommonGetParam() {
-        return "&app_key=" + OkayApi.getAppKey() + "&sign=" + "" + "&uuid=" + mUuid + "&token=" + mToken;
+    public String getUserName() {
+        return userName;
     }
 
-    public void signUpInBackground(@NonNull SignUpCallback callback) {
+    public String getPassword() {
+        return password;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+
+
+    private String getRegisterUrl() {
+        SortedMap<String, String> map = new TreeMap<>();
+        map.put("s", "App.User.Register");
+        map.put("app_key", OkayApi.get().getAppKey());
+        map.put("username", userName);
+        map.put("password", MD5Utils.md5(password));
+        String sign = SignUtils.getSign(map);
+        return OkayApi.get().getHost() + "?s=App.User.Register"
+                + "&username=" + userName
+                + "&password=" + MD5Utils.md5(password)
+                + "&app_key=" + OkayApi.get().getAppKey()
+                + "&sign=" + sign;
+    }
+
+    private String getLoginUrl() {
+        SortedMap<String, String> map = new TreeMap<>();
+        map.put("s", "App.User.Login");
+        map.put("app_key", OkayApi.get().getAppKey());
+//        map.put("uuid", mUuid);
+//        map.put("token", mToken);
+        map.put("username", userName);
+        map.put("password", MD5Utils.md5(password));
+        String sign = SignUtils.getSign(map);
+        return OkayApi.get().getHost() + "?s=App.User.Login"
+                + "&username=" + userName
+                + "&password=" + MD5Utils.md5(password)
+                + "&app_key=" + OkayApi.get().getAppKey()
+                + "&sign=" + sign;
+    }
+
+    public void registerInBackground(@NonNull RegisterCallback callback) {
         OkHttpClient client = new OkHttpClient();
-
         final Request req = new Request.Builder()
-                            .url(URL_SIGNUP)
+                            .url(getRegisterUrl())
                             .get()
                             .build();
         Call call = client.newCall(req);
@@ -69,7 +117,15 @@ public class OkUser {
 
                         String resCode = jsonObj.get("ret").getAsString();
                         if (resCode.equals("200")) {
-                            callback.done(null);
+                            JsonObject jsonData = jsonObj.get("data").getAsJsonObject();
+                            String errCode = jsonData.get("err_code").getAsString();
+                            if (errCode.equals("0")) {
+                                callback.done(null);
+                            } else {
+                                String msg = jsonData.get("err_msg").getAsString();
+                                OkException oe = new OkException(msg);
+                                callback.done(oe);
+                            }
 
                         } else if (resCode.startsWith("4")) {
                             String msg = jsonObj.get("msg").getAsString();
@@ -81,6 +137,9 @@ public class OkUser {
                             OkException oe = new OkException(msg);
                             callback.done(oe);
                         }
+                    } else {
+                        OkException oe = new OkException("连接失败");
+                        callback.done(oe);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -89,10 +148,10 @@ public class OkUser {
         });
     }
 
-    public static void signInInBackground(String username, String password, SignInCallback callback) {
+    public void loginInBackground(LoginCallback callback) {
         OkHttpClient client = new OkHttpClient();
         final Request req = new Request.Builder()
-                .url(URL_SIGNIN)
+                .url(getLoginUrl())
                 .get()
                 .build();
         Call call = client.newCall(req);
@@ -111,15 +170,23 @@ public class OkUser {
                         JsonObject jsonObj = new JsonParser().parse(jsonStr).getAsJsonObject();
 
                         String resCode = jsonObj.get("ret").getAsString();
+
                         if (resCode.equals("200")) {
-                            String uuid = jsonObj.get("uuid").getAsString();
-                            String token = jsonObj.get("token").getAsString();
-                            OkUser user = new OkUser();
-                            user.setUsername(username);
-                            user.setPassword(password);
-                            user.setUuid(uuid);
-                            user.setToken(token);
-                            callback.done(user, null);
+                            JsonObject jsonData = jsonObj.get("data").getAsJsonObject();
+                            String errCode = jsonData.get("err_code").getAsString();
+                            if (errCode.equals("0")) {
+                                String uuid = jsonData.get("uuid").getAsString();
+                                String token = jsonData.get("token").getAsString();
+                                setUuid(uuid);
+                                setToken(token);
+                                OkayApi.get().setUser(OkUser.this);
+                                callback.done(OkUser.this, null);
+                            } else {
+                                String msg = jsonData.get("err_msg").getAsString();
+                                MLog.e(msg);
+                                OkException oe = new OkException("用户名或密码错误");
+                                callback.done(null, oe);
+                            }
 
                         } else if (resCode.startsWith("4")) {
                             String msg = jsonObj.get("msg").getAsString();
@@ -131,6 +198,9 @@ public class OkUser {
                             OkException oe = new OkException(msg);
                             callback.done(null, oe);
                         }
+                    } else {
+                        OkException oe = new OkException("连接失败");
+                        callback.done(null, oe);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 
 import com.mapbox.mapboxsdk.Mapbox;
+import com.muyu.mapnote.app.okayapi.OkayApi;
 import com.muyu.minimalism.framework.app.BaseApplication;
 import com.muyu.minimalism.utils.Msg;
 
@@ -25,6 +26,8 @@ public class MapApplication extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         Instance = this;
+
+        OkayApi.create("http://hn1.api.okayapi.com/", "6DE3414C5B914826ADC91EFF3555DBBF", "zypfNWZ40b8V2R4sStiSbczkqNKafncrNnN20pw35wzzqXCxWYkkde710");
 
         Mapbox.getInstance(getApplicationContext(), "sk.eyJ1IjoiemhlbmdydWlsaW4iLCJhIjoiY2pjbGp0emhvMGJqaDJ4cm5vcWY2aGpmbSJ9.9SbamWpiv5iegnxrwU1WWA");
 

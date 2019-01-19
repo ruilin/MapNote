@@ -12,55 +12,54 @@
     android:background="@color/bgGray"
     tools:context=".user.activity.LoginActivity">
 
-    <!-- Login progress -->
-    <FrameLayout
+    <ScrollView
+        android:id="@+id/login_form"
+        android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
-            android:id="@+id/login_form"
-            android:scrollbars="none"
+        <LinearLayout
+            android:id="@+id/email_login_form"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/email_login_form"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="56dp"
+                android:layout_gravity="left"
+                android:textSize="24sp"
+                android:textColor="@color/black"
+                android:text="@string/login_title"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:textColorHint="@color/textGray0"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:id="@+id/login_et_mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/EditText"
+                    android:hint="@string/prompt_phone"
+                    android:textColor="@color/black"
+                    android:inputType="phone"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="50dp"
-                    android:layout_gravity="left"
-                    android:textSize="22sp"
-                    android:textColor="@color/black"
-                    android:text="@string/login_title"/>
+                android:gravity="center_vertical">
 
                 <android.support.design.widget.TextInputLayout
                     android:textColorHint="@color/textGray0"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/login_et_mobile"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:theme="@style/EditText"
-                        android:hint="@string/prompt_phone"
-                        android:textColor="@color/black"
-                        android:inputType="phone"
-                        android:maxLines="1"
-                        android:singleLine="true" />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:textColorHint="@color/textGray0"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
                     <EditText
                         android:id="@+id/login_et_password"
                         android:theme="@style/EditText"
@@ -75,29 +74,44 @@
                         android:maxLength="20"
                         android:maxLines="1"
                         android:singleLine="true" />
-
                 </android.support.design.widget.TextInputLayout>
 
+                <CheckBox
+                    android:checked="false"
+                    android:id="@+id/cbDisplayPassword"
+                    android:layout_width="40dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:button="@drawable/selector_password"/>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:orientation="horizontal">
                 <Button
                     android:id="@+id/login_bt_login"
                     style="?android:textAppearanceSmall"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
                     android:backgroundTint="@color/colorPrimary"
                     android:text="@string/action_sign_in"
                     android:textStyle="bold" />
 
+                <Button
+                    android:id="@+id/login_bt_register"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:text="@string/action_sign_up"
+                    android:textStyle="bold" />
             </LinearLayout>
-        </ScrollView>
 
-        <ProgressBar
-            android:id="@+id/login_progress"
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="100dp"
-            android:visibility="gone" />
-    </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

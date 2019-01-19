@@ -1,6 +1,7 @@
 package com.muyu.mapnote.map.activity;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -22,6 +23,7 @@ import com.muyu.mapnote.map.search.GoogleSearchHelper;
 import com.muyu.mapnote.note.PublishActivity;
 import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
+import com.muyu.minimalism.utils.SysUtils;
 
 public class MapActivity extends BaseActivity
         implements OnMapEventListener {
@@ -35,6 +37,7 @@ public class MapActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        SysUtils.setStatusBarColor(this, Color.WHITE);
 
         View searchView = findViewById(R.id.view_home_et);
         searchView.setOnClickListener((View v) -> {

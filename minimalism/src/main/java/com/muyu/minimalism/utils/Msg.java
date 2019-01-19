@@ -2,6 +2,7 @@ package com.muyu.minimalism.utils;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Handler;
 import android.widget.Toast;
 import com.muyu.minimalism.BuildConfig;
 
@@ -27,9 +28,19 @@ public class Msg {
     }
 
     public static void show(final Context context, final String text) {
-        if (text != null)
-            Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
-        else
+        if (text != null) {
+            if (SysUtils.isMainThread()) {
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+            } else {
+                SysUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        } else {
             MLog.e("text == null");
+        }
     }
 }
