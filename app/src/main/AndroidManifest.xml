@@ -79,7 +79,9 @@
 
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".note.PublishActivity" />
+        <activity android:name=".note.PublishActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            />
         <activity
             android:name=".user.activity.LoginActivity"
             android:label="@string/title_activity_login" />

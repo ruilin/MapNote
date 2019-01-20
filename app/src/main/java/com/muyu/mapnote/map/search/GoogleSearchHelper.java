@@ -18,7 +18,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.mapnote.R;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.controller.ActivityController;
-import com.muyu.minimalism.utils.Msg;
+import com.muyu.minimalism.view.Msg;
 
 public class GoogleSearchHelper extends ActivityController {
 

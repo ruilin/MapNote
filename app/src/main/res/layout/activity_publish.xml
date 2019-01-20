@@ -1,25 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical"
     android:background="@color/white"
     tools:context=".note.PublishActivity">
 
-    <com.muyu.minimalism.view.imagebox.ZzImageBox
-        android:id="@+id/zz_image_box"
+    <com.wuhenzhizao.titlebar.widget.CommonTitleBar
+        android:id="@+id/publish_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:zib_left_margin="20dp"
-        app:zib_right_margin="20dp"
-        app:zib_img_padding="5dp"
-        app:zib_img_size_one_line="4"
-        app:zib_max_line="1"
-        app:zib_img_deletable="true"
-        app:zib_img_add="@drawable/iv_add"
-        app:zib_img_default="@drawable/iv_default"
-        app:zib_img_delete="@drawable/iv_delete"
+        app:fillStatusBar="true"
+        app:showBottomLine="false"
+        app:titleBarColor="@color/white"
+        app:statusBarColor="@color/white"
+        app:statusBarMode="dark"
+        app:centerType="textView"
+        app:centerText="写游记"
+        app:centerTextColor="@color/black"
+        app:leftType="imageButton"
+        app:leftDrawable="@mipmap/common_back"
+        app:rightType="textView"
+        app:rightText="发表"
+        app:rightTextColor="@color/black"
         />
-</android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:background="@color/white"
+            android:padding="10dp"
+            android:gravity="left|top"
+            android:hint="我的游记"
+            android:minLines="6"
+            android:textColorHint="@color/textGray1"
+            android:maxLength="1000" />
+
+        <com.muyu.minimalism.view.imagebox.ZzImageBox
+            android:id="@+id/zz_image_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:zib_left_margin="0dp"
+            app:zib_right_margin="0dp"
+            app:zib_img_padding="10dp"
+            app:zib_img_size_one_line="4"
+            app:zib_max_line="1"
+            app:zib_img_deletable="true"
+            app:zib_img_add="@mipmap/publish_add_img"
+            app:zib_img_default="@drawable/iv_default"
+            app:zib_img_delete="@drawable/iv_delete"
+            />
+    </LinearLayout>
+</LinearLayout>

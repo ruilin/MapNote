@@ -78,7 +78,7 @@
                 android:background="@drawable/selector_marker_info_button"
                 android:paddingVertical="2dp"
                 android:paddingHorizontal="20dp"
-                android:textColor="@color/textGray2"
+                android:textColor="@color/textGray4"
                 android:textSize="14sp"
                 android:text="路线"/>
         </LinearLayout>

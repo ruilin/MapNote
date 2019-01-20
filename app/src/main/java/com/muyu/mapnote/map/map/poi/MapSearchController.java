@@ -17,7 +17,7 @@ import com.mapbox.mapboxsdk.plugins.markerview.MarkerViewManager;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.minimalism.framework.app.BaseActivity;
-import com.muyu.minimalism.utils.Msg;
+import com.muyu.minimalism.view.Msg;
 import com.tencent.lbssearch.TencentSearch;
 import com.tencent.lbssearch.httpresponse.BaseObject;
 import com.tencent.lbssearch.httpresponse.HttpResponseListener;

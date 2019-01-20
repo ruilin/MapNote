@@ -7,10 +7,10 @@
     <color name="white">#fff</color>
     <color name="black">#000</color>
 
-    <color name="textGray0">#888</color>
-    <color name="textGray1">#777</color>
-    <color name="textGray2">#666</color>
-    <color name="textGray3">#aaa</color>
+    <color name="textGray1">#aaa</color>
+    <color name="textGray2">#888</color>
+    <color name="textGray3">#777</color>
+    <color name="textGray4">#666</color>
     <color name="lineGray">#aaa</color>
     <color name="bgGray">#eee</color>
 </resources>

@@ -37,7 +37,7 @@
         android:drawablePadding="15px"
         android:gravity="center"
         android:text="搜索"
-        android:textColor="@color/textGray1"
+        android:textColor="@color/textGray3"
         android:textSize="15dp" />
 
 </FrameLayout>

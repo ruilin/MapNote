@@ -7,7 +7,8 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.muyu.minimalism.BuildConfig;
-import com.muyu.minimalism.utils.Msg;
+import com.muyu.minimalism.view.Dialog;
+import com.muyu.minimalism.view.Msg;
 import com.muyu.minimalism.utils.SPUtils;
 
 import java.security.MessageDigest;

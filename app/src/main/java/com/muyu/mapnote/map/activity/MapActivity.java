@@ -25,6 +25,8 @@ import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.SysUtils;
 
+import java.util.Set;
+
 public class MapActivity extends BaseActivity
         implements OnMapEventListener {
 
@@ -57,6 +59,10 @@ public class MapActivity extends BaseActivity
         addController(mMapController);
     }
 
+    private final int MAIN_MENU_HOME = 0;
+    private final int MAIN_MENU_PATH = 1;
+    private final int MAIN_MENU_MORE = 2;
+
     /**
      * 主菜单
      */
@@ -69,21 +75,20 @@ public class MapActivity extends BaseActivity
         bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);//适应大小
         /*3.添加Tab*/
         bottomNavigationBar.addItem(new BottomNavigationItem(
-                R.drawable.ic_launcher_foreground,R.string.main_menu_home)
-                .setInactiveIconResource(R.drawable.ic_arrow_up)
-                .setActiveColorResource(R.color.colorPrimary))
+                        R.mipmap.main_home,
+                        R.string.main_menu_home)
+                        .setInactiveIconResource(R.mipmap.main_home_disable)
+                        .setActiveColorResource(R.color.colorPrimary))
                 .addItem(new BottomNavigationItem(
-                        R.drawable.ic_arrow_head_casing,R.string.main_menu_route)
-                        .setInactiveIconResource(R.drawable.ic_close)
-                        .setActiveColorResource(R.color.colorPrimaryDark))
+                        R.mipmap.main_path,
+                        R.string.main_menu_route)
+                        .setInactiveIconResource(R.mipmap.main_path_disable)
+                        .setActiveColorResource(R.color.colorPrimary))
                 .addItem(new BottomNavigationItem(
-                        R.drawable.ic_arrow_head_casing,R.string.main_menu_discovery)
-                        .setInactiveIconResource(R.drawable.ic_launcher_foreground)
-                        .setActiveColorResource(R.color.mapbox_navigation_route_alternative_congestion_yellow))
-                .addItem(new BottomNavigationItem(
-                        R.drawable.ic_arrow_head_casing,R.string.main_menu_more)
-                        .setInactiveIconResource(R.drawable.ic_launcher_background)
-                        .setActiveColorResource(R.color.colorAccent))
+                        R.mipmap.main_more,
+                        R.string.main_menu_more)
+                        .setInactiveIconResource(R.mipmap.main_more_disable)
+                        .setActiveColorResource(R.color.colorPrimary))
                 .setFirstSelectedPosition(0)//默认显示面板
                 .initialise();//初始化
 
@@ -91,8 +96,8 @@ public class MapActivity extends BaseActivity
             @Override
             public void onTabSelected(int position) {
                 switch (position) {
-                    case 3:
-                        changeLeftSideView();
+                    case MAIN_MENU_MORE:
+                        openLeftSideView();
                         break;
                     default:
                         break;
@@ -106,8 +111,8 @@ public class MapActivity extends BaseActivity
             @Override
             public void onTabReselected(int position) {
                 switch (position) {
-                    case 3:
-                        changeLeftSideView();
+                    case MAIN_MENU_MORE:
+                        openLeftSideView();
                         break;
                     default:
                         break;
@@ -124,8 +129,31 @@ public class MapActivity extends BaseActivity
         }
     }
 
+    private void openLeftSideView(){
+        if (!mLeftSideView.isDrawerOpen(Gravity.LEFT)) {
+            mLeftSideView.openDrawer(Gravity.LEFT);
+        }
+    }
+
     private void initLeftSizeMenu() {
         mLeftSideView = findViewById(R.id.drawer_layout);
+        mLeftSideView.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {}
+            @Override
+            public void onDrawerStateChanged(int newState) {}
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                bottomNavigationBar.selectTab(MAIN_MENU_MORE);
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+                bottomNavigationBar.selectTab(MAIN_MENU_HOME);
+            }
+
+        });
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

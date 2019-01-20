@@ -6,7 +6,6 @@ import android.support.multidex.MultiDex;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.muyu.mapnote.app.okayapi.OkayApi;
 import com.muyu.minimalism.framework.app.BaseApplication;
-import com.muyu.minimalism.utils.Msg;
 
 
 /**

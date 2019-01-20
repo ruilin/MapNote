@@ -1,10 +1,7 @@
 package com.muyu.mapnote.user.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -28,7 +25,7 @@ import com.muyu.mapnote.app.okayapi.callback.RegisterCallback;
 import com.muyu.minimalism.Loading;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.LoginUtils;
-import com.muyu.minimalism.utils.Msg;
+import com.muyu.minimalism.view.Msg;
 import com.muyu.minimalism.utils.SPUtils;
 import com.muyu.minimalism.utils.SysUtils;
 
@@ -132,7 +129,7 @@ public class LoginActivity extends BaseActivity {
             SPUtils.saveObject(SP_KEY_USERNAME, mobile);
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
+            mLoading.show(isLogin ? "登录中……" : "注册中……");
 
             OkUser user = new OkUser();
             user.setUsername(mobile);
@@ -145,7 +142,7 @@ public class LoginActivity extends BaseActivity {
                         SysUtils.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                showProgress(false);
+                                mLoading.dismiss();
                                 if (e == null) {
                                     Msg.show("登录成功!");
                                     finish();
@@ -163,7 +160,7 @@ public class LoginActivity extends BaseActivity {
                         SysUtils.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                showProgress(false);
+                                mLoading.dismiss();
                                 if (e == null) {
                                     Msg.show("注册成功，请登录！");
                                 } else {
@@ -183,17 +180,6 @@ public class LoginActivity extends BaseActivity {
 
     private boolean isPasswordValid(String password) {
         return password.length() >= 6 && password.length() <= 20;
-    }
-
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
-        if (show)
-            mLoading.show();
-        else
-            mLoading.dismiss();
     }
 
     private void initPasswordShow() {
