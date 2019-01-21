@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 
 import com.muyu.minimalism.R;
 
-public class Dialog {
+public class DialogUtils {
 
     public static void show(Context context, String title, String content, DialogCallback callback) {
         AlertDialog dialog = new AlertDialog.Builder(context)

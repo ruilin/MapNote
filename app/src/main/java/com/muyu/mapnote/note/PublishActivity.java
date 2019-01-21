@@ -4,13 +4,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 
 import com.muyu.mapnote.R;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.SysUtils;
-import com.muyu.minimalism.view.Dialog;
-import com.muyu.minimalism.view.Dialog.DialogCallback;
+import com.muyu.minimalism.view.BottomMenu;
+import com.muyu.minimalism.view.DialogUtils;
 import com.muyu.minimalism.view.Msg;
 import com.muyu.minimalism.view.imagebox.ZzImageBox;
 import com.wuhenzhizao.titlebar.widget.CommonTitleBar;
@@ -34,7 +35,7 @@ public class PublishActivity extends BaseActivity {
                     finish();
                 } else if (action == CommonTitleBar.ACTION_RIGHT_TEXT) {
                     SysUtils.hideSoftInput(v);
-                    Dialog.show(PublishActivity.this, "发表", "确定发表游记是吗？", new Dialog.DialogCallback() {
+                    DialogUtils.show(PublishActivity.this, "发表", "确定发表游记是吗？", new DialogUtils.DialogCallback() {
 
                         @Override
                         public void onPositiveClick(DialogInterface dialog) {
@@ -69,6 +70,12 @@ public class PublishActivity extends BaseActivity {
                 imageBox.addImage(null);
                 Log.d("ZzImageBox", "add clicked");
                 Log.d("ZzImageBox", "all images\n"+imageBox.getAllImages().toString());
+                BottomMenu.show(PublishActivity.this, new String[]{"拍照", "从相册选取"}, new BottomMenu.OnItemClickedListener() {
+                    @Override
+                    public void OnItemClicked(int position) {
+                        Msg.show("" + position);
+                    }
+                });
             }
         });
     }
