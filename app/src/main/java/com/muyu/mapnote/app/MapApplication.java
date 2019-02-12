@@ -25,6 +25,7 @@ public class MapApplication extends BaseApplication {
     public void onCreate() {
         super.onCreate();
         Instance = this;
+        Config.init();
 
         OkayApi.create("http://hn1.api.okayapi.com/", "6DE3414C5B914826ADC91EFF3555DBBF", "zypfNWZ40b8V2R4sStiSbczkqNKafncrNnN20pw35wzzqXCxWYkkde710");
 

@@ -52,7 +52,7 @@
             android:layout_marginTop="10dp"
             app:zib_left_margin="0dp"
             app:zib_right_margin="0dp"
-            app:zib_img_padding="10dp"
+            app:zib_img_padding="4dp"
             app:zib_img_size_one_line="4"
             app:zib_max_line="1"
             app:zib_img_deletable="true"
@@ -60,5 +60,25 @@
             app:zib_img_default="@drawable/iv_default"
             app:zib_img_delete="@drawable/iv_delete"
             />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:tint="@color/colorPrimary"
+                android:src="@drawable/mapbox_ic_place"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginLeft="5dp"
+                android:textSize="15sp"
+                android:text="万科金色梦想"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

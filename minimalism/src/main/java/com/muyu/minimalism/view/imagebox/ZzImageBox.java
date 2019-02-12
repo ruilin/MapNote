@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
 import com.muyu.minimalism.R;
 
 import java.io.File;
@@ -88,8 +89,15 @@ public class ZzImageBox extends RecyclerView {
         mAddPicId = a.getResourceId(R.styleable.ZzImageBox_zib_img_add, -1);
         mDeletable = a.getBoolean(R.styleable.ZzImageBox_zib_img_deletable, DEFAULT_DELETABLE);
         a.recycle();
-        
+
         initData(context);
+
+        setOnlineImageLoader(new OnlineImageLoader() {
+            @Override
+            public void onLoadImage(ImageView iv, String url) {
+                Glide.with(context).load(url).into(iv);
+            }
+        });
     }
     
     

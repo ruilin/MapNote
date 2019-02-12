@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.StrictMode;
 import android.util.Log;
 
 import com.muyu.minimalism.BuildConfig;
@@ -34,8 +36,18 @@ public abstract class BaseApplication extends Application {
         if (BuildConfig.DEBUG) {
             Log.e("xxx", "sHA1: " + sHA1(this));
         }
+        initPhotoError();
         Msg.create(this);
         SPUtils.create(this);
+    }
+
+    private void initPhotoError(){
+        // android 7.0系统解决拍照的问题
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            builder.detectFileUriExposure();
+        }
     }
 
     public static String sHA1(Context context) {

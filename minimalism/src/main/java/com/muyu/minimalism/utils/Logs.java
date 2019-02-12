@@ -4,9 +4,9 @@ import android.util.Log;
 
 import com.muyu.minimalism.BuildConfig;
 
-public class MLog {
+public class Logs {
 
-    private final static String TAG = MLog.class.getSimpleName() + ":";
+    private final static String TAG = Logs.class.getSimpleName() + ":";
 
     public static void i(String text) {
         Log.i(getTag(), text);

@@ -42,7 +42,7 @@ import com.muyu.mapnote.map.map.poi.MapSearchController;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.controller.ActivityController;
 import com.muyu.minimalism.framework.controller.SubController;
-import com.muyu.minimalism.utils.MLog;
+import com.muyu.minimalism.utils.Logs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -207,28 +207,28 @@ public class MapController extends ActivityController implements PermissionsList
             @Override
             public void onCameraMoveStarted(int reason) {
                 String string = String.format(Locale.US, "OnCameraMoveStarted: %s", REASONS[reason - 1]);
-                MLog.d(string);
+                Logs.d(string);
             }
         });
 
         mapboxMap.addOnCameraMoveListener(new MapboxMap.OnCameraMoveListener() {
             @Override
             public void onCameraMove() {
-                MLog.d("onCameraMove");
+                Logs.d("onCameraMove");
             }
         });
 
         mapboxMap.addOnCameraMoveCancelListener(new MapboxMap.OnCameraMoveCanceledListener() {
             @Override
             public void onCameraMoveCanceled() {
-                MLog.d("onCameraMoveCanceled");
+                Logs.d("onCameraMoveCanceled");
             }
         });
 
         mapboxMap.addOnCameraIdleListener(new MapboxMap.OnCameraIdleListener() {
             @Override
             public void onCameraIdle() {
-                MLog.d("onCameraIdle");
+                Logs.d("onCameraIdle");
             }
         });
 

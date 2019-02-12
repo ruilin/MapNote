@@ -8,9 +8,7 @@ import com.muyu.mapnote.app.okayapi.callback.LoginCallback;
 import com.muyu.mapnote.app.okayapi.callback.RegisterCallback;
 import com.muyu.mapnote.app.okayapi.utils.SignUtils;
 import com.muyu.minimalism.utils.MD5Utils;
-import com.muyu.minimalism.utils.MLog;
-
-import org.json.JSONObject;
+import com.muyu.minimalism.utils.Logs;
 
 import java.io.IOException;
 import java.util.SortedMap;
@@ -183,7 +181,7 @@ public class OkUser {
                                 callback.done(OkUser.this, null);
                             } else {
                                 String msg = jsonData.get("err_msg").getAsString();
-                                MLog.e(msg);
+                                Logs.e(msg);
                                 OkException oe = new OkException("用户名或密码错误");
                                 callback.done(null, oe);
                             }

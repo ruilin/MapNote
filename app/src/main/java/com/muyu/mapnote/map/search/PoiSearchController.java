@@ -15,7 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.mapnote.map.map.MapPluginController;
-import com.muyu.minimalism.utils.MLog;
+import com.muyu.minimalism.utils.Logs;
 
 public class PoiSearchController extends MapPluginController {
     private final static int M_MAX_ENTRIES = 10;
@@ -53,7 +53,7 @@ public class PoiSearchController extends MapPluginController {
                         String mLikelyPlaceAttributions = (String) placeLikelihood.getPlace()
                                 .getAttributions();
                         LatLng mLikelyPlaceLatLngs = placeLikelihood.getPlace().getLatLng();
-                        MLog.d("Google place search: " + mLikelyPlaceNames + " : " + mLikelyPlaceAttributions + " : " + mLikelyPlaceAddresses);
+                        Logs.d("Google place search: " + mLikelyPlaceNames + " : " + mLikelyPlaceAttributions + " : " + mLikelyPlaceAddresses);
                         i++;
                         if (i > (count - 1)) {
                             break;
@@ -61,7 +61,7 @@ public class PoiSearchController extends MapPluginController {
                     }
                     likelyPlaces.release();
                 } else {
-                    MLog.e("Google place search error: " + task.getException());
+                    Logs.e("Google place search error: " + task.getException());
                 }
             }
         });
