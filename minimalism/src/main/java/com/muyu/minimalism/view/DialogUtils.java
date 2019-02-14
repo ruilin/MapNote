@@ -9,7 +9,7 @@ import com.muyu.minimalism.R;
 public class DialogUtils {
 
     public static void show(Context context, String title, String content, DialogCallback callback) {
-        AlertDialog dialog = new AlertDialog.Builder(context)
+        AlertDialog dialog = new AlertDialog.Builder(context, R.style.Theme_AppCompat_Light_Dialog)
                 .setTitle(title)
                 .setMessage(content)
                 .setPositiveButton(R.string.dialog_positive, new DialogInterface.OnClickListener() {

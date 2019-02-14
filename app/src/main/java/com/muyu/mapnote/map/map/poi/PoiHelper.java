@@ -57,7 +57,7 @@ public class PoiHelper {
         Geo2AddressParam param = new Geo2AddressParam().location(new com.tencent.lbssearch.object.Location()
                 .lat((float) location.getLatitude()).lng((float) location.getLongitude()));
         //设置此参数可以返回坐标附近的POI，默认为false,不返回
-        param.get_poi(true);
+        param.get_poi(false);
         tencentSearch.geo2address(param, new HttpResponseListener() {
             @Override
             public void onSuccess(int i, BaseObject baseObject) {

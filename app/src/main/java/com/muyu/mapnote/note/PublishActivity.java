@@ -97,14 +97,14 @@ public class PublishActivity extends BaseActivity {
         titleBar.setListener(new CommonTitleBar.OnTitleBarListener() {
             @Override
             public void onClicked(View v, int action, String extra) {
-                if (imageBox.getCount() == 0 && editText.length() == 0) {
-                    Msg.show("请写点什么或留下照片吧");
-                    return;
-                }
                 if (action == CommonTitleBar.ACTION_LEFT_BUTTON) {
                     finish();
                 } else if (action == CommonTitleBar.ACTION_RIGHT_TEXT) {
                     SysUtils.hideSoftInput(v);
+                    if (imageBox.getCount() == 0 && editText.length() == 0) {
+                        Msg.show("请写点什么或留下照片吧");
+                        return;
+                    }
                     DialogUtils.show(PublishActivity.this, "发表", "确定发表游记是吗？", new DialogUtils.DialogCallback() {
 
                         @Override
@@ -118,6 +118,22 @@ public class PublishActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void finish() {
+        if (imageBox.getCount() != 0 || editText.length() != 0) {
+            DialogUtils.show(PublishActivity.this, "提示", "有正在编辑到内容，确定放弃吗？", new DialogUtils.DialogCallback() {
+
+                @Override
+                public void onPositiveClick(DialogInterface dialog) {
+                    dialog.dismiss();
+                    PublishActivity.super.finish();
+                }
+            });
+        } else {
+            super.finish();
+        }
     }
 
     private void initImageBox() {
