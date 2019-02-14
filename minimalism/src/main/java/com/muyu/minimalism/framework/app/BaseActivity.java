@@ -1,12 +1,15 @@
 package com.muyu.minimalism.framework.app;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.muyu.minimalism.framework.controller.ActivityController;
+import com.muyu.minimalism.utils.SysUtils;
 
 import java.util.ArrayList;
 
@@ -104,5 +107,9 @@ public class BaseActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         for (ActivityController controller : mControllerList)
             controller.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    public void setStatusBarColor(@ColorInt int color) {
+        SysUtils.setStatusBarColor(this, color);
     }
 }

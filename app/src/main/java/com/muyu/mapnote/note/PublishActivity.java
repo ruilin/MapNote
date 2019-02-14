@@ -1,10 +1,13 @@
 package com.muyu.mapnote.note;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,12 +17,19 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.Config;
+import com.muyu.mapnote.app.MapApplication;
+import com.muyu.mapnote.app.okayapi.OkImage;
+import com.muyu.mapnote.map.map.poi.PoiHelper;
+import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.Logs;
+import com.muyu.minimalism.utils.MathUtils;
 import com.muyu.minimalism.utils.SysUtils;
 import com.muyu.minimalism.view.BottomMenu;
 import com.muyu.minimalism.view.DialogUtils;
@@ -43,27 +53,43 @@ import java.util.List;
 public class PublishActivity extends BaseActivity {
     private final int MAX_COUNT = 4;
     private ZzImageBox imageBox;
-
+    private EditText editText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
+        editText = findViewById(R.id.publish_et);
         initTitleBar();
         initImageBox();
+        initPlace();
 
         Album.initialize(AlbumConfig.newBuilder(this)
                 .setAlbumLoader(new MediaLoader())
                 .build());
-        Album.image(this)
-                .multipleChoice()
-                .widget(Widget.newLightBuilder(this)
-                        .statusBarColor(Color.WHITE) // StatusBar color.
-                        .toolBarColor(Color.WHITE) // Toolbar color.
-                        .navigationBarColor(Color.WHITE) // Virtual NavigationBar color of Android5.0+.
-                        .mediaItemCheckSelector(Color.BLUE, Color.GREEN) // Image or video selection box.
-                        .bucketItemCheckSelector(Color.RED, Color.YELLOW) // Select the folder selection box.
-                        .build()
-                );
+
+    }
+
+    private void initPlace() {
+        TextView placeText = findViewById(R.id.publish_place_text);
+        Location loc = LocationHelper.INSTANCE.getLastLocation();
+        placeText.setText("经纬度(" + MathUtils.round(loc.getLatitude(), 6) + "," + MathUtils.round(loc.getLongitude(), 6) + ")");
+        PoiHelper.getLocationInfo(this, LocationHelper.INSTANCE.getLastLocation(), new PoiHelper.OnLocationInfo() {
+            @Override
+            public void onLocationInfoCallback(String info) {
+                placeText.setText(info);
+            }
+        });
+
+        TextView copyButton = findViewById(R.id.publish_copy);
+        copyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText("copy from " + MapApplication.getInstance().getAppName(), placeText.getText());
+                clipboardManager.setPrimaryClip(clipData);
+                Msg.show("复制成功");
+            }
+        });
     }
 
     private void initTitleBar() {
@@ -71,6 +97,10 @@ public class PublishActivity extends BaseActivity {
         titleBar.setListener(new CommonTitleBar.OnTitleBarListener() {
             @Override
             public void onClicked(View v, int action, String extra) {
+                if (imageBox.getCount() == 0 && editText.length() == 0) {
+                    Msg.show("请写点什么或留下照片吧");
+                    return;
+                }
                 if (action == CommonTitleBar.ACTION_LEFT_BUTTON) {
                     finish();
                 } else if (action == CommonTitleBar.ACTION_RIGHT_TEXT) {
@@ -82,6 +112,7 @@ public class PublishActivity extends BaseActivity {
                             dialog.dismiss();
                             finish();
                             Msg.show("发表成功");
+                            new OkImage(imageBox.getImagePathAt(0)).upload();
                         }
                     });
                 }
@@ -133,35 +164,48 @@ public class PublishActivity extends BaseActivity {
                                 takePhotoToDir();
                                 break;
                             case 1:
-                                Album.image(PublishActivity.this) // Image selection.
-                                        .multipleChoice()
-                                        .camera(false)
-                                        .columnCount(4)
-                                        .selectCount(MAX_COUNT - imageBox.getCount())
-                                        .checkedList(null)
-//                                        .filterSize() // Filter the file size.
-//                                        .filterMimeType() // Filter file format.
-//                                        .afterFilterVisibility() // Show the filtered files, but they are not available.
-                                        .onResult(new Action<ArrayList<AlbumFile>>() {
-                                            @Override
-                                            public void onAction(@NonNull ArrayList<AlbumFile> result) {
-                                                for (AlbumFile file : result) {
-                                                    imageBox.addImage(file.getPath());
-                                                }
-                                            }
-                                        })
-                                        .onCancel(new Action<String>() {
-                                            @Override
-                                            public void onAction(@NonNull String result) {
-                                            }
-                                        })
-                                        .start();
+                                showSelector();
                                 break;
                         }
                     }
                 });
             }
         });
+    }
+
+    private void showSelector() {
+        Album.image(PublishActivity.this) // Image selection.
+                .multipleChoice()
+                .widget(Widget.newLightBuilder(PublishActivity.this)
+                        .title(R.string.image_selector_title)
+                        .statusBarColor(Color.WHITE) // StatusBar color.
+                        .toolBarColor(Color.WHITE) // Toolbar color.
+//                        .navigationBarColor(Color.WHITE) // Virtual NavigationBar color of Android5.0+.
+//                        .mediaItemCheckSelector(Config.colorPrimaryDark, Config.colorPrimary) // Image or video selection box.
+//                        .bucketItemCheckSelector(Config.colorPrimaryDark, Config.colorPrimary) // Select the folder selection box.
+                        .build()
+                )
+                .camera(false)
+                .columnCount(4)
+                .selectCount(MAX_COUNT - imageBox.getCount())
+                .checkedList(null)
+//                                        .filterSize() // Filter the file size.
+//                                        .filterMimeType() // Filter file format.
+//                                        .afterFilterVisibility() // Show the filtered files, but they are not available.
+                .onResult(new Action<ArrayList<AlbumFile>>() {
+                    @Override
+                    public void onAction(@NonNull ArrayList<AlbumFile> result) {
+                        for (AlbumFile file : result) {
+                            imageBox.addImage(file.getPath());
+                        }
+                    }
+                })
+                .onCancel(new Action<String>() {
+                    @Override
+                    public void onAction(@NonNull String result) {
+                    }
+                })
+                .start();
     }
 
     final int TAKE_PHOTO_REQUEST = 101;

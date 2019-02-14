@@ -2,6 +2,7 @@ package com.muyu.mapnote.app.okayapi;
 
 import android.support.annotation.NonNull;
 
+import com.muyu.minimalism.framework.app.BaseApplication;
 import com.muyu.minimalism.utils.SPUtils;
 
 public class OkayApi {
@@ -43,7 +44,21 @@ public class OkayApi {
         SPUtils.put(SP_KEY_USER_PASSWORD, user.getPassword());
     }
 
+    public OkUser getCurrentUser() {
+        return user;
+    }
+
     public boolean isLogined() {
         return instance.user != null;
+    }
+
+    public void logOut() {
+        if (isLogined()) {
+            SPUtils.remove(BaseApplication.getInstance(), SP_KEY_USER_TOKEN);
+            SPUtils.remove(BaseApplication.getInstance(), SP_KEY_USER_UUID);
+            SPUtils.remove(BaseApplication.getInstance(), SP_KEY_USER_NAME);
+            SPUtils.remove(BaseApplication.getInstance(), SP_KEY_USER_PASSWORD);
+            setUser(null);
+        }
     }
 }

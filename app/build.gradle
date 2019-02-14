@@ -102,19 +102,17 @@ dependencies {
 
     // --------------------
 
-    // --------------------
-
     // LeanCloud 基础包
-    implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
+    // implementation 'cn.leancloud.android:avoscloud-sdk:v4.6.4'
 
     // 推送与实时聊天需要的包
-    implementation('cn.leancloud.android:avoscloud-push:v4.6.4@aar') { transitive = true }
+    // implementation('cn.leancloud.android:avoscloud-push:v4.6.4@aar') { transitive = true }
 
     // LeanCloud 统计包
-    implementation 'cn.leancloud.android:avoscloud-statistics:v4.6.4'
+    // implementation 'cn.leancloud.android:avoscloud-statistics:v4.6.4'
 
     // LeanCloud 用户反馈包
-    implementation 'cn.leancloud.android:avoscloud-feedback:v4.6.4@aar'
+    // implementation 'cn.leancloud.android:avoscloud-feedback:v4.6.4@aar'
 
     // avoscloud-sns：LeanCloud 第三方登录包
     implementation 'cn.leancloud.android:avoscloud-sns:v4.6.4@aar'
@@ -129,13 +127,11 @@ dependencies {
 
     // --------------------
 
-    // --------------------
-
     // 高德定位
     implementation files('libs/AMap_Location_V4.4.0_20181122.jar')
 
     // Google 搜索
-    implementation 'com.google.android.gms:play-services-places:16.0.0'
+    // implementation 'com.google.android.gms:play-services-places:16.0.0'
 
     // 极简框架
     implementation(project(':minimalism')) {
@@ -148,4 +144,7 @@ dependencies {
     // --------------------
     implementation files('libs/TencentMapSearch_v1.1.7.1.3e04ee1.jar')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    // Bugly
+    implementation 'com.tencent.bugly:crashreport:latest.release'
 }

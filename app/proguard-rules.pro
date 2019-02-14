@@ -30,3 +30,7 @@
 
 # 搜索
 -keep   class com.amap.api.services.**{*;}
+
+# Bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}

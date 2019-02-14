@@ -1,5 +1,6 @@
 package com.muyu.mapnote.map.map.poi;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,6 +23,7 @@ import com.tencent.lbssearch.TencentSearch;
 import com.tencent.lbssearch.httpresponse.BaseObject;
 import com.tencent.lbssearch.httpresponse.HttpResponseListener;
 import com.tencent.lbssearch.object.Location;
+import com.tencent.lbssearch.object.param.Geo2AddressParam;
 import com.tencent.lbssearch.object.param.SearchParam;
 import com.tencent.lbssearch.object.result.SearchResultObject;
 

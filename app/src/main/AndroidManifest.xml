@@ -25,11 +25,6 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <application
         android:name=".app.MapApplication"
         android:allowBackup="true"
@@ -50,9 +45,9 @@
         <!-- 7DPBZ-S32H4-JCXU2-DANU7-EPX6H-VOB2V -->
         <!-- L4MBZ-ZGOWS-6OWOV-6D3FN-B6YEJ-MCBIC -->
         <!-- Google -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+        <!-- <meta-data -->
+        <!-- android:name="com.google.android.gms.version" -->
+        <!-- android:value="@integer/google_play_services_version" /> -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAhtch79cMBtEXGT6j8fqMThaKo7A5UJQo" />
@@ -79,12 +74,14 @@
 
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".note.PublishActivity"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            />
+        <activity
+            android:name=".note.PublishActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".user.activity.LoginActivity"
             android:label="@string/title_activity_login" />
+        <activity android:name=".map.activity.SearchActivity"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

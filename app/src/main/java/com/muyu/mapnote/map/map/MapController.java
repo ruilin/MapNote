@@ -37,7 +37,6 @@ import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.map.location.LocationController;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
-import com.muyu.mapnote.map.search.PoiSearchController;
 import com.muyu.mapnote.map.map.poi.MapSearchController;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.controller.ActivityController;
@@ -76,7 +75,7 @@ public class MapController extends ActivityController implements PermissionsList
     private OnMapEventListener mListener;
 
     /* 插件 */
-    private PoiSearchController mPoiSearchController = new PoiSearchController();
+//    private PoiSearchController mPoiSearchController = new PoiSearchController();
     private MapSearchController mMapSearchController = new MapSearchController();
     private LocationController mLocationController = new LocationController();
 
@@ -89,7 +88,7 @@ public class MapController extends ActivityController implements PermissionsList
         mActivity = activity;
         mLayout = mActivity.findViewById(R.id.map_content);
 
-        addController(activity, mPoiSearchController);
+//        addController(activity, mPoiSearchController);
         addController(activity, mMapSearchController);
         addController(activity, mLocationController);
 

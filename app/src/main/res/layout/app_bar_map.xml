@@ -39,13 +39,12 @@
         android:layout_gravity="bottom|end"
         android:layout_marginRight="14dp"
         android:layout_marginBottom="140dp"
-        android:padding="5dp"
         android:tint="@color/colorPrimary"
         android:elevation="5dp"
         app:fabSize="normal"
         app:backgroundTint="@color/white"
         app:rippleColor="#e7d16b"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+        app:srcCompat="@mipmap/ic_plus" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/map_fab_loc"
@@ -54,12 +53,11 @@
         android:layout_gravity="bottom|end"
         android:layout_marginRight="14dp"
         android:layout_marginBottom="80dp"
-        android:padding="5dp"
         android:tint="@color/colorPrimary"
         android:elevation="5dp"
         app:fabSize="normal"
         app:backgroundTint="@color/white"
         app:rippleColor="#e7d16b"
-        app:srcCompat="@drawable/mapbox_ic_place" />
+        app:srcCompat="@mipmap/ic_loc" />
 
 </android.support.design.widget.CoordinatorLayout>

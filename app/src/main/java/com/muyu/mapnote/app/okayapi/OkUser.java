@@ -20,7 +20,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class OkUser {
+public class OkUser extends OkObject {
     private String userName;
     private String password;
     private String uuid;
@@ -59,7 +59,6 @@ public class OkUser {
     public String getToken() {
         return token;
     }
-
 
 
     private String getRegisterUrl() {
@@ -109,29 +108,13 @@ public class OkUser {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    if (response.code() == 200) {
-                        String jsonStr = response.body().string();
-                        JsonObject jsonObj = new JsonParser().parse(jsonStr).getAsJsonObject();
-
-                        String resCode = jsonObj.get("ret").getAsString();
-                        if (resCode.equals("200")) {
-                            JsonObject jsonData = jsonObj.get("data").getAsJsonObject();
-                            String errCode = jsonData.get("err_code").getAsString();
-                            if (errCode.equals("0")) {
-                                callback.done(null);
-                            } else {
-                                String msg = jsonData.get("err_msg").getAsString();
-                                OkException oe = new OkException(msg);
-                                callback.done(oe);
-                            }
-
-                        } else if (resCode.startsWith("4")) {
-                            String msg = jsonObj.get("msg").getAsString();
-                            OkException oe = new OkException(msg);
-                            callback.done(oe);
-
-                        } else if (resCode.startsWith("5")) {
-                            String msg = jsonObj.get("msg").getAsString();
+                    JsonObject jsonData = getResponseData(response);
+                    if (jsonData != null) {
+                        String errCode = jsonData.get("err_code").getAsString();
+                        if (errCode.equals("0")) {
+                            callback.done(null);
+                        } else {
+                            String msg = jsonData.get("err_msg").getAsString();
                             OkException oe = new OkException(msg);
                             callback.done(oe);
                         }
@@ -139,6 +122,8 @@ public class OkUser {
                         OkException oe = new OkException("连接失败");
                         callback.done(oe);
                     }
+                } catch (OkException e) {
+                    callback.done(e);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -163,43 +148,28 @@ public class OkUser {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    if (response.code() == 200) {
-                        String jsonStr = response.body().string();
-                        JsonObject jsonObj = new JsonParser().parse(jsonStr).getAsJsonObject();
-
-                        String resCode = jsonObj.get("ret").getAsString();
-
-                        if (resCode.equals("200")) {
-                            JsonObject jsonData = jsonObj.get("data").getAsJsonObject();
-                            String errCode = jsonData.get("err_code").getAsString();
-                            if (errCode.equals("0")) {
-                                String uuid = jsonData.get("uuid").getAsString();
-                                String token = jsonData.get("token").getAsString();
-                                setUuid(uuid);
-                                setToken(token);
-                                OkayApi.get().setUser(OkUser.this);
-                                callback.done(OkUser.this, null);
-                            } else {
-                                String msg = jsonData.get("err_msg").getAsString();
-                                Logs.e(msg);
-                                OkException oe = new OkException("用户名或密码错误");
-                                callback.done(null, oe);
-                            }
-
-                        } else if (resCode.startsWith("4")) {
-                            String msg = jsonObj.get("msg").getAsString();
-                            OkException oe = new OkException(msg);
-                            callback.done(null, oe);
-
-                        } else if (resCode.startsWith("5")) {
-                            String msg = jsonObj.get("msg").getAsString();
-                            OkException oe = new OkException(msg);
+                    JsonObject jsonData = getResponseData(response);
+                    if (jsonData != null) {
+                        String errCode = jsonData.get("err_code").getAsString();
+                        if (errCode.equals("0")) {
+                            String uuid = jsonData.get("uuid").getAsString();
+                            String token = jsonData.get("token").getAsString();
+                            setUuid(uuid);
+                            setToken(token);
+                            OkayApi.get().setUser(OkUser.this);
+                            callback.done(OkUser.this, null);
+                        } else {
+                            String msg = jsonData.get("err_msg").getAsString();
+                            Logs.e(msg);
+                            OkException oe = new OkException("用户名或密码错误");
                             callback.done(null, oe);
                         }
                     } else {
                         OkException oe = new OkException("连接失败");
                         callback.done(null, oe);
                     }
+                } catch (OkException e) {
+                    callback.done(null, e);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

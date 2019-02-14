@@ -19,7 +19,6 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.map.MapController;
 import com.muyu.mapnote.map.map.OnMapEventListener;
-import com.muyu.mapnote.map.search.GoogleSearchHelper;
 import com.muyu.mapnote.note.PublishActivity;
 import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
@@ -31,7 +30,7 @@ public class MapActivity extends BaseActivity
         implements OnMapEventListener {
 
     private MapController mMapController;
-    private GoogleSearchHelper mSearchPlaceController;
+//    private GoogleSearchHelper mSearchPlaceController;
     private BottomNavigationBar bottomNavigationBar;
     private DrawerLayout mLeftSideView;
 
@@ -39,12 +38,13 @@ public class MapActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        SysUtils.setStatusBarColor(this, Color.WHITE);
+        setStatusBarColor(Color.WHITE);
 
         View searchView = findViewById(R.id.view_home_et);
         searchView.setOnClickListener((View v) -> {
-            if (mSearchPlaceController != null)
-                mSearchPlaceController.toSearhMode();
+            SearchActivity.startSearch(MapActivity.this);
+//            if (mSearchPlaceController != null)
+//                mSearchPlaceController.toSearhMode();
         });
 
         initMenu();
@@ -210,8 +210,8 @@ public class MapActivity extends BaseActivity
 
     @Override
     public void onMapCreated(MapboxMap map, @SuppressLint("NotChinaMapView") MapView mapView) {
-        mSearchPlaceController = new GoogleSearchHelper(map);
-        addController(mSearchPlaceController);
+//        mSearchPlaceController = new GoogleSearchHelper(map);
+//        addController(mSearchPlaceController);
     }
 
     @Override
@@ -227,5 +227,11 @@ public class MapActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 }

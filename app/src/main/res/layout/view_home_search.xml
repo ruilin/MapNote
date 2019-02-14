@@ -3,7 +3,8 @@
     android:id="@+id/view_home_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="2dp"
     android:orientation="horizontal">
 
     <EditText
@@ -18,26 +19,27 @@
         android:maxLines="1"
         android:paddingLeft="20px"
         android:paddingRight="20px"
-        android:textColor="@color/avoscloud_feedback_text_gray"
-        android:textColorHint="@color/avoscloud_feedback_text_gray"
+        android:textColor="@color/gray2"
+        android:textColorHint="@color/gray2"
         android:textSize="28px"
         />
 
     <TextView
         android:id="@+id/view_home_tv"
         android:layout_width="wrap_content"
-        android:layout_height="60px"
-        android:layout_gravity="center"
-        android:layout_marginLeft="25px"
-        android:layout_marginTop="14px"
-        android:layout_marginRight="25px"
-        android:layout_marginBottom="14px"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:clickable="false"
-        android:drawableLeft="@drawable/places_ic_search"
-        android:drawablePadding="15px"
+        android:drawableLeft="@mipmap/ic_search"
+        android:drawablePadding="12dp"
+        android:drawableTint="@color/textGray2"
+        android:adjustViewBounds="true"
         android:gravity="center"
         android:text="搜索"
-        android:textColor="@color/textGray3"
-        android:textSize="15dp" />
+        android:textColor="@color/textGray2"
+        android:textSize="18dp" />
 
 </FrameLayout>
