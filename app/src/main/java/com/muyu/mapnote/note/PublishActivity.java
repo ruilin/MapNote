@@ -26,6 +26,7 @@ import com.muyu.mapnote.app.Config;
 import com.muyu.mapnote.app.MapApplication;
 import com.muyu.mapnote.app.okayapi.OkImage;
 import com.muyu.mapnote.map.map.poi.PoiHelper;
+import com.muyu.mapnote.map.map.poi.SearchHelper;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.Logs;
@@ -73,9 +74,9 @@ public class PublishActivity extends BaseActivity {
         TextView placeText = findViewById(R.id.publish_place_text);
         Location loc = LocationHelper.INSTANCE.getLastLocation();
         placeText.setText("经纬度(" + MathUtils.round(loc.getLatitude(), 6) + "," + MathUtils.round(loc.getLongitude(), 6) + ")");
-        PoiHelper.getLocationInfo(this, LocationHelper.INSTANCE.getLastLocation(), new PoiHelper.OnLocationInfo() {
+        SearchHelper.searchLocationInfo(this, LocationHelper.INSTANCE.getLastLocation(), new SearchHelper.OnSearchLocationCallback() {
             @Override
-            public void onLocationInfoCallback(String info) {
+            public void onSearchLocationCallback(String info) {
                 placeText.setText(info);
             }
         });
@@ -123,7 +124,7 @@ public class PublishActivity extends BaseActivity {
     @Override
     public void finish() {
         if (imageBox.getCount() != 0 || editText.length() != 0) {
-            DialogUtils.show(PublishActivity.this, "提示", "有正在编辑到内容，确定放弃吗？", new DialogUtils.DialogCallback() {
+            DialogUtils.show(PublishActivity.this, "提示", "要放弃正在编辑的内容吗？", new DialogUtils.DialogCallback() {
 
                 @Override
                 public void onPositiveClick(DialogInterface dialog) {

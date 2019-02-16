@@ -70,7 +70,7 @@ public class LocationController extends MapPluginController {
         }
     }
 
-    private void setCameraPosition(Location location) {
+    public void setCameraPosition(Location location) {
         if (location != null) {
             getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(location.getLatitude(), location.getLongitude()), 13));

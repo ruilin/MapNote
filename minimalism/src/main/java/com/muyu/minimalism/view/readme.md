@@ -8,3 +8,6 @@ https://github.com/wuhenzhizao/android-titlebar
 
 图片选择器
 https://github.com/yanzhenjie/album
+
+EventBus
+https://github.com/greenrobot/EventBus

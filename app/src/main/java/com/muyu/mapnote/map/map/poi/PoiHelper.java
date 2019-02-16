@@ -18,11 +18,16 @@ import com.tencent.lbssearch.httpresponse.HttpResponseListener;
 import com.tencent.lbssearch.object.param.Geo2AddressParam;
 import com.tencent.lbssearch.object.result.Geo2AddressResultObject;
 
+import java.util.ArrayList;
+import java.util.Hashtable;
+
 public class PoiHelper {
 
     public final static byte POI_TYPE_TARGET = 0;
     public final static byte POI_TYPE_SEARCH_FIRST = 1;
     public final static byte POI_TYPE_SEARCH_OTHER = 2;
+
+    private static Hashtable<String, Marker> mPoiMap = new Hashtable<String, Marker>();
 
     public static Marker showPoi(MapboxMap map, String title, String snippet, LatLng point, byte poiType) {
         IconFactory iconFactory = IconFactory.getInstance(BaseApplication.getInstance());
@@ -46,35 +51,17 @@ public class PoiHelper {
         );
     }
 
-    public static void getLocationInfo(Context context, Location location, final OnLocationInfo callback) {
-        if (callback == null) {
-            return;
-        }
-        TencentSearch tencentSearch = new TencentSearch(context);
-        //用户还可以通过Geo2AddressParam.coord_type(CoordTypeEnum type)
-        //这个方法指定传入的坐标类型以获取正确的结果
-        //此接口支持的坐标类型请参考接口文档
-        Geo2AddressParam param = new Geo2AddressParam().location(new com.tencent.lbssearch.object.Location()
-                .lat((float) location.getLatitude()).lng((float) location.getLongitude()));
-        //设置此参数可以返回坐标附近的POI，默认为false,不返回
-        param.get_poi(false);
-        tencentSearch.geo2address(param, new HttpResponseListener() {
-            @Override
-            public void onSuccess(int i, BaseObject baseObject) {
-                if (baseObject.isStatusOk() && baseObject instanceof Geo2AddressResultObject) {
-                    Geo2AddressResultObject result = (Geo2AddressResultObject) baseObject;
-                    callback.onLocationInfoCallback(result.result.formatted_addresses.recommend);
-                }
-            }
-
-            @Override
-            public void onFailure(int i, String s, Throwable throwable) {
-
-            }
-        });
+    public static void showPoi(MapboxMap map, Poi poi) {
+        byte poiType = PoiHelper.POI_TYPE_SEARCH_OTHER;
+//        if (isFirst) {
+//            poiType = PoiHelper.POI_TYPE_SEARCH_FIRST;
+//            isFirst = false;
+//        }
+        Marker marker = PoiHelper.showPoi(map, poi.title, poi.category, new LatLng(poi.location.getLatitude(), poi.location.getLongitude()), poiType);
+        mPoiMap.put(poi.title, marker);
     }
 
-    public interface OnLocationInfo {
-        void onLocationInfoCallback(String info);
+    public static void removePoi(MapboxMap map, String title) {
+        map.removeMarker(mPoiMap.get(title));
     }
 }

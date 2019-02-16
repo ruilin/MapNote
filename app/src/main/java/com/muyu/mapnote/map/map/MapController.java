@@ -36,8 +36,10 @@ import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.map.location.LocationController;
+import com.muyu.mapnote.map.map.poi.Poi;
+import com.muyu.mapnote.map.map.poi.PoiHelper;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
-import com.muyu.mapnote.map.map.poi.MapSearchController;
+import com.muyu.mapnote.map.map.poi.PoiSearchController;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.controller.ActivityController;
 import com.muyu.minimalism.framework.controller.SubController;
@@ -76,7 +78,7 @@ public class MapController extends ActivityController implements PermissionsList
 
     /* 插件 */
 //    private PoiSearchController mPoiSearchController = new PoiSearchController();
-    private MapSearchController mMapSearchController = new MapSearchController();
+    private PoiSearchController mPoiSearchController = new PoiSearchController();
     private LocationController mLocationController = new LocationController();
 
     public MapController(OnMapEventListener listener) {
@@ -89,7 +91,7 @@ public class MapController extends ActivityController implements PermissionsList
         mLayout = mActivity.findViewById(R.id.map_content);
 
 //        addController(activity, mPoiSearchController);
-        addController(activity, mMapSearchController);
+        addController(activity, mPoiSearchController);
         addController(activity, mLocationController);
 
         // 默认设置
@@ -293,6 +295,15 @@ public class MapController extends ActivityController implements PermissionsList
                     return;
             }
         }
+    }
+
+    public void showPoi(Poi poi) {
+        mLocationController.setCameraPosition(poi.location);
+        PoiHelper.showPoi(mapboxMap, poi);
+    }
+
+    public void removePoi(String title) {
+        PoiHelper.removePoi(mapboxMap, title);
     }
 
     private void getRoute(Point origin, Point destination) {

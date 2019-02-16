@@ -2,6 +2,7 @@ package com.muyu.mapnote.map.activity;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -11,18 +12,30 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.MapController;
 import com.muyu.mapnote.map.map.OnMapEventListener;
+import com.muyu.mapnote.map.map.poi.Poi;
+import com.muyu.mapnote.map.map.poi.PoiHelper;
+import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.note.PublishActivity;
 import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.SysUtils;
+import com.tencent.lbssearch.object.result.SearchResultObject;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.w3c.dom.Text;
 
 import java.util.Set;
 
@@ -33,6 +46,7 @@ public class MapActivity extends BaseActivity
 //    private GoogleSearchHelper mSearchPlaceController;
     private BottomNavigationBar bottomNavigationBar;
     private DrawerLayout mLeftSideView;
+    private TextView searchKeyWord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +54,15 @@ public class MapActivity extends BaseActivity
         setContentView(R.layout.activity_map);
         setStatusBarColor(Color.WHITE);
 
+        EventBus.getDefault().register(this);
+
         View searchView = findViewById(R.id.view_home_et);
         searchView.setOnClickListener((View v) -> {
-            SearchActivity.startSearch(MapActivity.this);
+            SearchActivity.startSearch(MapActivity.this, searchKeyWord.getText().toString());
 //            if (mSearchPlaceController != null)
 //                mSearchPlaceController.toSearhMode();
         });
+        searchKeyWord = findViewById(R.id.view_home_tv);
 
         initMenu();
         initFloatButton();
@@ -214,6 +231,22 @@ public class MapActivity extends BaseActivity
 //        addController(mSearchPlaceController);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMapOptEvent(MapOptEvent event) {
+        switch (event.eventId) {
+            case MapOptEvent.MAP_EVENT_GOTO_LOCATION:
+                Poi poi = (Poi) event.object;
+                if (poi != null) {
+                    mMapController.showPoi(poi);
+                    searchKeyWord.setText(poi.title);
+                } else if (!searchKeyWord.getText().equals("搜索")) {
+                    mMapController.removePoi(searchKeyWord.getText().toString());
+                    searchKeyWord.setText("搜索");
+                }
+                break;
+        }
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -227,6 +260,7 @@ public class MapActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

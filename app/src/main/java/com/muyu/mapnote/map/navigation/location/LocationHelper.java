@@ -28,7 +28,23 @@ public enum LocationHelper {
         mListeners = new ArrayList<>();
     }
 
-    public Location toLocation(AMapLocation amapLocation) {
+    public static Location toLocation(com.tencent.lbssearch.object.Location tcLocation) {
+        if (tcLocation != null) {
+            Location location = new Location("tencent");
+            location.setTime(System.currentTimeMillis());
+            location.setLatitude(tcLocation.lat);
+            location.setLongitude(tcLocation.lng);
+            location.setAltitude(1.0f);
+            location.setSpeed(0.0f);
+            location.setBearing(0.0f);
+            location.setAccuracy(1.0f);
+            return location;
+        } else {
+            return null;
+        }
+    }
+
+    public static Location toLocation(AMapLocation amapLocation) {
         if (amapLocation != null) {
             Location location = new Location("AMap");
             location.setTime(amapLocation.getTime());

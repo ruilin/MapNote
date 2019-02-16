@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".map.activity.SearchActivity">
 
     <SearchView
@@ -15,9 +16,8 @@
         android:searchIcon="@mipmap/ic_search"
         android:queryHint="搜索" />
 
-    <ListView
+    <com.muyu.minimalism.view.recyclerview.VerticalRecyclerView
         android:id="@+id/search_list"
-        android:paddingHorizontal="10dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />

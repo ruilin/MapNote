@@ -20,7 +20,7 @@
         app:statusBarColor="@color/white"
         app:statusBarMode="dark"
         app:centerType="textView"
-        app:centerText="写游记"
+        app:centerText="动态"
         app:centerTextColor="@color/black"
         app:leftType="imageButton"
         app:leftDrawable="@mipmap/common_back"
