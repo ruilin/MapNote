@@ -236,9 +236,10 @@ public class MapActivity extends BaseActivity
         switch (event.eventId) {
             case MapOptEvent.MAP_EVENT_GOTO_LOCATION:
                 Poi poi = (Poi) event.object;
-                if (!searchKeyWord.getText().equals("搜索")) {
+                String defText = getResources().getString(R.string.action_search);
+                if (!searchKeyWord.getText().equals(defText)) {
                     mMapController.removePoi(searchKeyWord.getText().toString());
-                    searchKeyWord.setText("搜索");
+                    searchKeyWord.setText(defText);
                 }
                 if (poi != null) {
                     mMapController.showPoi(poi);

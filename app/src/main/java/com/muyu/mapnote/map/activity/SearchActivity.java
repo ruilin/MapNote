@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchActivity extends BaseActivity {
+    private static final String PARAM_KEY_KEYWORKD = "keyword";
     private List<SearchResultObject.SearchResultData> dataList = new ArrayList<>();
     private SearchView searchView;
     private VerticalRecyclerView listView;
@@ -83,7 +84,7 @@ public class SearchActivity extends BaseActivity {
         });
 
         Intent intent = getIntent();
-        String keyword = intent.getStringExtra("keyword");
+        String keyword = intent.getStringExtra(PARAM_KEY_KEYWORKD);
         if (!TextUtils.isEmpty(keyword) && !keyword.equals(searchView.getQueryHint().toString())) {
             searchView.setQuery(keyword, true);
         }
@@ -119,7 +120,7 @@ public class SearchActivity extends BaseActivity {
 
     public static void startSearch(Activity activity, String keyword) {
         Intent intent = new Intent(activity, SearchActivity.class);
-        intent.putExtra("keyword", keyword);
+        intent.putExtra(PARAM_KEY_KEYWORKD, keyword);
         activity.startActivity(intent);
         activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
