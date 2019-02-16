@@ -32,8 +32,10 @@ public enum LocationHelper {
         if (tcLocation != null) {
             Location location = new Location("tencent");
             location.setTime(System.currentTimeMillis());
-            location.setLatitude(tcLocation.lat);
-            location.setLongitude(tcLocation.lng);
+
+            GpsUtils.Gps gps = GpsUtils.gcj_To_Gps84(tcLocation.lat, tcLocation.lng);
+            location.setLatitude(gps.getWgLat());
+            location.setLongitude(gps.getWgLon());
             location.setAltitude(1.0f);
             location.setSpeed(0.0f);
             location.setBearing(0.0f);
