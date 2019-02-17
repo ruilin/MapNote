@@ -57,7 +57,7 @@ public class PoiHelper {
 //            poiType = PoiHelper.POI_TYPE_SEARCH_FIRST;
 //            isFirst = false;
 //        }
-        Marker marker = PoiHelper.showPoi(map, poi.title, poi.category, new LatLng(poi.location.getLatitude(), poi.location.getLongitude()), poiType);
+        Marker marker = PoiHelper.showPoi(map, poi.title, poi.address, new LatLng(poi.location.getLatitude(), poi.location.getLongitude()), poiType);
         mPoiMap.put(poi.title, marker);
     }
 

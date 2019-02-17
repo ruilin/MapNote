@@ -29,15 +29,18 @@ public class SearchHelper {
         if (gps != null) {
             //圆形范围搜索
             Location location1 = new Location().lat((float) gps.getLatitude()).lng((float) gps.getLongitude());
-            SearchParam.Nearby nearBy = new SearchParam.Nearby().point(location1).r(1000);
+            SearchParam.Nearby nearBy = new SearchParam.Nearby()
+                    .point(location1)
+                    .r(100000); // 单位：米
             //矩形搜索，这里的范围是故宫
             Location location2 = new Location().lat(39.913127f).lng(116.392164f);
             Location location3 = new Location().lat(39.923034f).lng(116.402078f);
             SearchParam.Rectangle rectangle = new SearchParam.Rectangle().point(location2, location3);
 
             searchParam = new SearchParam()
-                                        .keyword(keyWord)
-                                        .boundary(nearBy);
+                    .keyword(keyWord)
+                    .page_index(0)
+                    .boundary(nearBy);
         } else {
             //城市搜索
             SearchParam.Region region = new SearchParam.Region()
@@ -50,12 +53,14 @@ public class SearchHelper {
                     .keyword(keyWord)
                     .boundary(region);
         }
+        searchParam.page_size(20);
         tencentSearch.search(searchParam, new HttpResponseListener() {
 
             @Override
             public void onFailure(int arg0, String arg1, Throwable arg2) {
                 // TODO Auto-generated method stub
-                arg2.printStackTrace();
+                if (arg2 != null)
+                    arg2.printStackTrace();
             }
 
             @Override
