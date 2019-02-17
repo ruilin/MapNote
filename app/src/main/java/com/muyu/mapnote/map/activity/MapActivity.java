@@ -30,6 +30,7 @@ import com.muyu.mapnote.note.PublishActivity;
 import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.SysUtils;
+import com.muyu.minimalism.view.Msg;
 import com.tencent.lbssearch.object.result.SearchResultObject;
 
 import org.greenrobot.eventbus.EventBus;
@@ -238,24 +239,32 @@ public class MapActivity extends BaseActivity
                 Poi poi = (Poi) event.object;
                 String defText = getResources().getString(R.string.action_search);
                 if (!searchKeyWord.getText().equals(defText)) {
-                    mMapController.removePoi(searchKeyWord.getText().toString());
+                    mMapController.cleanKeywordPois();
                     searchKeyWord.setText(defText);
                 }
                 if (poi != null) {
                     mMapController.showPoi(poi);
-                    searchKeyWord.setText(poi.title);
+                    searchKeyWord.setText(event.message);
                 }
                 break;
         }
     }
 
+    long time_interval = 2000;
+    long last_back_time = 0;
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - last_back_time > time_interval) {
+                Msg.show("再按一次退出");
+            } else {
+                super.onBackPressed();
+            }
+            last_back_time = currentTime;
         }
     }
 

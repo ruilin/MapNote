@@ -16,9 +16,24 @@
         android:searchIcon="@mipmap/ic_search"
         android:queryHint="搜索" />
 
-    <com.muyu.minimalism.view.recyclerview.VerticalRecyclerView
-        android:id="@+id/search_list"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1">
+        <com.muyu.minimalism.view.recyclerview.VerticalRecyclerView
+            android:id="@+id/search_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+        <com.muyu.minimalism.view.tag.TagListView
+            xmlns:f="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/search_tag"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp"
+            f:horizontalSpacing="10dp"
+            f:orientation="horizontal"
+            f:verticalSpacing="10dp" />
+    </FrameLayout>
 </LinearLayout>

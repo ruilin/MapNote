@@ -302,8 +302,8 @@ public class MapController extends ActivityController implements PermissionsList
         PoiHelper.showPoi(mapboxMap, poi);
     }
 
-    public void removePoi(String title) {
-        PoiHelper.removePoi(mapboxMap, title);
+    public void cleanKeywordPois() {
+        PoiHelper.removePoiByType(mapboxMap, PoiHelper.POI_TYPE_SEARCH_OTHER);
     }
 
     private void getRoute(Point origin, Point destination) {

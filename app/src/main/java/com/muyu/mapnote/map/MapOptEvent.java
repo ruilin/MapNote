@@ -12,13 +12,15 @@ public class MapOptEvent<T> {
 
     public byte eventId = 0;
     public T object;
+    public String message;
 
-    public MapOptEvent(byte mapEvent, T object) {
+    public MapOptEvent(byte mapEvent, T object, String message) {
         this.eventId = mapEvent;
         this.object = object;
+        this.message = message;
     }
 
-    public static void toLocation(Poi poi) {
-        EventBus.getDefault().post(new MapOptEvent(MAP_EVENT_GOTO_LOCATION, poi));
+    public static void showSearchResult(String keyword, Poi poi) {
+        EventBus.getDefault().post(new MapOptEvent(MAP_EVENT_GOTO_LOCATION, poi, keyword));
     }
 }

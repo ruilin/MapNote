@@ -20,6 +20,8 @@ import com.tencent.lbssearch.object.result.Geo2AddressResultObject;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 
 public class PoiHelper {
 
@@ -27,7 +29,7 @@ public class PoiHelper {
     public final static byte POI_TYPE_SEARCH_FIRST = 1;
     public final static byte POI_TYPE_SEARCH_OTHER = 2;
 
-    private static Hashtable<String, Marker> mPoiMap = new Hashtable<String, Marker>();
+    private static Hashtable<String, Marker> mPoiKeywordMap = new Hashtable<String, Marker>();
 
     public static Marker showPoi(MapboxMap map, String title, String snippet, LatLng point, byte poiType) {
         IconFactory iconFactory = IconFactory.getInstance(BaseApplication.getInstance());
@@ -58,10 +60,25 @@ public class PoiHelper {
 //            isFirst = false;
 //        }
         Marker marker = PoiHelper.showPoi(map, poi.title, poi.address, new LatLng(poi.location.getLatitude(), poi.location.getLongitude()), poiType);
-        mPoiMap.put(poi.title, marker);
+        mPoiKeywordMap.put(poi.title, marker);
     }
 
-    public static void removePoi(MapboxMap map, String title) {
-        map.removeMarker(mPoiMap.get(title));
+    public static void removePoiByType(MapboxMap map, byte type) {
+        switch (type) {
+            case POI_TYPE_TARGET:
+                break;
+            case POI_TYPE_SEARCH_FIRST:
+                break;
+            case POI_TYPE_SEARCH_OTHER:
+                for(Iterator<Map.Entry<String, Marker>> iterator = mPoiKeywordMap.entrySet().iterator(); iterator.hasNext();){
+                    Map.Entry<String, Marker> entry = iterator.next();
+                    map.removeMarker(entry.getValue());
+                }
+                break;
+        }
+    }
+
+    public static void removePoiByKey(MapboxMap map, String key) {
+        map.removeMarker(mPoiKeywordMap.get(key));
     }
 }

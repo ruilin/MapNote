@@ -6,17 +6,20 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.SearchView;
 
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.poi.Poi;
 import com.muyu.mapnote.map.map.poi.SearchHelper;
-import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.view.recyclerview.CommonRecyclerAdapter;
 import com.muyu.minimalism.view.recyclerview.CommonViewHolder;
 import com.muyu.minimalism.view.recyclerview.VerticalRecyclerView;
+import com.muyu.minimalism.view.tag.Tag;
+import com.muyu.minimalism.view.tag.TagListView;
+import com.muyu.minimalism.view.tag.TagView;
 import com.tencent.lbssearch.object.result.SearchResultObject;
 
 import java.util.ArrayList;
@@ -28,11 +31,12 @@ public class SearchActivity extends BaseActivity {
     private SearchView searchView;
     private VerticalRecyclerView listView;
     private CommonRecyclerAdapter adapter;
+    private TagListView tagListView;
 
     CommonViewHolder.onItemCommonClickListener resultClicked = new CommonViewHolder.onItemCommonClickListener() {
         @Override
         public void onItemClickListener(int position) {
-            MapOptEvent.toLocation(Poi.toPoi(dataList.get(position)));
+            MapOptEvent.showSearchResult(searchView.getQuery().toString(), Poi.toPoi(dataList.get(position)));
             finish();
         }
 
@@ -47,6 +51,21 @@ public class SearchActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         setStatusBarColor(Color.WHITE);
+
+        tagListView = findViewById(R.id.search_tag);
+        ArrayList<Tag> tagList = new ArrayList<>();
+        tagList.add(new Tag(1, "景点"));
+        tagList.add(new Tag(2, "酒店"));
+        tagList.add(new Tag(3, "酒吧"));
+        tagList.add(new Tag(4, "美食"));
+        tagList.add(new Tag(5, "银行"));
+        tagListView.setTags(tagList);
+        tagListView.setOnTagClickListener(new TagListView.OnTagClickListener() {
+            @Override
+            public void onTagClick(TagView tagView, Tag tag) {
+                searchView.setQuery(tag.getTitle(), true);
+            }
+        });
 
         searchView = findViewById(R.id.search_sv);
         listView = findViewById(R.id.search_list);
@@ -79,6 +98,7 @@ public class SearchActivity extends BaseActivity {
                 } else {
                     adapter.clear();
                 }
+                tagListView.setVisibility(newText.length() == 0 ? View.VISIBLE : View.GONE);
                 return false;
             }
         });
@@ -130,7 +150,7 @@ public class SearchActivity extends BaseActivity {
         super.finish();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         if (dataList.size() == 0) {
-            MapOptEvent.toLocation(null);
+            MapOptEvent.showSearchResult(null, null);
         }
     }
 }
