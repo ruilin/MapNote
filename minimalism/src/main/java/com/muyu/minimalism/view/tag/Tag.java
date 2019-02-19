@@ -17,7 +17,11 @@ public class Tag implements Serializable {
 	private String title;
 
 	public Tag() {
-		
+	}
+
+	public Tag(String paramString) {
+		this.id = -1;
+		this.title = paramString;
 	}
 
 	public Tag(int paramInt, String paramString) {

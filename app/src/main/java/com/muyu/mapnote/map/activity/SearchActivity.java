@@ -54,11 +54,12 @@ public class SearchActivity extends BaseActivity {
 
         tagListView = findViewById(R.id.search_tag);
         ArrayList<Tag> tagList = new ArrayList<>();
-        tagList.add(new Tag(1, "景点"));
-        tagList.add(new Tag(2, "酒店"));
-        tagList.add(new Tag(3, "酒吧"));
-        tagList.add(new Tag(4, "美食"));
-        tagList.add(new Tag(5, "银行"));
+        tagList.add(new Tag("景点"));
+        tagList.add(new Tag("酒店"));
+        tagList.add(new Tag("美食"));
+        tagList.add(new Tag("酒吧"));
+        tagList.add(new Tag("超市"));
+        tagList.add(new Tag("银行"));
         tagListView.setTags(tagList);
         tagListView.setOnTagClickListener(new TagListView.OnTagClickListener() {
             @Override

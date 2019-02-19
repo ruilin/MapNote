@@ -36,8 +36,9 @@ import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.map.location.LocationController;
+import com.muyu.mapnote.map.map.poi.MomentPoi;
 import com.muyu.mapnote.map.map.poi.Poi;
-import com.muyu.mapnote.map.map.poi.PoiHelper;
+import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.map.map.poi.PoiSearchController;
 import com.muyu.minimalism.framework.app.BaseActivity;
@@ -87,6 +88,7 @@ public class MapController extends ActivityController implements PermissionsList
 
     @Override
     public void onCreate(BaseActivity activity) {
+        super.onCreate(activity);
         mActivity = activity;
         mLayout = mActivity.findViewById(R.id.map_content);
 
@@ -251,20 +253,20 @@ public class MapController extends ActivityController implements PermissionsList
         mapboxMap.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng point) {
-                if (destinationMarker != null) {
-                    mapboxMap.removeMarker(destinationMarker);
-                }
-                destinationCoord = point;
-                destinationMarker = mapboxMap.addMarker(new MarkerOptions()
-                        .position(destinationCoord)
-                );
-
-                if (originLocation != null) {
-                    LatLng originCoord = new LatLng(originLocation.getLatitude(), originLocation.getLongitude());
-                    Point destinationPosition = Point.fromLngLat(destinationCoord.getLongitude(), destinationCoord.getLatitude());
-                    Point originPosition = Point.fromLngLat(originCoord.getLongitude(), originCoord.getLatitude());
-                    getRoute(originPosition, destinationPosition);
-                }
+//                if (destinationMarker != null) {
+//                    mapboxMap.removeMarker(destinationMarker);
+//                }
+//                destinationCoord = point;
+//                destinationMarker = mapboxMap.addMarker(new MarkerOptions()
+//                        .position(destinationCoord)
+//                );
+//
+//                if (originLocation != null) {
+//                    LatLng originCoord = new LatLng(originLocation.getLatitude(), originLocation.getLongitude());
+//                    Point destinationPosition = Point.fromLngLat(destinationCoord.getLongitude(), destinationCoord.getLatitude());
+//                    Point originPosition = Point.fromLngLat(originCoord.getLongitude(), originCoord.getLatitude());
+//                    getRoute(originPosition, destinationPosition);
+//                }
             }
         });
 
@@ -298,12 +300,16 @@ public class MapController extends ActivityController implements PermissionsList
     }
 
     public void showPoi(Poi poi) {
-        mLocationController.setCameraPosition(poi.location);
-        PoiHelper.showPoi(mapboxMap, poi);
+        mLocationController.setCameraPosition(poi.lat, poi.lng);
+        PoiManager.showPoi(mapboxMap, poi);
+    }
+
+    public void showMoment(MomentPoi poi) {
+        PoiManager.showMoment(mapboxMap, poi);
     }
 
     public void cleanKeywordPois() {
-        PoiHelper.removePoiByType(mapboxMap, PoiHelper.POI_TYPE_SEARCH_OTHER);
+        PoiManager.removePoiByType(mapboxMap, PoiManager.POI_TYPE_SEARCH_OTHER);
     }
 
     private void getRoute(Point origin, Point destination) {

@@ -9,7 +9,7 @@ import com.muyu.minimalism.framework.app.BaseActivity;
 import java.util.ArrayList;
 
 public abstract class ActivityController {
-
+    private BaseActivity mActivity;
     private ArrayList<SubController> mControllerList = new ArrayList<>();
 
     public void addController(@NonNull BaseActivity activity, @NonNull SubController controller) {
@@ -17,6 +17,10 @@ public abstract class ActivityController {
             mControllerList.add(controller);
             controller.onAttached(activity);
         }
+    }
+
+    protected BaseActivity getActivity() {
+        return mActivity;
     }
 
     public void removeController(@NonNull ActivityController controller) {
@@ -28,7 +32,9 @@ public abstract class ActivityController {
         return mControllerList;
     }
 
-    public abstract void onCreate(BaseActivity activity);
+    public void onCreate(BaseActivity activity) {
+        mActivity = activity;
+    }
 
     public void onStart() {
     }

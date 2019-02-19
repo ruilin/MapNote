@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimaryDark">
     </com.ashokvarma.bottomnavigation.BottomNavigationBar>
 
     <include layout="@layout/content_map" />
@@ -39,7 +39,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginRight="14dp"
         android:layout_marginBottom="140dp"
-        android:tint="@color/colorPrimary"
+        android:tint="@color/colorPrimaryDark"
         android:elevation="5dp"
         app:fabSize="normal"
         app:backgroundTint="@color/white"
@@ -53,7 +53,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginRight="14dp"
         android:layout_marginBottom="80dp"
-        android:tint="@color/colorPrimary"
+        android:tint="@color/colorPrimaryDark"
         android:elevation="5dp"
         app:fabSize="normal"
         app:backgroundTint="@color/white"

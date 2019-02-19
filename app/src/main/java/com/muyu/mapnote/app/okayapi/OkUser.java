@@ -3,7 +3,6 @@ package com.muyu.mapnote.app.okayapi;
 import android.support.annotation.NonNull;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.muyu.mapnote.app.okayapi.callback.LoginCallback;
 import com.muyu.mapnote.app.okayapi.callback.RegisterCallback;
 import com.muyu.mapnote.app.okayapi.utils.SignUtils;
@@ -108,7 +107,7 @@ public class OkUser extends OkObject {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    JsonObject jsonData = getResponseData(response);
+                    JsonObject jsonData = getResponseJson(response);
                     if (jsonData != null) {
                         String errCode = jsonData.get("err_code").getAsString();
                         if (errCode.equals("0")) {
@@ -148,7 +147,7 @@ public class OkUser extends OkObject {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    JsonObject jsonData = getResponseData(response);
+                    JsonObject jsonData = getResponseJson(response);
                     if (jsonData != null) {
                         String errCode = jsonData.get("err_code").getAsString();
                         if (errCode.equals("0")) {

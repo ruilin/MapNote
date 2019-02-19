@@ -11,7 +11,7 @@ import com.muyu.minimalism.utils.StringUtils;
 
 public abstract class Loading extends Dialog {
 
-    public abstract void cancle();
+    public abstract void cancel();
     private TextView tv;
 
     public Loading(Context context) {
@@ -41,7 +41,7 @@ public abstract class Loading extends Dialog {
     @Override
     public void onBackPressed() {
         // 回调
-        cancle();
+        cancel();
         // 关闭Loading
         dismiss();
     }

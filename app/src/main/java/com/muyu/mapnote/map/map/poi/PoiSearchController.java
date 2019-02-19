@@ -90,12 +90,12 @@ public class PoiSearchController extends MapPluginController {
         }
         boolean isFirst = true;
         for (SearchResultObject.SearchResultData item : data) {
-            byte poiType = PoiHelper.POI_TYPE_SEARCH_OTHER;
+            byte poiType = PoiManager.POI_TYPE_SEARCH_OTHER;
             if (isFirst) {
-                poiType = PoiHelper.POI_TYPE_SEARCH_FIRST;
+                poiType = PoiManager.POI_TYPE_SEARCH_FIRST;
                 isFirst = false;
             }
-            Marker poi = PoiHelper.showPoi(mMap, item.title, item.category, new LatLng(item.location.lat, item.location.lng), poiType);
+            Marker poi = PoiManager.showPoi(mMap, item.title, item.category, new LatLng(item.location.lat, item.location.lng), poiType);
             searchResult.add(poi);
         }
     }

@@ -39,6 +39,7 @@ public class SearchPlaceController extends ActivityController {
 
     @Override
     public void onCreate(BaseActivity activity) {
+        super.onCreate(activity);
         mActivity = activity;
         initSearch();
     }

@@ -90,6 +90,18 @@ public enum LocationHelper {
         return null;
     }
 
+    public boolean isLocationFresh() {
+        Location location = getLastLocation();
+        if (location != null) {
+            long timeInterval = System.currentTimeMillis() - location.getTime();
+            // 15分钟内有效
+            if (timeInterval  < 15 * 60 * 1000) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void init() {
         mLocationClient = new AMapLocationClient(MapApplication.getInstance());
         //初始化定位参数

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -38,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <AutoCompleteTextView
+                <EditText
                     android:id="@+id/login_et_mobile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -97,8 +98,9 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorPrimary"
+                    android:backgroundTint="@color/colorPrimaryDark"
                     android:text="@string/action_sign_in"
+                    android:textColor="@color/white"
                     android:textStyle="bold" />
 
                 <Button
@@ -109,6 +111,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/colorPrimaryDark"
                     android:text="@string/action_sign_up"
+                    android:textColor="@color/white"
                     android:textStyle="bold" />
             </LinearLayout>
 

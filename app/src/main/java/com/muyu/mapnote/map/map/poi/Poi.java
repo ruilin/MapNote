@@ -13,7 +13,8 @@ public class Poi {
     public String tel;
     public String category;
     public String type;
-    public Location location;
+    public double lat;
+    public double lng;
 
     public static Poi toPoi(SearchResultObject.SearchResultData tcPoi) {
         Poi poi = new Poi();
@@ -23,7 +24,9 @@ public class Poi {
         poi.tel = tcPoi.tel;
         poi.category = tcPoi.category;
         poi.type = tcPoi.type;
-        poi.location = LocationHelper.toLocation(tcPoi.location);
+        Location location = LocationHelper.toLocation(tcPoi.location);
+        poi.lat = location.getLatitude();
+        poi.lng = location.getLongitude();
         return poi;
     }
 }

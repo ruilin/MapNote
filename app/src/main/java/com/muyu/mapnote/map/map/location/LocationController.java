@@ -54,7 +54,7 @@ public class LocationController extends MapPluginController {
                 public void onLocationUpdate(Location location) {
                     originLocation = location;
                     if (isFirst) {
-                        setCameraPosition(location);
+                        setCameraPosition(location.getLatitude(), location.getLongitude());
                         isFirst = false;
                     }
                     locationPlugin.forceLocationUpdate(location);
@@ -63,18 +63,16 @@ public class LocationController extends MapPluginController {
             Location lastLocation = LocationHelper.INSTANCE.getLastLocation();
             if (lastLocation != null) {
                 originLocation = lastLocation;
-                setCameraPosition(lastLocation);
+                setCameraPosition(lastLocation.getLatitude(), lastLocation.getLongitude());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void setCameraPosition(Location location) {
-        if (location != null) {
-            getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(location.getLatitude(), location.getLongitude()), 13));
-        }
+    public void setCameraPosition(double lat, double lng) {
+        getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(lat, lng), 13));
     }
 
     @Override
@@ -89,7 +87,7 @@ public class LocationController extends MapPluginController {
         if (originLocation == null) {
             Msg.show("无法获取定位");
         } else {
-            setCameraPosition(originLocation);
+            setCameraPosition(originLocation.getLatitude(), originLocation.getLongitude());
         }
         return true;
     }

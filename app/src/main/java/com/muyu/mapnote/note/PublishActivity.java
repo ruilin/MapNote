@@ -24,10 +24,13 @@ import android.widget.TextView;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.Config;
 import com.muyu.mapnote.app.MapApplication;
+import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkImage;
-import com.muyu.mapnote.map.map.poi.PoiHelper;
+import com.muyu.mapnote.app.okayapi.OkMoment;
+import com.muyu.mapnote.app.okayapi.callback.MomentPostCallback;
 import com.muyu.mapnote.map.map.poi.SearchHelper;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
+import com.muyu.minimalism.Loading;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.Logs;
 import com.muyu.minimalism.utils.MathUtils;
@@ -42,7 +45,6 @@ import com.yanzhenjie.album.Action;
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumConfig;
 import com.yanzhenjie.album.AlbumFile;
-import com.yanzhenjie.album.AlbumLoader;
 import com.yanzhenjie.album.api.widget.Widget;
 
 import java.io.File;
@@ -55,11 +57,16 @@ public class PublishActivity extends BaseActivity {
     private final int MAX_COUNT = 4;
     private ZzImageBox imageBox;
     private EditText editText;
+    private TextView placeTextView;
+    private Loading loading;
+    private boolean isPublished = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
         editText = findViewById(R.id.publish_et);
+        isPublished = false;
         initTitleBar();
         initImageBox();
         initPlace();
@@ -68,16 +75,22 @@ public class PublishActivity extends BaseActivity {
                 .setAlbumLoader(new MediaLoader())
                 .build());
 
+        loading = new Loading(this) {
+            @Override
+            public void cancel() {
+
+            }
+        };
     }
 
     private void initPlace() {
-        TextView placeText = findViewById(R.id.publish_place_text);
+        placeTextView = findViewById(R.id.publish_place_text);
         Location loc = LocationHelper.INSTANCE.getLastLocation();
-        placeText.setText("经纬度(" + MathUtils.round(loc.getLatitude(), 6) + "," + MathUtils.round(loc.getLongitude(), 6) + ")");
+        placeTextView.setText("经纬度(" + MathUtils.round(loc.getLatitude(), 8) + "," + MathUtils.round(loc.getLongitude(), 8) + ")");
         SearchHelper.searchLocationInfo(this, LocationHelper.INSTANCE.getLastLocation(), new SearchHelper.OnSearchLocationCallback() {
             @Override
             public void onSearchLocationCallback(String info) {
-                placeText.setText(info);
+                placeTextView.setText(info);
             }
         });
 
@@ -86,7 +99,7 @@ public class PublishActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                ClipData clipData = ClipData.newPlainText("copy from " + MapApplication.getInstance().getAppName(), placeText.getText());
+                ClipData clipData = ClipData.newPlainText("copy from " + MapApplication.getInstance().getAppName(), placeTextView.getText());
                 clipboardManager.setPrimaryClip(clipData);
                 Msg.show("复制成功");
             }
@@ -106,14 +119,35 @@ public class PublishActivity extends BaseActivity {
                         Msg.show("请写点什么或留下照片吧");
                         return;
                     }
-                    DialogUtils.show(PublishActivity.this, "发表", "确定发表游记是吗？", new DialogUtils.DialogCallback() {
+                    DialogUtils.show(PublishActivity.this, "发表", "您确定发表该动态吗？", new DialogUtils.DialogCallback() {
 
                         @Override
                         public void onPositiveClick(DialogInterface dialog) {
+                            /** 上传数据 */
                             dialog.dismiss();
-                            finish();
-                            Msg.show("发表成功");
-                            new OkImage(imageBox.getImagePathAt(0)).upload();
+                            loading.show("发表中，请耐心等待哦～");
+                            OkMoment moment = OkMoment.newInstance()
+                                    .setContent(editText.getText().toString())
+                                    .setLocation(LocationHelper.INSTANCE.getLastLocation(), placeTextView.getText().toString());
+                            for (int i = 0; i < imageBox.getCount(); i++) {
+                                moment.addImage(new OkImage(imageBox.getImagePathAt(i)));
+                            }
+                            moment.postInBackground(new MomentPostCallback() {
+                                @Override
+                                public void onPostSuccess() {
+                                    isPublished = true;
+                                    loading.dismiss();
+                                    finish();
+                                    Msg.show("发表成功");
+                                }
+
+                                @Override
+                                public void onPostFail(OkException e) {
+                                    Logs.e(e.getMessage());
+                                    Msg.show("网络异常，请检查设置");
+                                    loading.dismiss();
+                                }
+                            });
                         }
                     });
                 }
@@ -123,7 +157,7 @@ public class PublishActivity extends BaseActivity {
 
     @Override
     public void finish() {
-        if (imageBox.getCount() != 0 || editText.length() != 0) {
+        if (!isPublished && (imageBox.getCount() != 0 || editText.length() != 0)) {
             DialogUtils.show(PublishActivity.this, "提示", "要放弃正在编辑的内容吗？", new DialogUtils.DialogCallback() {
 
                 @Override

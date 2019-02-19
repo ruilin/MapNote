@@ -11,3 +11,6 @@ https://github.com/yanzhenjie/album
 
 EventBus
 https://github.com/greenrobot/EventBus
+
+圆形ImageView
+https://github.com/hdodenhof/CircleImageView

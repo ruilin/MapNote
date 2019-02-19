@@ -2,7 +2,6 @@ package com.muyu.mapnote.map.activity;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -12,7 +11,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
@@ -20,30 +18,38 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.app.okayapi.OkException;
+import com.muyu.mapnote.app.okayapi.OkMomentItem;
+import com.muyu.mapnote.app.okayapi.OkayApi;
+import com.muyu.mapnote.app.okayapi.OkMoment;
+import com.muyu.mapnote.app.okayapi.callback.MomentListCallback;
+import com.muyu.mapnote.app.okayapi.callback.MomentPostCallback;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.MapController;
 import com.muyu.mapnote.map.map.OnMapEventListener;
+import com.muyu.mapnote.map.map.poi.MomentPoi;
 import com.muyu.mapnote.map.map.poi.Poi;
-import com.muyu.mapnote.map.map.poi.PoiHelper;
+import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
+import com.muyu.mapnote.map.user.UserController;
 import com.muyu.mapnote.note.PublishActivity;
 import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
+import com.muyu.minimalism.utils.GpsUtils;
 import com.muyu.minimalism.utils.SysUtils;
 import com.muyu.minimalism.view.Msg;
-import com.tencent.lbssearch.object.result.SearchResultObject;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.w3c.dom.Text;
 
-import java.util.Set;
+import java.util.ArrayList;
 
 public class MapActivity extends BaseActivity
         implements OnMapEventListener {
 
     private MapController mMapController;
+    private UserController mUserController;
 //    private GoogleSearchHelper mSearchPlaceController;
     private BottomNavigationBar bottomNavigationBar;
     private DrawerLayout mLeftSideView;
@@ -75,6 +81,8 @@ public class MapActivity extends BaseActivity
     private void initController() {
         mMapController = new MapController(this);
         addController(mMapController);
+        mUserController = new UserController();
+        addController(mUserController);
     }
 
     private final int MAIN_MENU_HOME = 0;
@@ -96,17 +104,17 @@ public class MapActivity extends BaseActivity
                         R.mipmap.main_home,
                         R.string.main_menu_home)
                         .setInactiveIconResource(R.mipmap.main_home_disable)
-                        .setActiveColorResource(R.color.colorPrimary))
+                        .setActiveColorResource(R.color.colorPrimaryDark))
                 .addItem(new BottomNavigationItem(
                         R.mipmap.main_path,
                         R.string.main_menu_route)
                         .setInactiveIconResource(R.mipmap.main_path_disable)
-                        .setActiveColorResource(R.color.colorPrimary))
+                        .setActiveColorResource(R.color.colorPrimaryDark))
                 .addItem(new BottomNavigationItem(
                         R.mipmap.main_more,
                         R.string.main_menu_more)
                         .setInactiveIconResource(R.mipmap.main_more_disable)
-                        .setActiveColorResource(R.color.colorPrimary))
+                        .setActiveColorResource(R.color.colorPrimaryDark))
                 .setFirstSelectedPosition(0)//默认显示面板
                 .initialise();//初始化
 
@@ -179,7 +187,7 @@ public class MapActivity extends BaseActivity
                 // Handle navigation view item clicks here.
                 int id = item.getItemId();
 
-                if (id == R.id.nav_camera) {
+                if (id == R.id.nav_user) {
                     // Handle the camera action
                     startActivity(LoginActivity.class);
                 } else if (id == R.id.nav_gallery) {
@@ -221,7 +229,14 @@ public class MapActivity extends BaseActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(PublishActivity.class);
+                if (OkayApi.get().isLogined()) {
+                    if (LocationHelper.INSTANCE.isLocationFresh())
+                        startActivity(PublishActivity.class);
+                    else
+                        Msg.show("无法获取最新定位，请检查系统设置");
+                } else {
+                    startActivity(LoginActivity.class);
+                }
             }
         });
     }
@@ -278,5 +293,44 @@ public class MapActivity extends BaseActivity
     protected void onResume() {
         super.onResume();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        if (OkayApi.get().isLogined()) {
+            OkMoment.getAllMoment(new MomentListCallback() {
+                @Override
+                public void onSuccess(ArrayList<OkMomentItem> list) {
+                    Msg.show("成功");
+                    for (OkMomentItem item : list) {
+                        MomentPoi poi = new MomentPoi();
+                        poi.address = item.moment_place;
+                        poi.title = item.moment_content;
+                        GpsUtils.Gps gps = GpsUtils.gcj_To_Gps84(item.moment_lat, item.moment_lng);
+                        poi.lat = gps.getWgLat();
+                        poi.lng = gps.getWgLon();
+                        if (item.moment_picture1 != null) {
+                            poi.pictureUrlLiat.add(item.moment_picture1);
+                        }
+                        if (item.moment_picture2 != null) {
+                            poi.pictureUrlLiat.add(item.moment_picture2);
+                        }
+                        if (item.moment_picture3 != null) {
+                            poi.pictureUrlLiat.add(item.moment_picture3);
+                        }
+                        if (item.moment_picture4 != null) {
+                            poi.pictureUrlLiat.add(item.moment_picture4);
+                        }
+                        SysUtils.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mMapController.showMoment(poi);
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onFail(OkException e) {
+
+                }
+            });
+        }
     }
 }

@@ -22,6 +22,7 @@ import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkUser;
 import com.muyu.mapnote.app.okayapi.callback.LoginCallback;
 import com.muyu.mapnote.app.okayapi.callback.RegisterCallback;
+import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.minimalism.Loading;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.LoginUtils;
@@ -35,7 +36,7 @@ import com.muyu.minimalism.utils.SysUtils;
 public class LoginActivity extends BaseActivity {
     private final static String SP_KEY_USERNAME = "SP_KEY_LOGIN_USERNAME";
 
-    private AutoCompleteTextView mMobileView;
+    private EditText mMobileView;
     private EditText mPasswordView;
     private View mLoginFormView;
     private Loading mLoading;
@@ -80,7 +81,7 @@ public class LoginActivity extends BaseActivity {
 
         mLoading = new Loading(this) {
             @Override
-            public void cancle() {
+            public void cancel() {
 
             }
         };
@@ -145,6 +146,7 @@ public class LoginActivity extends BaseActivity {
                                 mLoading.dismiss();
                                 if (e == null) {
                                     Msg.show("登录成功!");
+                                    MapOptEvent.loginSuccess();
                                     finish();
                                 } else {
                                     Msg.show(e.getMessage());

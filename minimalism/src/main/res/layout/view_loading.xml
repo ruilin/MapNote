@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:indeterminateTint="@color/colorAccent"
+        android:indeterminateTint="@color/white"
         android:indeterminateTintMode="src_atop"
         android:layout_marginBottom="8dp"
         android:visibility="visible" />
@@ -21,7 +21,7 @@
         android:id="@+id/loading_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/white"
         android:layout_marginBottom="200dp"
         android:textSize="17sp"
         android:text="Loading"
