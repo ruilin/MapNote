@@ -80,8 +80,10 @@
         <activity
             android:name=".user.activity.LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".map.activity.SearchActivity"
-            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".map.activity.SearchActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".note.DetailActivity"></activity>
     </application>
 
 </manifest>

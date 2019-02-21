@@ -1,8 +1,12 @@
 package com.muyu.mapnote.app.okayapi;
 
 import com.google.gson.JsonObject;
+import com.muyu.mapnote.app.Config;
+import com.muyu.mapnote.app.Network;
 import com.muyu.mapnote.app.okayapi.callback.UploadCallback;
 import com.muyu.mapnote.app.okayapi.utils.SignUtils;
+import com.muyu.minimalism.utils.BitmapUtils;
+import com.muyu.minimalism.utils.FileUtils;
 import com.muyu.minimalism.utils.Logs;
 import com.muyu.minimalism.utils.MD5Utils;
 import com.muyu.minimalism.utils.StringUtils;
@@ -11,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Struct;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import okhttp3.Call;
@@ -26,7 +31,7 @@ public class OkImage extends OkObject {
     private String path;
 
     public OkImage(@NotNull String filePath) {
-        path = filePath;
+        path = BitmapUtils.compressImage(filePath, Config.genPhotoPathRandom(), 30);
     }
 
     private String getUploadUrl() {
@@ -43,15 +48,13 @@ public class OkImage extends OkObject {
 
 
     public boolean upload(@NotNull UploadCallback callback) {
-        if (!OkayApi.get().isLogined()) {
-            return false;
-        }
-        OkHttpClient mOkHttpClent = new OkHttpClient();
-        File file = new File(path);
+        OkHttpClient mOkHttpClent = Network.getClient();
         MultipartBody.Builder builder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("file", file.getName(),
-                        RequestBody.create(MediaType.parse("image/png"), file));
+                .setType(MultipartBody.FORM);
+
+        File file = new File(path);
+        builder.addFormDataPart("file", file.getName(),
+                RequestBody.create(MediaType.parse("image/png"), file));
 
         RequestBody requestBody = builder.build();
 
@@ -89,6 +92,7 @@ public class OkImage extends OkObject {
                     callback.onFail(e);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    callback.onFail(new OkException(e.getMessage()));
                 }
             }
         });

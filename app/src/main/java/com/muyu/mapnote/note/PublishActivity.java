@@ -115,8 +115,8 @@ public class PublishActivity extends BaseActivity {
                     finish();
                 } else if (action == CommonTitleBar.ACTION_RIGHT_TEXT) {
                     SysUtils.hideSoftInput(v);
-                    if (imageBox.getCount() == 0 && editText.length() == 0) {
-                        Msg.show("请写点什么或留下照片吧");
+                    if (imageBox.getCount() == 0) {
+                        Msg.show("选一张照片分享下吧");
                         return;
                     }
                     DialogUtils.show(PublishActivity.this, "发表", "您确定发表该动态吗？", new DialogUtils.DialogCallback() {
@@ -260,8 +260,7 @@ public class PublishActivity extends BaseActivity {
     }
 
     final int TAKE_PHOTO_REQUEST = 101;
-    SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
-    String cameraPath = Config.PHOTO_PATH + format.format(new Date()) + ".jpg";
+    String cameraPath = Config.genPhotoPath();
 
     private void takePhotoToDir() {
         if (Build.VERSION.SDK_INT >= 23) {
@@ -279,6 +278,7 @@ public class PublishActivity extends BaseActivity {
 
         Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //指定保存路径
+        cameraPath = Config.genPhotoPath();
         File imageFile = new File(cameraPath);
 
         //创建一个图片保存的Uri

@@ -45,7 +45,7 @@ public class ZzImageBox extends RecyclerView {
     
     private List<ImageEntity> mDatas;
     private MyAdapter mAdapter;
-    
+
     private Context context;
     
     private OnImageClickListener mClickListener;

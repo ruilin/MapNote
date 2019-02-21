@@ -7,6 +7,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.muyu.mapnote.app.Network;
 import com.muyu.mapnote.app.okayapi.callback.CommonCallback;
 import com.muyu.mapnote.app.okayapi.callback.MomentListCallback;
 import com.muyu.mapnote.app.okayapi.callback.MomentPostCallback;
@@ -127,13 +128,16 @@ public class OkMoment extends OkObject {
     public void postInBackground(MomentPostCallback callback) {
         uploadCount = 0;
         okImagesUrl.clear();
+        for (int i = 0; i < okImages.size(); i++) {
+            okImagesUrl.add("");
+        }
         if (okImages.size() > 0) {
             for (int i = 0; i < okImages.size(); i++) {
                 final int ind = i;
                 okImages.get(i).upload(new UploadCallback() {
                     @Override
                     public void onSuccess(String url) {
-                        okImagesUrl.add(ind, url);
+                        okImagesUrl.set(ind, url);
                         uploadCount++;
                         if (uploadCount == okImages.size()) {
                             postMoment(callback);
@@ -152,7 +156,7 @@ public class OkMoment extends OkObject {
     }
 
     private void postMoment(MomentPostCallback callback) {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = Network.getClient();
         final Request req = new Request.Builder()
                 .url(getPostUrl())
                 .get()
@@ -210,7 +214,7 @@ public class OkMoment extends OkObject {
 
     static int itemCount = 0;
     public static void getAllMoment(MomentListCallback callback) {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = Network.getClient();
         final Request req = new Request.Builder()
                 .url(getAllMomentUrl())
                 .get()
@@ -246,6 +250,7 @@ public class OkMoment extends OkObject {
                                         item.moment_lat = object.get("moment_lat").getAsDouble();
                                         item.moment_lng = object.get("moment_lng").getAsDouble();
                                         item.moment_place = object.get("moment_place").getAsString();
+                                        item.moment_nickname = object.get("moment_nickname").getAsString();
                                         if (Double.compare(item.moment_lat, 0) == 0 || Double.compare(item.moment_lng, 0) == 0) {
                                             item.isValid = false;
                                         }
@@ -284,6 +289,7 @@ public class OkMoment extends OkObject {
                     callback.onFail(e);
                 } catch (Exception e) {
                     e.printStackTrace();
+                    callback.onFail(new OkException(e.getMessage()));
                 }
             }
         });

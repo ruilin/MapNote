@@ -76,10 +76,10 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:tint="@color/black"
-                android:src="@mipmap/ic_scene"/>
+                android:src="@mipmap/ic_place"/>
             <TextView
                 android:id="@+id/publish_place_text"
                 android:layout_width="0dp"

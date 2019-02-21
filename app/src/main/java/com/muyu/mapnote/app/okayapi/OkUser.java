@@ -3,6 +3,7 @@ package com.muyu.mapnote.app.okayapi;
 import android.support.annotation.NonNull;
 
 import com.google.gson.JsonObject;
+import com.muyu.mapnote.app.Network;
 import com.muyu.mapnote.app.okayapi.callback.LoginCallback;
 import com.muyu.mapnote.app.okayapi.callback.RegisterCallback;
 import com.muyu.mapnote.app.okayapi.utils.SignUtils;
@@ -91,7 +92,7 @@ public class OkUser extends OkObject {
     }
 
     public void registerInBackground(@NonNull RegisterCallback callback) {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = Network.getClient();
         final Request req = new Request.Builder()
                             .url(getRegisterUrl())
                             .get()
@@ -131,7 +132,7 @@ public class OkUser extends OkObject {
     }
 
     public void loginInBackground(LoginCallback callback) {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = Network.getClient();
         final Request req = new Request.Builder()
                 .url(getLoginUrl())
                 .get()

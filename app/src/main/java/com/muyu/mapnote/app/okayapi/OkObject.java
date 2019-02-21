@@ -7,6 +7,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.muyu.mapnote.app.Network;
 import com.muyu.mapnote.app.okayapi.callback.CommonCallback;
 import com.muyu.mapnote.app.okayapi.callback.MomentListCallback;
 import com.muyu.mapnote.app.okayapi.utils.SignUtils;
@@ -116,7 +117,7 @@ public class OkObject {
     }
 
     public static void getCustomData(String modelName, int id, CommonCallback callback) {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = Network.getClient();
         final Request req = new Request.Builder()
                 .url(getCustomData(modelName, id))
                 .get()
@@ -159,7 +160,7 @@ public class OkObject {
     }
 
     public static void setCustomData(String modelName, int id, String jsonStr, CommonCallback callback) {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = Network.getClient();
         final Request req = new Request.Builder()
                 .url(getCustomUpdateUrl(modelName, id, jsonStr))
                 .get()

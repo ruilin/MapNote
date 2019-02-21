@@ -29,6 +29,7 @@ public class MapApplication extends BaseApplication {
         super.onCreate();
         Instance = this;
         Config.init();
+        Network.init();
 
         CrashReport.initCrashReport(getApplicationContext(), "bda53bc624", BuildConfig.DEBUG);
         //CrashReport.testJavaCrash();

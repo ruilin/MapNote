@@ -15,13 +15,17 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.plugins.markerview.MarkerViewManager;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.map.MapPluginController;
+import com.muyu.mapnote.map.map.moment.MomentMarker;
+import com.muyu.mapnote.map.map.moment.MomentPoi;
+import com.muyu.mapnote.note.DetailActivity;
+import com.muyu.mapnote.note.MomentPopupView;
 import com.muyu.minimalism.view.Msg;
 import com.tencent.lbssearch.object.result.SearchResultObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PoiSearchController extends MapPluginController {
+public class PoiController extends MapPluginController {
     private MarkerViewManager markerViewManager;
     private MapboxMap mMap;
     private MapView mMapView;
@@ -46,7 +50,7 @@ public class PoiSearchController extends MapPluginController {
             @Nullable
             @Override
             public View getInfoWindow(@NonNull Marker marker) {
-                View view = PoiSearchController.this.getActivity().getLayoutInflater().inflate(R.layout.marker_info_search, null);
+                View view = PoiController.this.getActivity().getLayoutInflater().inflate(R.layout.marker_info_search, null);
                 ((TextView) view.findViewById(R.id.marker_info_search_title)).setText(marker.getTitle());
                 ((TextView) view.findViewById(R.id.marker_info_search_content)).setText(marker.getSnippet());
                 ImageView imgView = view.findViewById(R.id.marker_info_search_img);
@@ -70,7 +74,12 @@ public class PoiSearchController extends MapPluginController {
 
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
-        Msg.showDebug(marker.getTitle());
+        if (marker instanceof MomentMarker) {
+            MomentPoi poi = ((MomentMarker) marker).getMomentPoi();
+//            DetailActivity.startDetailPage(getActivity(), ((MomentMarker)marker).getMomentPoi().id);
+            new MomentPopupView(getActivity(), poi).show(getActivity().getCurrentFocus());
+            return true;
+        }
         return super.onMarkerClick(marker);
     }
 

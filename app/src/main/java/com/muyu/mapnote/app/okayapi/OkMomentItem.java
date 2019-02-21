@@ -16,4 +16,5 @@ public class OkMomentItem extends OkObject {
     public double moment_lat = 0;
     public double moment_lng = 0;
     public String moment_place = "";
+    public String moment_nickname = "";
 }

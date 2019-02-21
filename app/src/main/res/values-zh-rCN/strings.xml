@@ -11,8 +11,8 @@
     <string name="action_settings">设置</string>
     <string name="action_search">搜索</string>
 
-    <string name="main_menu_home">看世界</string>
-    <string name="main_menu_route">我的足迹</string>
+    <string name="main_menu_home">发现</string>
+    <string name="main_menu_route">足迹</string>
     <string name="main_menu_discovery">发现</string>
     <string name="main_menu_more">更多</string>
 

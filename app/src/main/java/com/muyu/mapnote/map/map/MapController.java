@@ -16,7 +16,6 @@ import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Marker;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -36,11 +35,11 @@ import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.map.location.LocationController;
-import com.muyu.mapnote.map.map.poi.MomentPoi;
+import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.mapnote.map.map.poi.Poi;
 import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
-import com.muyu.mapnote.map.map.poi.PoiSearchController;
+import com.muyu.mapnote.map.map.poi.PoiController;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.controller.ActivityController;
 import com.muyu.minimalism.framework.controller.SubController;
@@ -79,7 +78,7 @@ public class MapController extends ActivityController implements PermissionsList
 
     /* 插件 */
 //    private PoiSearchController mPoiSearchController = new PoiSearchController();
-    private PoiSearchController mPoiSearchController = new PoiSearchController();
+    private PoiController mPoiSearchController = new PoiController();
     private LocationController mLocationController = new LocationController();
 
     public MapController(OnMapEventListener listener) {
@@ -305,7 +304,7 @@ public class MapController extends ActivityController implements PermissionsList
     }
 
     public void showMoment(MomentPoi poi) {
-        PoiManager.showMoment(mapboxMap, poi);
+        PoiManager.showMoment(getActivity(), mapboxMap, poi);
     }
 
     public void cleanKeywordPois() {

@@ -23,11 +23,10 @@ import com.muyu.mapnote.app.okayapi.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.OkayApi;
 import com.muyu.mapnote.app.okayapi.OkMoment;
 import com.muyu.mapnote.app.okayapi.callback.MomentListCallback;
-import com.muyu.mapnote.app.okayapi.callback.MomentPostCallback;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.MapController;
 import com.muyu.mapnote.map.map.OnMapEventListener;
-import com.muyu.mapnote.map.map.poi.MomentPoi;
+import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.mapnote.map.map.poi.Poi;
 import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
@@ -35,7 +34,6 @@ import com.muyu.mapnote.map.user.UserController;
 import com.muyu.mapnote.note.PublishActivity;
 import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
-import com.muyu.minimalism.utils.GpsUtils;
 import com.muyu.minimalism.utils.SysUtils;
 import com.muyu.minimalism.view.Msg;
 
@@ -83,6 +81,31 @@ public class MapActivity extends BaseActivity
         addController(mMapController);
         mUserController = new UserController();
         addController(mUserController);
+    }
+
+    public void updateMoments() {
+        if (OkayApi.get().isLogined()) {
+            OkMoment.getAllMoment(new MomentListCallback() {
+                @Override
+                public void onSuccess(ArrayList<OkMomentItem> list) {
+                    SysUtils.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Msg.show("成功");
+                            for (OkMomentItem item : list) {
+                                MomentPoi poi = PoiManager.toMomentPoi(item);
+                                mMapController.showMoment(poi);
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void onFail(OkException e) {
+
+                }
+            });
+        }
     }
 
     private final int MAIN_MENU_HOME = 0;
@@ -245,6 +268,7 @@ public class MapActivity extends BaseActivity
     public void onMapCreated(MapboxMap map, @SuppressLint("NotChinaMapView") MapView mapView) {
 //        mSearchPlaceController = new GoogleSearchHelper(map);
 //        addController(mSearchPlaceController);
+        updateMoments();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -293,44 +317,5 @@ public class MapActivity extends BaseActivity
     protected void onResume() {
         super.onResume();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        if (OkayApi.get().isLogined()) {
-            OkMoment.getAllMoment(new MomentListCallback() {
-                @Override
-                public void onSuccess(ArrayList<OkMomentItem> list) {
-                    Msg.show("成功");
-                    for (OkMomentItem item : list) {
-                        MomentPoi poi = new MomentPoi();
-                        poi.address = item.moment_place;
-                        poi.title = item.moment_content;
-                        GpsUtils.Gps gps = GpsUtils.gcj_To_Gps84(item.moment_lat, item.moment_lng);
-                        poi.lat = gps.getWgLat();
-                        poi.lng = gps.getWgLon();
-                        if (item.moment_picture1 != null) {
-                            poi.pictureUrlLiat.add(item.moment_picture1);
-                        }
-                        if (item.moment_picture2 != null) {
-                            poi.pictureUrlLiat.add(item.moment_picture2);
-                        }
-                        if (item.moment_picture3 != null) {
-                            poi.pictureUrlLiat.add(item.moment_picture3);
-                        }
-                        if (item.moment_picture4 != null) {
-                            poi.pictureUrlLiat.add(item.moment_picture4);
-                        }
-                        SysUtils.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mMapController.showMoment(poi);
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void onFail(OkException e) {
-
-                }
-            });
-        }
     }
 }
