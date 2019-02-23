@@ -2,6 +2,7 @@ package com.muyu.mapnote.map.navigation.location;
 
 import android.location.Location;
 
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.muyu.mapnote.app.MapApplication;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -59,6 +60,15 @@ public enum LocationHelper {
             return location;
         } else {
             return null;
+        }
+    }
+
+    public static LatLng getChinaLatlng(double lat, double lng) {
+        if (isInChina(lat, lng)) {
+            GpsUtils.Gps gps = GpsUtils.gcj_To_Gps84(lat, lng);
+            return new LatLng(gps.getWgLat(), gps.getWgLon());
+        } else {
+            return new LatLng(lat, lng);
         }
     }
 

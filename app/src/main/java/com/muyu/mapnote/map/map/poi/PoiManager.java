@@ -2,7 +2,6 @@ package com.muyu.mapnote.map.map.poi;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -21,7 +20,9 @@ import com.muyu.mapnote.map.map.moment.MomentMarker;
 import com.muyu.mapnote.map.map.moment.MomentMarkerOptions;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.minimalism.framework.app.BaseApplication;
+import com.muyu.minimalism.utils.bitmap.BitmapUtils;
 import com.muyu.minimalism.utils.GpsUtils;
+import com.muyu.minimalism.utils.bitmap.CanvasUtils;
 
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -45,7 +46,7 @@ public class PoiManager {
         poi.content = item.moment_content;
         poi.nickname = item.moment_nickname;
         poi.createtime = item.moment_createtime;
-        poi.like = item.moment_like;
+        poi.like = item.footmark_like;
         poi.place = item.moment_place;
         GpsUtils.Gps gps = GpsUtils.gcj_To_Gps84(item.moment_lat, item.moment_lng);
         poi.lat = gps.getWgLat();
@@ -65,7 +66,7 @@ public class PoiManager {
         return poi;
     }
 
-    public static Marker showPoi(MapboxMap map, String title, String snippet, LatLng point, byte poiType) {
+    public static Marker createPoi(MapboxMap map, String title, String snippet, LatLng point, byte poiType) {
         IconFactory iconFactory = IconFactory.getInstance(BaseApplication.getInstance());
         Icon icon = iconFactory.fromResource(R.drawable.yellow_marker);
         switch (poiType) {
@@ -90,13 +91,13 @@ public class PoiManager {
         );
     }
 
-    public static void showPoi(MapboxMap map, Poi poi) {
+    public static void createPoi(MapboxMap map, Poi poi) {
         byte poiType = PoiManager.POI_TYPE_SEARCH_OTHER;
 //        if (isFirst) {
 //            poiType = PoiHelper.POI_TYPE_SEARCH_FIRST;
 //            isFirst = false;
 //        }
-        Marker marker = showPoi(map, poi.title, poi.address, new LatLng(poi.lat, poi.lng), poiType);
+        Marker marker = createPoi(map, poi.title, poi.address, new LatLng(poi.lat, poi.lng), poiType);
         mKeywordPoiMap.put(poi.title, marker);
     }
 
@@ -120,7 +121,9 @@ public class PoiManager {
             Glide.with(context).asBitmap().load(poi.pictureUrlLiat.get(0)).into(new SimpleTarget<Bitmap>() {
                 @Override
                 public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                    marker.setIcon(iconFactory.fromBitmap(changeBitmapSize(resource)));
+                    Bitmap smallBitmap = BitmapUtils.changeBitmapSize(resource, 100, 100);
+                    Bitmap circle = CanvasUtils.drawCircleBitmap(smallBitmap);
+                    marker.setIcon(iconFactory.fromBitmap(circle));
                 }
             });
         }
@@ -129,27 +132,6 @@ public class PoiManager {
 
     public static MomentPoi getMomentPoi(String id) {
         return mMomentPoiMap.get(id).getMomentPoi();
-    }
-
-    private static Bitmap changeBitmapSize(Bitmap bitmap) {
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        //设置想要的大小
-        int newWidth = 80;
-        int newHeight = 100;
-        //计算压缩的比率
-        float scaleWidth=((float)newWidth)/width;
-        float scaleHeight=((float)newHeight)/height;
-
-        //获取想要缩放的matrix
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth,scaleHeight);
-
-        //获取新的bitmap
-        bitmap=Bitmap.createBitmap(bitmap,0,0,width,height,matrix,true);
-        bitmap.getWidth();
-        bitmap.getHeight();
-        return bitmap;
     }
 
     public static void removePoiByType(MapboxMap map, byte type) {

@@ -24,11 +24,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.SupportMapFragment;
-import com.mapbox.mapboxsdk.maps.UiSettings;
-import com.mapbox.mapboxsdk.plugins.localization.LocalizationPlugin;
-import com.mapbox.mapboxsdk.plugins.localization.MapLocale;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
-import com.mapbox.mapboxsdk.style.layers.Layer;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
@@ -160,35 +156,11 @@ public class MapController extends ActivityController implements PermissionsList
     }
 
     private void initUi() {
-        // 本地化
-        try {
-            LocalizationPlugin localizationPlugin = new LocalizationPlugin(mapView, mapboxMap);
-//            localizationPlugin.matchMapLanguageWithDeviceDefault();
-            localizationPlugin.setMapLanguage(MapLocale.SIMPLIFIED_CHINESE);
-            // 镜头转移到所在国家
-            // localizationPlugin.setCameraToLocaleCountry();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
-
-
-        // UI设置
-        UiSettings uiSettings = mapboxMap.getUiSettings();
-        uiSettings.setCompassEnabled(true);             //指南针
-        uiSettings.setTiltGesturesEnabled(false);        //设置是否可以调整地图倾斜角
-        uiSettings.setRotateGesturesEnabled(false);     //设置是否可以旋转地图
-        uiSettings.setAttributionEnabled(false);        //设置是否显示那个提示按钮
-        uiSettings.setLogoEnabled(false);               //隐藏logo
-
-        Layer mapText = mapboxMap.getLayer("country-label-lg");
-        if (mapText != null) {
-            mapText.setProperties(textField("{name_zh}"));
-        }
+        MapSettings.initMapStyle(mapboxMap, mapView);
 
         /**
          * Setting Map Events
          */
-
         mapboxMap.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
             @Override
             public void onMapClick(@NonNull LatLng point) {
@@ -300,7 +272,7 @@ public class MapController extends ActivityController implements PermissionsList
 
     public void showPoi(Poi poi) {
         mLocationController.setCameraPosition(poi.lat, poi.lng);
-        PoiManager.showPoi(mapboxMap, poi);
+        PoiManager.createPoi(mapboxMap, poi);
     }
 
     public void showMoment(MomentPoi poi) {

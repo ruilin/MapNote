@@ -23,6 +23,7 @@ import com.muyu.mapnote.app.okayapi.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.OkayApi;
 import com.muyu.mapnote.app.okayapi.OkMoment;
 import com.muyu.mapnote.app.okayapi.callback.MomentListCallback;
+import com.muyu.mapnote.footmark.FootmarkFragment;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.MapController;
 import com.muyu.mapnote.map.map.OnMapEventListener;
@@ -52,6 +53,13 @@ public class MapActivity extends BaseActivity
     private BottomNavigationBar bottomNavigationBar;
     private DrawerLayout mLeftSideView;
     private TextView searchKeyWord;
+
+    private FootmarkFragment footmarkFragment;
+
+    private final int MAIN_MENU_HOME = 0;
+    private final int MAIN_MENU_PATH = 1;
+    private final int MAIN_MENU_MORE = 2;
+    private int lastMemuIndex = MAIN_MENU_HOME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,10 +116,6 @@ public class MapActivity extends BaseActivity
         }
     }
 
-    private final int MAIN_MENU_HOME = 0;
-    private final int MAIN_MENU_PATH = 1;
-    private final int MAIN_MENU_MORE = 2;
-
     /**
      * 主菜单
      */
@@ -145,6 +149,30 @@ public class MapActivity extends BaseActivity
             @Override
             public void onTabSelected(int position) {
                 switch (position) {
+                    case MAIN_MENU_HOME:
+                        lastMemuIndex = MAIN_MENU_HOME;
+                        if (footmarkFragment != null && !footmarkFragment.isHidden()) {
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .hide(footmarkFragment)
+                                    .commit();
+                        }
+                        break;
+                    case MAIN_MENU_PATH:
+                        lastMemuIndex = MAIN_MENU_PATH;
+                        if (footmarkFragment == null) {
+                            footmarkFragment = FootmarkFragment.newInstance();
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.map_frag_footmark, footmarkFragment)
+                                    .commit();
+                        } else {
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .show(footmarkFragment)
+                                    .commit();
+                        }
+                        break;
                     case MAIN_MENU_MORE:
                         openLeftSideView();
                         break;
@@ -199,7 +227,7 @@ public class MapActivity extends BaseActivity
 
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {
-                bottomNavigationBar.selectTab(MAIN_MENU_HOME);
+                bottomNavigationBar.selectTab(lastMemuIndex);
             }
 
         });

@@ -44,7 +44,11 @@ public class DetailActivity extends BaseActivity {
             TextView userTv = findViewById(R.id.detail_user);
             userTv.setText(poi.nickname);
             TextView contentTv = findViewById(R.id.detail_content);
-            contentTv.setText(poi.content);
+            if (!StringUtils.isEmpty(poi.content)) {
+                contentTv.setText(poi.content);
+            } else {
+                contentTv.setVisibility(View.GONE);
+            }
             TextView timeTv = findViewById(R.id.detail_time);
             timeTv.setText(poi.createtime);
             TextView placeTv = findViewById(R.id.detail_place_text);

@@ -126,7 +126,7 @@ public class SearchActivity extends BaseActivity {
         }
 
         @Override
-        public void bindData(CommonViewHolder holder, SearchResultObject.SearchResultData data) {
+        public void bindData(CommonViewHolder holder, SearchResultObject.SearchResultData data, int position) {
             holder.setText(R.id.item_search_tv, data.title)
                     .setCommonClickListener(commonClickListener);
         }
@@ -144,6 +144,12 @@ public class SearchActivity extends BaseActivity {
         intent.putExtra(PARAM_KEY_KEYWORKD, keyword);
         activity.startActivity(intent);
         activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     @Override

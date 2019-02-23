@@ -1,4 +1,4 @@
-package com.muyu.minimalism.utils;
+package com.muyu.minimalism.utils.bitmap;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,10 +11,49 @@ import java.io.IOException;
 
 public class BitmapUtils {
 
+    /**
+     * 改变图片尺寸
+     * @param bitmap
+     * @param newWidth
+     * @param newHeight
+     * @return
+     */
+    public static Bitmap changeBitmapSize(Bitmap bitmap, int newWidth, int newHeight) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        int widthCut = width;
+        int heightCut = height;
+
+        float radOrigin = width / height;
+        float radNew = newWidth / newHeight;
+        if (radOrigin < radNew) {
+            // 保持宽度 按高度截取
+            float rad2 = newHeight / newWidth;
+            heightCut = (int)(width * rad2);
+        } else {
+            float rad2 = newWidth / newHeight;
+            widthCut = (int)(height * rad2);
+        }
+        // 计算压缩的比率
+        float scaleWidth = ((float) newWidth) / widthCut;
+        float scaleHeight = ((float) newHeight) / heightCut;
+
+        // 获取想要缩放的matrix
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // 获取新的bitmap
+        bitmap = Bitmap.createBitmap(bitmap, (width - widthCut) >> 1, (height - heightCut) >> 1, widthCut, heightCut, matrix,true);
+        bitmap.getWidth();
+        bitmap.getHeight();
+        return bitmap;
+    }
+
     public static String compressImage(String filePath, String targetPath, int quality)  {
-        Bitmap bm = getSmallBitmap(filePath);       //获取一定尺寸的图片
-        int degree = readPictureDegree(filePath);   //获取相片拍摄角度
-        if (degree != 0) {                            //旋转照片角度，防止头像横着显示
+        Bitmap bm = getSmallBitmap(filePath);       // 获取一定尺寸的图片
+        int degree = readPictureDegree(filePath);   // 获取相片拍摄角度
+        if (degree != 0) {                          // 旋转照片角度，防止头像横着显示
             bm = rotateBitmap(bm,degree);
         }
         File outputFile = new File(targetPath);

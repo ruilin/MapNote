@@ -124,6 +124,27 @@ public class OkMoment extends OkObject {
         return sb.toString();
     }
 
+    private static String getMyMomentUrl() {
+        String apiKey = "App.Market_Minimoments.GetMyMoment";
+
+        StringBuffer sb = new StringBuffer();
+        sb.append(OkayApi.get().getHost());
+        sb.append("/?s=" + apiKey);
+        sb.append("&app_key=" + OkayApi.get().getAppKey());
+        sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
+        sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
+
+        SortedMap<String, String> map = new TreeMap<>();
+        map.put("s", apiKey);
+        map.put("app_key", OkayApi.get().getAppKey());
+        map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
+        map.put("token", OkayApi.get().getCurrentUser().getToken());
+        String sign = SignUtils.getSign(map);
+
+        sb.append("&sign=" + sign);
+        return sb.toString();
+    }
+
     static int uploadCount = 0;
     public void postInBackground(MomentPostCallback callback) {
         uploadCount = 0;
@@ -213,10 +234,10 @@ public class OkMoment extends OkObject {
     }
 
     static int itemCount = 0;
-    public static void getAllMoment(MomentListCallback callback) {
+    private static void getMoments(MomentListCallback callback, String url) {
         OkHttpClient client = Network.getClient();
         final Request req = new Request.Builder()
-                .url(getAllMomentUrl())
+                .url(url)
                 .get()
                 .build();
         Call call = client.newCall(req);
@@ -293,6 +314,14 @@ public class OkMoment extends OkObject {
                 }
             }
         });
+    }
+
+    public static void getAllMoment(MomentListCallback callback) {
+        getMoments(callback, getAllMomentUrl());
+    }
+
+    public static void getMyMoment(MomentListCallback callback) {
+        getMoments(callback, getMyMomentUrl());
     }
 
     public void cancel() {

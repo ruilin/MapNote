@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<CommonViewHolder> {
@@ -20,6 +21,9 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Comm
         this.layoutInflater = LayoutInflater.from(context);
         this.dataList = dataList;
         this.layoutId = layoutId;
+        if (dataList == null) {
+            this.dataList = new ArrayList<>();
+        }
     }
 
     @Override
@@ -35,7 +39,7 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Comm
 
     @Override
     public void onBindViewHolder(CommonViewHolder holder, int position) {
-        bindData(holder, dataList.get(position));
+        bindData(holder, dataList.get(position), position);
     }
 
     @Override
@@ -54,6 +58,6 @@ public abstract class CommonRecyclerAdapter<T> extends RecyclerView.Adapter<Comm
         notifyDataSetChanged();
     }
 
-    public abstract void bindData(CommonViewHolder holder, T data);
+    public abstract void bindData(CommonViewHolder holder, T data, int position);
 
 }

@@ -17,9 +17,7 @@ import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.mapnote.map.map.moment.MomentMarker;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
-import com.muyu.mapnote.note.DetailActivity;
 import com.muyu.mapnote.note.MomentPopupView;
-import com.muyu.minimalism.view.Msg;
 import com.tencent.lbssearch.object.result.SearchResultObject;
 
 import java.util.ArrayList;
@@ -78,7 +76,7 @@ public class PoiController extends MapPluginController {
             MomentPoi poi = ((MomentMarker) marker).getMomentPoi();
 //            DetailActivity.startDetailPage(getActivity(), ((MomentMarker)marker).getMomentPoi().id);
             new MomentPopupView(getActivity(), poi).show(getActivity().getCurrentFocus());
-            return true;
+            return false;
         }
         return super.onMarkerClick(marker);
     }
@@ -104,7 +102,7 @@ public class PoiController extends MapPluginController {
                 poiType = PoiManager.POI_TYPE_SEARCH_FIRST;
                 isFirst = false;
             }
-            Marker poi = PoiManager.showPoi(mMap, item.title, item.category, new LatLng(item.location.lat, item.location.lng), poiType);
+            Marker poi = PoiManager.createPoi(mMap, item.title, item.category, new LatLng(item.location.lat, item.location.lng), poiType);
             searchResult.add(poi);
         }
     }

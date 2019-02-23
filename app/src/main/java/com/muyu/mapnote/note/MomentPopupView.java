@@ -1,12 +1,9 @@
 package com.muyu.mapnote.note;
 
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,10 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
-import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.minimalism.framework.app.BaseActivity;
-
-import org.w3c.dom.Text;
 
 public class MomentPopupView extends PopupWindow {
     private BaseActivity mContext;
@@ -39,11 +33,11 @@ public class MomentPopupView extends PopupWindow {
         if (!poi.pictureUrlLiat.isEmpty()) {
             Glide.with(mContext).load(poi.pictureUrlLiat.get(0)).into((ImageView) view.findViewById(R.id.moment_pupup_iv));
         }
-        TextView tv = view.findViewById(R.id.moment_pupup_content);
+        TextView tv = view.findViewById(R.id.footmark_content);
         tv.setText(poi.content);
-        tv = view.findViewById(R.id.moment_pupup_username);
+        tv = view.findViewById(R.id.footmark_username);
         tv.setText(poi.nickname);
-        tv = view.findViewById(R.id.moment_pupup_like);
+        tv = view.findViewById(R.id.footmark_pupup_like);
         tv.setText(String.valueOf(poi.like));
 
         view.setOnClickListener(new View.OnClickListener() {

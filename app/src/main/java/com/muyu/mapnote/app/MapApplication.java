@@ -40,8 +40,6 @@ public class MapApplication extends BaseApplication {
 
         // 初始化参数依次为 this, AppId, AppKey
         // AVOSCloud.initialize(this,"{{appid}}","{{appkey}}");
-
-        //Log.e("Map", "xxxxxxxxxx   " + sHA1(this));
     }
 
     public static MapApplication getInstance() {

@@ -5,17 +5,12 @@ import com.muyu.mapnote.app.Config;
 import com.muyu.mapnote.app.Network;
 import com.muyu.mapnote.app.okayapi.callback.UploadCallback;
 import com.muyu.mapnote.app.okayapi.utils.SignUtils;
-import com.muyu.minimalism.utils.BitmapUtils;
-import com.muyu.minimalism.utils.FileUtils;
-import com.muyu.minimalism.utils.Logs;
+import com.muyu.minimalism.utils.bitmap.BitmapUtils;
 import com.muyu.minimalism.utils.MD5Utils;
-import com.muyu.minimalism.utils.StringUtils;
 
 import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Struct;
-import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import okhttp3.Call;
