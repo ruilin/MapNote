@@ -1,6 +1,7 @@
 package com.muyu.mapnote.map.activity;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.Style;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkMomentItem;
@@ -36,6 +38,7 @@ import com.muyu.mapnote.note.PublishActivity;
 import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.SysUtils;
+import com.muyu.minimalism.view.DialogUtils;
 import com.muyu.minimalism.view.Msg;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,9 +54,9 @@ public class MapActivity extends BaseActivity
     private UserController mUserController;
 //    private GoogleSearchHelper mSearchPlaceController;
     private BottomNavigationBar bottomNavigationBar;
+    private NavigationView leftNavigationView;
     private DrawerLayout mLeftSideView;
     private TextView searchKeyWord;
-
     private FootmarkFragment footmarkFragment;
 
     private final int MAIN_MENU_HOME = 0;
@@ -159,6 +162,11 @@ public class MapActivity extends BaseActivity
                         }
                         break;
                     case MAIN_MENU_PATH:
+                        if (!OkayApi.get().isLogined()) {
+                            bottomNavigationBar.selectTab(MAIN_MENU_HOME);
+                            startActivity(LoginActivity.class);
+                            return;
+                        }
                         lastMemuIndex = MAIN_MENU_PATH;
                         if (footmarkFragment == null) {
                             footmarkFragment = FootmarkFragment.newInstance();
@@ -231,25 +239,33 @@ public class MapActivity extends BaseActivity
             }
 
         });
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        leftNavigationView = findViewById(R.id.nav_view);
+        leftNavigationView.setItemIconTintList(null);
+        leftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 // Handle navigation view item clicks here.
                 int id = item.getItemId();
 
                 if (id == R.id.nav_user) {
-                    // Handle the camera action
-                    startActivity(LoginActivity.class);
+                    if (!OkayApi.get().isLogined()) {
+                        startActivity(LoginActivity.class);
+                    } else {
+                        DialogUtils.show(MapActivity.this, "提示", "确定退出登录吗？", new DialogUtils.DialogCallback() {
+                            @Override
+                            public void onPositiveClick(DialogInterface dialog) {
+                                dialog.dismiss();
+                                mUserController.logout();
+                            }
+                        });
+                    }
                 } else if (id == R.id.nav_gallery) {
-
+                    mMapController.setMapStyle(Style.MAPBOX_STREETS);
                 } else if (id == R.id.nav_slideshow) {
-
+                    mMapController.setMapStyle(Style.SATELLITE_STREETS);
                 } else if (id == R.id.nav_manage) {
-
+                    mMapController.setMapStyle(Style.TRAFFIC_DAY);
                 } else if (id == R.id.nav_share) {
-
-                } else if (id == R.id.nav_send) {
 
                 }
 
@@ -313,6 +329,9 @@ public class MapActivity extends BaseActivity
                     mMapController.showPoi(poi);
                     searchKeyWord.setText(event.message);
                 }
+                break;
+            case MapOptEvent.MAP_EVENT_DATA_UPDATE:
+                updateMoments();
                 break;
         }
     }

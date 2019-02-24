@@ -28,6 +28,7 @@ import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkImage;
 import com.muyu.mapnote.app.okayapi.OkMoment;
 import com.muyu.mapnote.app.okayapi.callback.MomentPostCallback;
+import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.poi.SearchHelper;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.minimalism.Loading;
@@ -137,6 +138,7 @@ public class PublishActivity extends BaseActivity {
                                 public void onPostSuccess() {
                                     isPublished = true;
                                     loading.dismiss();
+                                    MapOptEvent.updateMap();
                                     finish();
                                     Msg.show("发表成功");
                                 }

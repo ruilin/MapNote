@@ -5,9 +5,12 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 
+import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
@@ -16,9 +19,12 @@ import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.minimalism.view.Msg;
 
+import java.util.List;
+
 public class LocationController extends MapPluginController {
     private PermissionsManager permissionsManager;
-    private LocationLayerPlugin locationPlugin;
+//    private LocationLayerPlugin locationPlugin;
+    private LocationComponent locationComponent;
     private Location originLocation;
     boolean isFirst = true;
 
@@ -32,15 +38,37 @@ public class LocationController extends MapPluginController {
         // Create an instance of LOST location engine
         initializeLocationEngine();
 
-        locationPlugin = new LocationLayerPlugin(getMapView(), getMap());
-        locationPlugin.setLocationLayerEnabled(true);
-        locationPlugin.setRenderMode(RenderMode.COMPASS);
+//        locationPlugin = new LocationLayerPlugin(getMapView(), getMap());
+//        locationPlugin.setLocationLayerEnabled(true);
+//        locationPlugin.setRenderMode(RenderMode.COMPASS);
+    }
+
+    @SuppressWarnings( {"MissingPermission"})
+    private void enableLocationComponent() {
+        initializeLocationEngine();
+
+        // Get an instance of the component
+        locationComponent = getMap().getLocationComponent();
+
+        // Activate with options
+        locationComponent.activateLocationComponent(getActivity(), getMap().getStyle());
+
+        // Enable to make component visible
+        locationComponent.setLocationComponentEnabled(true);
+
+        // Set the component's camera mode
+        locationComponent.setCameraMode(CameraMode.TRACKING);
+
+        // Set the component's render mode
+        locationComponent.setRenderMode(RenderMode.COMPASS);
+
     }
 
     @Override
     public void onRequestPermissionsResult(boolean granted) {
         if (granted) {
-            enableLocationPlugin();
+//            enableLocationPlugin();
+            enableLocationComponent();
         }
     }
 
@@ -57,7 +85,7 @@ public class LocationController extends MapPluginController {
                         setCameraPosition(location.getLatitude(), location.getLongitude());
                         isFirst = false;
                     }
-                    locationPlugin.forceLocationUpdate(location);
+                    locationComponent.forceLocationUpdate(location);
                 }
             });
             Location lastLocation = LocationHelper.INSTANCE.getLastLocation();
@@ -82,7 +110,7 @@ public class LocationController extends MapPluginController {
                 Msg.show("无法获取定位权限");
                 return true;
             }
-            originLocation = locationPlugin.getLastKnownLocation();
+            originLocation = locationComponent.getLastKnownLocation();
         }
         if (originLocation == null) {
             Msg.show("无法获取定位");

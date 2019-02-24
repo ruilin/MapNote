@@ -15,6 +15,7 @@ import com.muyu.mapnote.map.map.poi.Poi;
 import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.controller.ActivityController;
+import com.muyu.minimalism.view.Msg;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -22,13 +23,13 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class UserController extends ActivityController {
     private View headView;
-
+    private NavigationView navigationView;
     @Override
     public void onCreate(BaseActivity activity) {
         super.onCreate(activity);
         EventBus.getDefault().register(this);
 
-        NavigationView navigationView = activity.findViewById(R.id.nav_view);
+        navigationView = activity.findViewById(R.id.nav_view);
         headView = navigationView.getHeaderView(0);
         updateLogin();
     }
@@ -37,10 +38,18 @@ public class UserController extends ActivityController {
         if (OkayApi.get().isLogined()) {
             ((TextView)headView.findViewById(R.id.nav_username)).setText(OkayApi.get().getCurrentUser().getUserName());
             ((TextView)headView.findViewById(R.id.nav_account)).setText(OkayApi.get().getCurrentUser().getUserName());
+            navigationView.getMenu().getItem(0).setTitle("退出登录");
         } else {
             ((TextView)headView.findViewById(R.id.nav_username)).setText("未登录");
             ((TextView)headView.findViewById(R.id.nav_account)).setText("---");
+            navigationView.getMenu().getItem(0).setTitle("登录");
         }
+    }
+
+    public void logout() {
+        OkayApi.get().logOut();
+        EventBus.getDefault().post(new MapOptEvent<>(MapOptEvent.MAP_EVENT_LOGOUT, null, "logout"));
+        Msg.show("已退出登录");
     }
 
     @Override
@@ -51,8 +60,11 @@ public class UserController extends ActivityController {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMapOptEvent(MapOptEvent event) {
-        if (event.eventId == MapOptEvent.MAP_EVENT_LOGIN_SUCCESS) {
-            updateLogin();
+        switch (event.eventId){
+            case MapOptEvent.MAP_EVENT_LOGIN_SUCCESS:
+            case MapOptEvent.MAP_EVENT_LOGOUT:
+                updateLogin();
+            break;
         }
     }
 }

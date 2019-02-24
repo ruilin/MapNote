@@ -38,10 +38,12 @@ public class OkayApi {
 
     public void setUser(@NonNull OkUser user) {
         this.user = user;
-        SPUtils.put(SP_KEY_USER_TOKEN, user.getToken());
-        SPUtils.put(SP_KEY_USER_UUID, user.getUuid());
-        SPUtils.put(SP_KEY_USER_NAME, user.getUserName());
-        SPUtils.put(SP_KEY_USER_PASSWORD, user.getPassword());
+        if (user != null) {
+            SPUtils.put(SP_KEY_USER_TOKEN, user.getToken());
+            SPUtils.put(SP_KEY_USER_UUID, user.getUuid());
+            SPUtils.put(SP_KEY_USER_NAME, user.getUserName());
+            SPUtils.put(SP_KEY_USER_PASSWORD, user.getPassword());
+        }
     }
 
     public OkUser getCurrentUser() {

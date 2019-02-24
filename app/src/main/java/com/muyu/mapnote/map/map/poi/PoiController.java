@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PoiController extends MapPluginController {
-    private MarkerViewManager markerViewManager;
+//    private MarkerViewManager markerViewManager;
     private MapboxMap mMap;
     private MapView mMapView;
     private ArrayList<Marker> searchResult = new ArrayList<>();
@@ -67,7 +67,7 @@ public class PoiController extends MapPluginController {
             }
         });
 
-        markerViewManager = new MarkerViewManager(mMapView, mMap);
+//        markerViewManager = new MarkerViewManager(mMapView, mMap);
     }
 
     @Override
@@ -84,9 +84,9 @@ public class PoiController extends MapPluginController {
     @Override
     public void onDetached() {
         super.onDetached();
-        if (markerViewManager != null) {
-            markerViewManager.onDestroy();
-        }
+//        if (markerViewManager != null) {
+//            markerViewManager.onDestroy();
+//        }
     }
 
     private void showPoiList(List<SearchResultObject.SearchResultData> data) {

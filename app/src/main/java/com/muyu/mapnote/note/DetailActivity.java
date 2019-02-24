@@ -12,12 +12,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.StringUtils;
 import com.muyu.minimalism.view.BottomMenu;
 import com.muyu.minimalism.view.MediaLoader;
+import com.muyu.minimalism.view.Msg;
 import com.muyu.minimalism.view.imagebox.ZzImageBox;
 import com.wuhenzhizao.titlebar.widget.CommonTitleBar;
 import com.yanzhenjie.album.Action;
@@ -100,6 +102,11 @@ public class DetailActivity extends BaseActivity {
                 public void onAddClick() {
                 }
             });
+        } else {
+            Msg.show("地图正在刷新");
+            MapOptEvent.updateMap();
+            finish();
+            return;
         }
 
 

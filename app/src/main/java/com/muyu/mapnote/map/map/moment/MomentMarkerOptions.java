@@ -91,6 +91,7 @@ public class MomentMarkerOptions extends BaseMarkerOptions {
         MomentMarkerOptions markerOptions = new MomentMarkerOptions();
         markerOptions.position(position);
         markerOptions.icon(icon);
+        markerOptions.title(title);
         markerOptions.snippet(snippet);
         markerOptions.momentPoi(momentPoi);
         return new MomentMarker(markerOptions);

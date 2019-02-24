@@ -23,6 +23,7 @@ import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.maps.Style;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkMoment;
@@ -87,6 +88,8 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                                 new LatLng(okMomentItems.get(0).moment_lat, okMomentItems.get(0).moment_lng), 13));
                     }
+                    LatLng latlng = LocationHelper.getChinaLatlng(okMomentItems.get(0).moment_lat, okMomentItems.get(0).moment_lng);
+                    mark(latlng);
                 }
             }
         });
@@ -123,11 +126,8 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                 holder.setCommonClickListener(new CommonViewHolder.onItemCommonClickListener() {
                     @Override
                     public void onItemClickListener(int position) {
-                        if (mMarker != null) {
-                            mMap.removeMarker(mMarker);
-                        }
                         LatLng latlng = LocationHelper.getChinaLatlng(poi.moment_lat, poi.moment_lng);
-                        mMarker = PoiManager.createPoi(mMap, "", "", latlng, PoiManager.POI_TYPE_SEARCH_FIRST);
+                        mark(latlng);
                         double zoom = mMap.getCameraPosition().zoom;
                         if (zoom < 12) {
                             zoom = 12;
@@ -151,7 +151,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
         /** refresh */
         mRefreshView = mLayout.findViewById(R.id.footmark_refresh);
         mRefreshView.setColorSchemeColors(getResources().getColor(R.color.orange),
-                                        getResources().getColor(R.color.paleturquoise),
+                                        getResources().getColor(R.color.colorPrimary),
                                         getResources().getColor(R.color.tomato));
         mRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -165,8 +165,21 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
     public void onMapReady(MapboxMap mapboxMap) {
         mMap = mapboxMap;
         mMap.setMaxZoomPreference(15);
-        MapSettings.initMapStyle(mapboxMap, mMapView);
+        MapSettings.initMapStyle(mapboxMap, mMapView, new Style.OnStyleLoaded() {
+            @Override
+            public void onStyleLoaded(@NonNull Style style) {
+
+            }
+        });
         update();
+        mRefreshView.setRefreshing(true);
+    }
+
+    private void mark(LatLng latlng) {
+        if (mMarker != null) {
+            mMap.removeMarker(mMarker);
+        }
+        mMarker = PoiManager.createPoi(mMap, "", "", latlng, PoiManager.POI_TYPE_FOOTMARK);
     }
 
     public void update() {

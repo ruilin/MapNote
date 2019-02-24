@@ -34,6 +34,7 @@ public class PoiManager {
     public final static byte POI_TYPE_SEARCH_FIRST = 1;
     public final static byte POI_TYPE_SEARCH_OTHER = 2;
     public final static byte POI_TYPE_MOMENT = 3;
+    public final static byte POI_TYPE_FOOTMARK = 4;
 
     private static Hashtable<String, Marker> mKeywordPoiMap = new Hashtable<>();
     private static Hashtable<String, MomentMarker> mMomentPoiMap = new Hashtable<>();
@@ -74,12 +75,15 @@ public class PoiManager {
                 icon = iconFactory.fromResource(R.drawable.map_default_map_marker);
                 break;
             case POI_TYPE_SEARCH_FIRST:
-                icon = iconFactory.fromResource(R.drawable.yellow_marker);
-                break;
-            case POI_TYPE_SEARCH_OTHER:
                 icon = iconFactory.fromResource(R.drawable.blue_marker);
                 break;
+            case POI_TYPE_SEARCH_OTHER:
+                icon = iconFactory.fromResource(R.drawable.yellow_marker);
+                break;
             case POI_TYPE_MOMENT:
+                icon = iconFactory.fromResource(R.drawable.green_marker);
+                break;
+            case POI_TYPE_FOOTMARK:
                 icon = iconFactory.fromResource(R.drawable.green_marker);
                 break;
         }
@@ -112,8 +116,8 @@ public class PoiManager {
 //        );
         MomentMarkerOptions options = new MomentMarkerOptions();
         options.position(new LatLng(poi.lat, poi.lng))
-                .title(poi.title)
-                .snippet(poi.address)
+                .title(poi.nickname)
+                .snippet("……")
                 .icon(icon);
         options.momentPoi(poi);
         MomentMarker marker = (MomentMarker)map.addMarker(options);
@@ -131,7 +135,12 @@ public class PoiManager {
     }
 
     public static MomentPoi getMomentPoi(String id) {
-        return mMomentPoiMap.get(id).getMomentPoi();
+        MomentMarker marker = mMomentPoiMap.get(id);
+        if (marker != null) {
+            return marker.getMomentPoi();
+        } else {
+            return null;
+        }
     }
 
     public static void removePoiByType(MapboxMap map, byte type) {

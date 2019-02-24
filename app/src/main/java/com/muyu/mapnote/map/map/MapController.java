@@ -17,12 +17,12 @@ import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.constants.Style;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.maps.SupportMapFragment;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
@@ -94,7 +94,6 @@ public class MapController extends ActivityController implements PermissionsList
         // 默认设置
         MapboxMapOptions options = new MapboxMapOptions();
         options.maxZoomPreference(19);
-        options.styleUrl(Style.MAPBOX_STREETS);
         LatLng paris = new LatLng(52.5173,13.3889);
         options.camera(new CameraPosition.Builder()
                 .target(paris)
@@ -145,25 +144,32 @@ public class MapController extends ActivityController implements PermissionsList
         for (SubController controller : getSubControllers()) {
             ((MapPluginController) controller).onMapCreated(mapboxMap, mapView);
         }
+    }
 
-        permissionsManager = new PermissionsManager(this);
-        if (!PermissionsManager.areLocationPermissionsGranted(mActivity)) {
-            permissionsManager = new PermissionsManager(this);
-            permissionsManager.requestLocationPermissions(mActivity);
-        } else {
-            onPermissionResult(true);
-        }
+    public void setMapStyle(String style) {
+        mapboxMap.setStyle(style);
     }
 
     private void initUi() {
-        MapSettings.initMapStyle(mapboxMap, mapView);
+        MapSettings.initMapStyle(mapboxMap, mapView, new Style.OnStyleLoaded() {
+            @Override
+            public void onStyleLoaded(@NonNull Style style) {
+                permissionsManager = new PermissionsManager(MapController.this);
+                if (!PermissionsManager.areLocationPermissionsGranted(mActivity)) {
+                    permissionsManager = new PermissionsManager(MapController.this);
+                    permissionsManager.requestLocationPermissions(mActivity);
+                } else {
+                    onPermissionResult(true);
+                }
+            }
+        });
 
         /**
          * Setting Map Events
          */
         mapboxMap.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
             @Override
-            public void onMapClick(@NonNull LatLng point) {
+            public boolean onMapClick(@NonNull LatLng point) {
                 final PointF screenPoint = mapboxMap.getProjection().toScreenLocation(point);
                 ArrayList<SubController> pluginList = MapController.this.getSubControllers();
                 for (SubController plugin : pluginList) {
@@ -171,6 +177,7 @@ public class MapController extends ActivityController implements PermissionsList
                         ((MapPluginController) plugin).onMapClick(point, screenPoint);
                     }
                 }
+                return false;
             }
         });
 
@@ -223,7 +230,7 @@ public class MapController extends ActivityController implements PermissionsList
     private void initNavigation() {
         mapboxMap.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
             @Override
-            public void onMapClick(@NonNull LatLng point) {
+            public boolean onMapClick(@NonNull LatLng point) {
 //                if (destinationMarker != null) {
 //                    mapboxMap.removeMarker(destinationMarker);
 //                }
@@ -238,6 +245,7 @@ public class MapController extends ActivityController implements PermissionsList
 //                    Point originPosition = Point.fromLngLat(originCoord.getLongitude(), originCoord.getLatitude());
 //                    getRoute(originPosition, destinationPosition);
 //                }
+                return false;
             }
         });
 
