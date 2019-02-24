@@ -47,16 +47,16 @@ public class OkObject {
         sb.append(OkayApi.get().getHost());
         sb.append("/?s=" + apiKey);
         sb.append("&app_key=" + OkayApi.get().getAppKey());
-        sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
-        sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
+        //sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
+        //sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
         sb.append("&model_name=" + modelName);
         sb.append("&id=" + id);
 
         SortedMap<String, String> map = new TreeMap<>();
         map.put("s", apiKey);
         map.put("app_key", OkayApi.get().getAppKey());
-        map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
-        map.put("token", OkayApi.get().getCurrentUser().getToken());
+        //map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
+        //map.put("token", OkayApi.get().getCurrentUser().getToken());
         map.put("model_name", modelName);
         map.put("id", String.valueOf(id));
 
@@ -72,8 +72,8 @@ public class OkObject {
         sb.append(OkayApi.get().getHost());
         sb.append("/?s=" + apiKey);
         sb.append("&app_key=" + OkayApi.get().getAppKey());
-        sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
-        sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
+        //sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
+        //sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
         sb.append("&model_name=" + modelName);
         sb.append("&id=" + id);
         sb.append("&data=" + jsonStr);
@@ -81,8 +81,8 @@ public class OkObject {
         SortedMap<String, String> map = new TreeMap<>();
         map.put("s", apiKey);
         map.put("app_key", OkayApi.get().getAppKey());
-        map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
-        map.put("token", OkayApi.get().getCurrentUser().getToken());
+        //map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
+        //map.put("token", OkayApi.get().getCurrentUser().getToken());
         map.put("model_name", modelName);
         map.put("id", String.valueOf(id));
         map.put("data", jsonStr);

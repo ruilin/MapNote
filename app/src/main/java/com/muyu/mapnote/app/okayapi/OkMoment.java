@@ -133,12 +133,18 @@ public class OkMoment extends OkObject {
         sb.append("&app_key=" + OkayApi.get().getAppKey());
         sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
         sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
+//        sb.append("&moment_lat=" + lat);
+//        sb.append("&moment_lng=" + lng);
+//        sb.append("&moment_place=" + place);
 
         SortedMap<String, String> map = new TreeMap<>();
         map.put("s", apiKey);
         map.put("app_key", OkayApi.get().getAppKey());
         map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
         map.put("token", OkayApi.get().getCurrentUser().getToken());
+//        map.put("moment_lat", String.valueOf(lat));
+//        map.put("moment_lng", String.valueOf(lng));
+//        map.put("moment_place", String.valueOf(place));
         String sign = SignUtils.getSign(map);
 
         sb.append("&sign=" + sign);
@@ -197,6 +203,8 @@ public class OkMoment extends OkObject {
                     if (jsonData != null) {
                         String errCode = jsonData.get("err_code").getAsString();
                         if (errCode.equals("0")) {
+                            callback.onPostSuccess();
+                            /*
                             int id = jsonData.get("id").getAsInt();
                             JsonObject obj = new JsonObject();
                             obj.addProperty("moment_lat", lat);
@@ -213,6 +221,7 @@ public class OkMoment extends OkObject {
                                     callback.onPostFail(e);
                                 }
                             });
+                            */
                         } else {
                             String msg = jsonData.get("err_msg").getAsString();
                             Logs.e(msg);
@@ -262,6 +271,8 @@ public class OkMoment extends OkObject {
                                 OkMomentItem item = gson.fromJson( obj , OkMomentItem.class);
                                 list.add(item);
                             }
+                            callback.onSuccess(list);
+                            /*
                             itemCount = 0;
                             for (OkMomentItem item : list) {
                                 getCustomData("okayapi_moment", item.id, new CommonCallback() {
@@ -296,10 +307,11 @@ public class OkMoment extends OkObject {
                                     }
                                 });
                             }
+                            */
                         } else {
                             String msg = jsonData.get("err_msg").getAsString();
                             Logs.e(msg);
-                            OkException oe = new OkException("用户名或密码错误");
+                            OkException oe = new OkException(msg);
                             callback.onFail(oe);
                         }
                     } else {
