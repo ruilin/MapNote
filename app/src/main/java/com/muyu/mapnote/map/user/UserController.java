@@ -38,11 +38,11 @@ public class UserController extends ActivityController {
         if (OkayApi.get().isLogined()) {
             ((TextView)headView.findViewById(R.id.nav_username)).setText(OkayApi.get().getCurrentUser().getUserName());
             ((TextView)headView.findViewById(R.id.nav_account)).setText(OkayApi.get().getCurrentUser().getUserName());
-            navigationView.getMenu().getItem(0).setTitle("退出登录");
+            navigationView.getMenu().findItem(R.id.nav_user).setTitle("退出登录");
         } else {
             ((TextView)headView.findViewById(R.id.nav_username)).setText("未登录");
             ((TextView)headView.findViewById(R.id.nav_account)).setText("---");
-            navigationView.getMenu().getItem(0).setTitle("登录");
+            navigationView.getMenu().findItem(R.id.nav_user).setTitle("登录");
         }
     }
 

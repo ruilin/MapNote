@@ -120,7 +120,7 @@ public class PublishActivity extends BaseActivity {
                         Msg.show("选一张照片分享下吧");
                         return;
                     }
-                    DialogUtils.show(PublishActivity.this, "发表", "您确定发表该动态吗？", new DialogUtils.DialogCallback() {
+                    DialogUtils.show(PublishActivity.this, "发表", "您确定发表该游记吗？", new DialogUtils.DialogCallback() {
 
                         @Override
                         public void onPositiveClick(DialogInterface dialog) {
