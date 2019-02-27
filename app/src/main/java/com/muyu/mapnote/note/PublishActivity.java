@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.Config;
 import com.muyu.mapnote.app.MapApplication;
+import com.muyu.mapnote.app.MapBaseActivity;
 import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkImage;
 import com.muyu.mapnote.app.okayapi.OkMoment;
@@ -54,7 +55,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PublishActivity extends BaseActivity {
+public class PublishActivity extends MapBaseActivity {
     private final int MAX_COUNT = 4;
     private ZzImageBox imageBox;
     private EditText editText;

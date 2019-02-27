@@ -155,4 +155,9 @@ dependencies {
 
     // Bugly
     implementation 'com.tencent.bugly:crashreport:latest.release'
+
+    // 友盟
+    implementation 'com.umeng.umsdk:analytics:8.0.0'
+    implementation 'com.umeng.umsdk:common:2.0.0'
+    compile  'com.umeng.umsdk:utdid:1.1.5.3'
 }

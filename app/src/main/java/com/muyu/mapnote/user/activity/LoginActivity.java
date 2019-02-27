@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.app.MapBaseActivity;
 import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkUser;
 import com.muyu.mapnote.app.okayapi.callback.LoginCallback;
@@ -33,7 +34,7 @@ import com.muyu.minimalism.utils.SysUtils;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends MapBaseActivity {
     private final static String SP_KEY_USERNAME = "SP_KEY_LOGIN_USERNAME";
 
     private EditText mMobileView;

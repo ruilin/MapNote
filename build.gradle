@@ -28,12 +28,14 @@ allprojects {
         jcenter()
         mavenCentral()
         maven { url 'https://maven.google.com' }
-        //这里是 LeanCloud 的包仓库
+        // 这里是 LeanCloud 的包仓库
         maven {
             url "http://mvn.leancloud.cn/nexus/content/repositories/public"
         }
-        //mapbox
+        // mapbox
         maven { url "https://mapbox.bintray.com/mapbox" }
+        // 友盟
+        maven { url 'https://dl.bintray.com/umsdk/release' }
     }
 }
 

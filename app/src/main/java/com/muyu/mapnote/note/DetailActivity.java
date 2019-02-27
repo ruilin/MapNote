@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.app.MapBaseActivity;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.mapnote.map.map.poi.PoiManager;
@@ -27,7 +28,7 @@ import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumConfig;
 import java.util.ArrayList;
 
-public class DetailActivity extends BaseActivity {
+public class DetailActivity extends MapBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
