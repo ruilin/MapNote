@@ -47,7 +47,7 @@ public class PoiManager {
         poi.content = item.moment_content;
         poi.nickname = item.moment_nickname;
         poi.createtime = item.moment_createtime;
-        poi.like = item.footmark_like;
+        poi.like = item.moment_like;
         poi.place = item.moment_place;
         GpsUtils.Gps gps = GpsUtils.gcj_To_Gps84(item.moment_lat, item.moment_lng);
         poi.lat = gps.getWgLat();

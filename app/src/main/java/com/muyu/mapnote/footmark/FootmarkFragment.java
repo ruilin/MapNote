@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
@@ -31,7 +30,6 @@ import com.muyu.mapnote.app.okayapi.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.callback.MomentListCallback;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.MapSettings;
-import com.muyu.mapnote.map.map.poi.Poi;
 import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.note.DetailActivity;
@@ -122,7 +120,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                 tv = view.findViewById(R.id.footmark_username);
                 tv.setText(poi.moment_nickname);
                 tv = view.findViewById(R.id.footmark_pupup_like);
-                tv.setText(String.valueOf(poi.footmark_like));
+                tv.setText(String.valueOf(poi.moment_like));
 
                 view.findViewById(R.id.footmark_detail).setOnClickListener(new View.OnClickListener() {
                     @Override

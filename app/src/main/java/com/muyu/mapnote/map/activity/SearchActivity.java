@@ -137,7 +137,7 @@ public class SearchActivity extends MapBaseActivity {
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         overridePendingTransition(0,0);
         super.onPause();
     }
