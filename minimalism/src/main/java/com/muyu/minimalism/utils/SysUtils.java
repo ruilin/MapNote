@@ -21,6 +21,10 @@ public class SysUtils {
         new Handler(Looper.getMainLooper()).post(run);
     }
 
+    public static void runOnUiThreadDelayed(Runnable run, long delay) {
+        new Handler(Looper.getMainLooper()).postDelayed(run, delay);
+    }
+
     public static void showSoftInput(View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {

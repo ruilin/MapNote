@@ -17,6 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 
 public abstract class BaseApplication extends Application {
+    private final String SP_KEY_LAUNCH = "launch_count";
     protected static BaseApplication Instance;
 
     public static BaseApplication getInstance() {
@@ -39,6 +40,10 @@ public abstract class BaseApplication extends Application {
         initPhotoError();
         Msg.create(this);
         SPUtils.create(this);
+
+        int launchCoutt = SPUtils.get(SP_KEY_LAUNCH, 0);
+        SPUtils.put(SP_KEY_LAUNCH, ++launchCoutt);
+
     }
 
     private void initPhotoError(){
@@ -48,6 +53,10 @@ public abstract class BaseApplication extends Application {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             builder.detectFileUriExposure();
         }
+    }
+
+    public boolean isFirshLaunch() {
+        return SPUtils.get(SP_KEY_LAUNCH, 0) <= 1;
     }
 
     public static String sHA1(Context context) {
