@@ -27,12 +27,25 @@
             mapbox:mapbox_renderTextureMode="true"
             mapbox:mapbox_uiRotateGestures="false"/>
 
-        <com.muyu.minimalism.view.recyclerview.VerticalRecyclerView
-            android:id="@+id/footmark_list"
-            android:background="@color/white"
-            android:layout_marginTop="10dp"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
 
+            <com.muyu.minimalism.view.recyclerview.VerticalRecyclerView
+                android:id="@+id/footmark_list"
+                android:background="@color/white"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <TextView
+                android:id="@+id/foot_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:visibility="gone"
+                android:textColor="@color/gray2"
+                android:paddingTop="100dp"
+                android:text="还没有发表过游记，快来发一个吧"/>
+        </FrameLayout>
     </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

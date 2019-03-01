@@ -151,6 +151,30 @@ public class OkMoment extends OkObject {
         return sb.toString();
     }
 
+    private static String getGiveLikeUrl(String id) {
+        String apiKey = "App.Market_Minimoments.GiveLike";
+
+        StringBuffer sb = new StringBuffer();
+        sb.append(OkayApi.get().getHost());
+        sb.append("/?s=" + apiKey);
+        sb.append("&app_key=" + OkayApi.get().getAppKey());
+        sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
+        sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
+        sb.append("&id=" + id);
+
+        SortedMap<String, String> map = new TreeMap<>();
+        map.put("s", apiKey);
+        map.put("app_key", OkayApi.get().getAppKey());
+        map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
+        map.put("token", OkayApi.get().getCurrentUser().getToken());
+        map.put("id", id);
+
+        String sign = SignUtils.getSign(map);
+
+        sb.append("&sign=" + sign);
+        return sb.toString();
+    }
+
     static int uploadCount = 0;
     public void postInBackground(MomentPostCallback callback) {
         uploadCount = 0;
@@ -334,6 +358,48 @@ public class OkMoment extends OkObject {
 
     public static void getMyMoment(MomentListCallback callback) {
         getMoments(callback, getMyMomentUrl());
+    }
+
+    public static void postLike(String id, CommonCallback callback) {
+        OkHttpClient client = Network.getClient();
+        final Request req = new Request.Builder()
+                .url(getGiveLikeUrl(id))
+                .get()
+                .build();
+        Call call = client.newCall(req);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                OkException oe = new OkException(e.getMessage());
+                callback.onFail(oe);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    JsonObject jsonData = getResponseJson(response);
+                    if (jsonData != null) {
+                        String errCode = jsonData.get("err_code").getAsString();
+                        if (errCode.equals("0")) {
+                            callback.onSuccess(id);
+                        } else {
+                            String msg = jsonData.get("err_msg").getAsString();
+                            Logs.e(msg);
+                            OkException oe = new OkException(msg);
+                            callback.onFail(oe);
+                        }
+                    } else {
+                        OkException oe = new OkException("连接失败");
+                        callback.onFail(oe);
+                    }
+                } catch (OkException e) {
+                    callback.onFail(e);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    callback.onFail(new OkException(e.getMessage()));
+                }
+            }
+        });
     }
 
     public void cancel() {

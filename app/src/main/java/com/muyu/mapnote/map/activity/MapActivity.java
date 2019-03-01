@@ -20,6 +20,7 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.app.MapBaseActivity;
 import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.OkayApi;
@@ -47,7 +48,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
-public class MapActivity extends BaseActivity
+public class MapActivity extends MapBaseActivity
         implements OnMapEventListener {
 
     private MapController mMapController;
@@ -361,7 +362,7 @@ public class MapActivity extends BaseActivity
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }

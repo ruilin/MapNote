@@ -20,7 +20,7 @@
         app:statusBarColor="@color/white"
         app:statusBarMode="dark"
         app:centerType="textView"
-        app:centerText="动态"
+        app:centerText="游记"
         app:centerTextColor="@color/black"
         app:leftType="imageButton"
         app:leftDrawable="@mipmap/common_back"
@@ -41,7 +41,7 @@
             android:background="@color/white"
             android:padding="10dp"
             android:gravity="left|top"
-            android:hint="记录此情此景"
+            android:hint="到此一游～"
             android:minLines="5"
             android:textColorHint="@color/textGray1"
             android:maxLength="1000" />

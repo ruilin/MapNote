@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.SearchView;
 
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.app.MapBaseActivity;
+import com.muyu.mapnote.app.Umeng;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.poi.Poi;
 import com.muyu.mapnote.map.map.poi.SearchHelper;
@@ -25,7 +27,7 @@ import com.tencent.lbssearch.object.result.SearchResultObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchActivity extends BaseActivity {
+public class SearchActivity extends MapBaseActivity {
     private static final String PARAM_KEY_KEYWORKD = "keyword";
     private List<SearchResultObject.SearchResultData> dataList = new ArrayList<>();
     private SearchView searchView;
@@ -87,6 +89,7 @@ public class SearchActivity extends BaseActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 if (newText.length() > 1) {
+                    Umeng.record("Search", newText);
                     SearchHelper.searchPoiByKeyWord(SearchActivity.this, newText, new SearchHelper.OnSearchKeyWordCallback() {
                         @Override
                         public void onSearchKeyWordCallback(List<SearchResultObject.SearchResultData> result) {
@@ -134,7 +137,7 @@ public class SearchActivity extends BaseActivity {
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         overridePendingTransition(0,0);
         super.onPause();
     }

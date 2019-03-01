@@ -12,6 +12,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.app.MapBaseActivity;
+import com.muyu.mapnote.app.okayapi.OkException;
+import com.muyu.mapnote.app.okayapi.OkMoment;
+import com.muyu.mapnote.app.okayapi.callback.CommonCallback;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.mapnote.map.map.poi.PoiManager;
@@ -27,7 +31,7 @@ import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumConfig;
 import java.util.ArrayList;
 
-public class DetailActivity extends BaseActivity {
+public class DetailActivity extends MapBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +42,11 @@ public class DetailActivity extends BaseActivity {
                 .build());
 
         String id = getIntent().getStringExtra("MomentId");
-        MomentPoi poi = null;
+        MomentPoi data = null;
         if (!StringUtils.isEmpty(id)) {
-            poi = PoiManager.getMomentPoi(id);
+            data = PoiManager.getMomentPoi(id);
         }
+        final MomentPoi poi = data;
         if (poi != null) {
             TextView userTv = findViewById(R.id.detail_user);
             userTv.setText(poi.nickname);
@@ -121,10 +126,35 @@ public class DetailActivity extends BaseActivity {
         });
 
         CheckBox checkBox = titleBar.getRightCustomView().findViewById(R.id.detail_like);
+        checkBox.setChecked(LikeManager.get().hadPut(poi.id));
+        checkBox.setClickable(!LikeManager.get().hadPut(poi.id));
+        checkBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (poi != null) {
+                    OkMoment.postLike(poi.id, new CommonCallback() {
+                        @Override
+                        public void onSuccess(String result) {
+                            LikeManager.get().put(poi.id);
+                            checkBox.setChecked(true);
+                            checkBox.setClickable(false);
+                            Msg.show("点赞成功");
+                        }
+
+                        @Override
+                        public void onFail(OkException e) {
+                            checkBox.setChecked(false);
+                            Msg.show(e.getMessage());
+                        }
+                    });
+                }
+            }
+        });
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                if (isChecked) {
+                }
             }
         });
     }

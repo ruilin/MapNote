@@ -8,7 +8,7 @@ public class OkMomentItem extends OkObject {
     public String moment_content = "";
     public String moment_url = "";
     public String moment_createtime = "";
-    public int footmark_like = 0;
+    public int moment_like = 0;
     public String moment_picture1;
     public String moment_picture2;
     public String moment_picture3;

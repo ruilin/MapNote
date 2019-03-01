@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
@@ -29,6 +28,7 @@ import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkMoment;
 import com.muyu.mapnote.app.okayapi.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.callback.MomentListCallback;
+import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.MapSettings;
 import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
@@ -37,6 +37,9 @@ import com.muyu.minimalism.framework.app.BaseFragment;
 import com.muyu.minimalism.utils.StringUtils;
 import com.muyu.minimalism.view.recyclerview.CommonRecyclerAdapter;
 import com.muyu.minimalism.view.recyclerview.CommonViewHolder;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +53,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
     private Marker mMarker;
     private int oldSelected = -1;
     private SwipeRefreshLayout mRefreshView;
-
+    private TextView emptyView;
     public static FootmarkFragment newInstance() {
         return new FootmarkFragment();
     }
@@ -59,6 +62,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mLayout = inflater.inflate(R.layout.fragment_footmark, container, false);
+        emptyView = mLayout.findViewById(R.id.foot_empty);
         return mLayout;
     }
 
@@ -69,7 +73,10 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
         mViewModel.getMyMoment().observe(this, new Observer<ArrayList<OkMomentItem>>() {
             @Override
             public void onChanged(@Nullable ArrayList<OkMomentItem> okMomentItems) {
+                emptyView.setVisibility(okMomentItems.size() > 0 ? View.GONE : View.VISIBLE);
+
                 adapter.setDataList(okMomentItems);
+
                 if (mMap != null && !okMomentItems.isEmpty()) {
                     if (okMomentItems.size() > 1) {
                         PolylineOptions opt = new PolylineOptions();
@@ -104,7 +111,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
             @Override
             public void bindData(CommonViewHolder holder, OkMomentItem poi, int position) {
                 View view = holder.itemView;
-                view.setSelected(oldSelected == position);
+                view.setSelected(true);
                 if (!StringUtils.isEmpty(poi.moment_picture1)) {
                     Glide.with(getActivity()).load(poi.moment_picture1).into((ImageView) view.findViewById(R.id.moment_pupup_iv));
                 }
@@ -113,7 +120,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                 tv = view.findViewById(R.id.footmark_username);
                 tv.setText(poi.moment_nickname);
                 tv = view.findViewById(R.id.footmark_pupup_like);
-                tv.setText(String.valueOf(poi.footmark_like));
+                tv.setText(String.valueOf(poi.moment_like));
 
                 view.findViewById(R.id.footmark_detail).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -159,6 +166,15 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                 update();
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMapOptEvent(MapOptEvent event) {
+        switch (event.eventId) {
+            case MapOptEvent.MAP_EVENT_DATA_UPDATE:
+                update();
+                break;
+        }
     }
 
     @Override
