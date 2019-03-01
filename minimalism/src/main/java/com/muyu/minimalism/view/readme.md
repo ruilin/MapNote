@@ -15,3 +15,5 @@ https://github.com/greenrobot/EventBus
 圆形ImageView
 https://github.com/hdodenhof/CircleImageView
 
+图片轮播控件
+https://github.com/wenchaosong/Banner

@@ -99,7 +99,6 @@ dependencies {
     //    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-china-global:0.4.5'
 //    implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-china:1.1.0'
 
-
     // China plugin dependency
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-china:+'
     // Mapbox Maps SDK dependency
