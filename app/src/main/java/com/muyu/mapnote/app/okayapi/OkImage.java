@@ -29,6 +29,10 @@ public class OkImage extends OkObject {
         path = BitmapUtils.compressImage(filePath, Config.genPhotoPathRandom(), 30);
     }
 
+    public OkImage(@NotNull String filePath, int quality) {
+        path = BitmapUtils.compressImage(filePath, Config.genPhotoPathRandom(), quality);
+    }
+
     private String getUploadUrl() {
         SortedMap<String, String> map = new TreeMap<>();
         map.put("s", "App.CDN.UploadImg");

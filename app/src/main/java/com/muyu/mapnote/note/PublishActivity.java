@@ -126,7 +126,7 @@ public class PublishActivity extends MapBaseActivity {
                                     .setContent(editText.getText().toString())
                                     .setLocation(LocationHelper.INSTANCE.getLastLocation(), placeTextView.getText().toString());
                             for (int i = 0; i < imageBox.getCount(); i++) {
-                                moment.addImage(new OkImage(imageBox.getImagePathAt(i)));
+                                moment.addImage(new OkImage(imageBox.getImagePathAt(i), 60));
                             }
                             moment.postInBackground(new MomentPostCallback() {
                                 @Override

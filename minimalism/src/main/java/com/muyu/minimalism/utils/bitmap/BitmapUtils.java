@@ -50,6 +50,10 @@ public class BitmapUtils {
         return bitmap;
     }
 
+    /**
+     * @param quality 要压缩到的质量（0-100）
+     * @return
+     */
     public static String compressImage(String filePath, String targetPath, int quality)  {
         Bitmap bm = getSmallBitmap(filePath);       // 获取一定尺寸的图片
         int degree = readPictureDegree(filePath);   // 获取相片拍摄角度
