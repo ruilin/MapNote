@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bgGray"
+    tools:context=".user.activity.FeedbackActivity">
+
+    <com.wuhenzhizao.titlebar.widget.CommonTitleBar
+        android:id="@+id/detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:fillStatusBar="true"
+        app:showBottomLine="false"
+        app:titleBarColor="@color/white"
+        app:statusBarColor="@color/white"
+        app:statusBarMode="dark"
+        app:centerType="textView"
+        app:centerText="吐槽"
+        app:centerTextColor="@color/black"
+        app:leftType="imageButton"
+        app:leftDrawable="@mipmap/common_back"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textGray4"
+                android:textSize="15sp"
+                android:text="      感谢您使用地图笔记，如遇到任何问题，欢迎在此提交，您的意见和建议将会帮助我们改进产品，谢谢！"/>
+
+            <EditText
+                android:id="@+id/feedback_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:padding="10dp"
+                android:gravity="top|left"
+                android:textSize="14sp"
+                android:hint="请描述一下问题和操作步骤"
+                android:background="@drawable/shape_edittext"
+                android:maxLength="1000"
+                android:minLines="6"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textGray4"
+                android:layout_marginTop="20dp"
+                android:textSize="15sp"
+                android:text="联系方式(选填)"/>
+
+            <EditText
+                android:id="@+id/feedback_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
+                android:gravity="top|left"
+                android:textSize="15sp"
+                android:hint="QQ/Email"
+                android:background="@drawable/shape_edittext"
+                android:singleLine="true"
+                android:lines="1"/>
+
+            <Button
+                android:id="@+id/feedback_commit"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/selector_button"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:text="提交"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

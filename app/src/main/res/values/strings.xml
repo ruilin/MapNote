@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MapNote</string>
     <string name="app_slogan">records every footmarks</string>
@@ -19,15 +20,19 @@
     <!-- Strings related to login -->
     <string name="title_activity_login">Sign in</string>
     <string name="login_title">Mobile number login</string>
+    <string name="register_title">Mobile number register</string>
     <string name="prompt_phone">Mobile number</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">sign in</string>
     <string name="action_sign_up">Quick sign up</string>
+    <string name="action_to_sign_in">To sign in</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_mobile">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+    <string name="error_field_required_nickname">This field is required</string>
+    <string name="register_nickname">Nickname</string>
 
     <!-- image selector -->
     <string name="image_selector_title">Album</string>

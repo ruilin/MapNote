@@ -6,15 +6,19 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.app.okayapi.OkUser;
 import com.muyu.mapnote.app.okayapi.OkayApi;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.poi.Poi;
 import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.controller.ActivityController;
+import com.muyu.minimalism.utils.StringUtils;
 import com.muyu.minimalism.view.Msg;
 
 import org.greenrobot.eventbus.EventBus;
@@ -36,13 +40,21 @@ public class UserController extends ActivityController {
 
     private void updateLogin() {
         if (OkayApi.get().isLogined()) {
-            ((TextView)headView.findViewById(R.id.nav_username)).setText(OkayApi.get().getCurrentUser().getUserName());
-            ((TextView)headView.findViewById(R.id.nav_account)).setText(OkayApi.get().getCurrentUser().getUserName());
+            OkUser user = OkayApi.get().getCurrentUser();
+            ((TextView)headView.findViewById(R.id.nav_username)).setText(user.getNickname());
+            ((TextView)headView.findViewById(R.id.nav_account)).setText(user.getUserName());
+            if (!StringUtils.isEmpty(user.getHeadimg())) {
+                Glide.with(getActivity()).load(user.getHeadimg()).into((ImageView)headView.findViewById(R.id.nav_head_iv));
+            } else {
+                ((ImageView) headView.findViewById(R.id.nav_head_iv)).setImageResource(
+                        user.getSex() == 0 ? R.drawable.head_girl_1 : R.drawable.head_boy_1);
+            }
             navigationView.getMenu().findItem(R.id.nav_user).setTitle("退出登录");
         } else {
             ((TextView)headView.findViewById(R.id.nav_username)).setText("未登录");
             ((TextView)headView.findViewById(R.id.nav_account)).setText("---");
             navigationView.getMenu().findItem(R.id.nav_user).setTitle("登录");
+            ((ImageView) headView.findViewById(R.id.nav_head_iv)).setImageResource(R.drawable.head_girl_1);
         }
     }
 

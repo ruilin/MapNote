@@ -10,6 +10,9 @@ public class OkayApi {
     private static final String SP_KEY_USER_UUID = "SP_KEY_USER_UUID";
     private static final String SP_KEY_USER_NAME = "SP_KEY_USER_NAME";
     private static final String SP_KEY_USER_PASSWORD = "SP_KEY_USER_PASSWORD";
+    private static final String SP_KEY_USER_NICKNAME = "SP_KEY_USER_NICKNAME";
+    private static final String SP_KEY_USER_SEX = "SP_KEY_USER_SEX";
+    private static final String SP_KEY_USER_HEAD = "SP_KEY_USER_HEAD";
     private static OkayApi instance = null;
     private String host = "";
     private String appKey = "";
@@ -28,6 +31,10 @@ public class OkayApi {
             instance.user.setUuid(SPUtils.get(SP_KEY_USER_UUID, ""));
             instance.user.setUsername(SPUtils.get(SP_KEY_USER_NAME, ""));
             instance.user.setPassword(SPUtils.get(SP_KEY_USER_PASSWORD, ""));
+            instance.user.setNickname(SPUtils.get(SP_KEY_USER_NICKNAME, ""));
+            instance.user.setSex(SPUtils.get(SP_KEY_USER_SEX, 0));
+            instance.user.setHeadimg(SPUtils.get(SP_KEY_USER_HEAD, ""));
+
         }
     }
 
@@ -43,6 +50,9 @@ public class OkayApi {
             SPUtils.put(SP_KEY_USER_UUID, user.getUuid());
             SPUtils.put(SP_KEY_USER_NAME, user.getUserName());
             SPUtils.put(SP_KEY_USER_PASSWORD, user.getPassword());
+            SPUtils.put(SP_KEY_USER_NICKNAME, user.getNickname());
+            SPUtils.put(SP_KEY_USER_SEX, user.getSex());
+            SPUtils.put(SP_KEY_USER_HEAD, user.getHeadimg());
         }
     }
 

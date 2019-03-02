@@ -24,9 +24,8 @@ import com.muyu.mapnote.app.okayapi.OkUser;
 import com.muyu.mapnote.app.okayapi.callback.LoginCallback;
 import com.muyu.mapnote.app.okayapi.callback.RegisterCallback;
 import com.muyu.mapnote.map.MapOptEvent;
-import com.muyu.minimalism.Loading;
-import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.LoginUtils;
+import com.muyu.minimalism.view.Loading;
 import com.muyu.minimalism.view.Msg;
 import com.muyu.minimalism.utils.SPUtils;
 import com.muyu.minimalism.utils.SysUtils;
@@ -35,18 +34,24 @@ import com.muyu.minimalism.utils.SysUtils;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends MapBaseActivity {
-    private final static String SP_KEY_USERNAME = "SP_KEY_LOGIN_USERNAME";
+    public final static String SP_KEY_USERNAME = "SP_KEY_LOGIN_USERNAME";
 
     private EditText mMobileView;
     private EditText mPasswordView;
-    private View mLoginFormView;
     private Loading mLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        SysUtils.setStatusBarColor(this, getResources().getColor(R.color.bgGray));
+        SysUtils.setStatusBarColor(this, getResources().getColor(R.color.white));
+
+        findViewById(R.id.login_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         // Set up the login form.
         mMobileView = findViewById(R.id.login_et_mobile);
         if (SPUtils.contains(SP_KEY_USERNAME)) {
@@ -66,7 +71,7 @@ public class LoginActivity extends MapBaseActivity {
         });
         initPasswordShow();
 
-        Button button = findViewById(R.id.login_bt_login);
+        View button = findViewById(R.id.login_bt_login);
         button.setOnClickListener(view -> {
             SysUtils.hideSoftInput(view);
             attemptLogin(true);
@@ -78,14 +83,13 @@ public class LoginActivity extends MapBaseActivity {
             attemptLogin(false);
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
+        button = findViewById(R.id.login_to_register);
+        button.setOnClickListener(view -> {
+            startActivity(RegisterActivity.class);
+            finish();
+        });
 
-        mLoading = new Loading(this) {
-            @Override
-            public void cancel() {
-
-            }
-        };
+        mLoading = new Loading(this);
     }
 
     /**
@@ -131,7 +135,7 @@ public class LoginActivity extends MapBaseActivity {
             SPUtils.saveObject(SP_KEY_USERNAME, mobile);
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            mLoading.show(isLogin ? "登录中……" : "注册中……");
+            mLoading.show("登录中……");
 
             OkUser user = new OkUser();
             user.setUsername(mobile);
@@ -149,23 +153,6 @@ public class LoginActivity extends MapBaseActivity {
                                     Msg.show("登录成功!");
                                     MapOptEvent.loginSuccess();
                                     finish();
-                                } else {
-                                    Msg.show(e.getMessage());
-                                }
-                            }
-                        });
-                    }
-                });
-            } else {
-                user.registerInBackground(new RegisterCallback() {
-                    @Override
-                    public void done(OkException e) {
-                        SysUtils.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mLoading.dismiss();
-                                if (e == null) {
-                                    Msg.show("注册成功，请登录！");
                                 } else {
                                     Msg.show(e.getMessage());
                                 }

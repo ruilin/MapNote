@@ -2,10 +2,14 @@ package com.muyu.mapnote.app.okayapi;
 
 import android.support.annotation.NonNull;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.muyu.mapnote.app.Network;
+import com.muyu.mapnote.app.okayapi.callback.CommonCallback;
 import com.muyu.mapnote.app.okayapi.callback.LoginCallback;
 import com.muyu.mapnote.app.okayapi.callback.RegisterCallback;
+import com.muyu.mapnote.app.okayapi.callback.UploadCallback;
 import com.muyu.mapnote.app.okayapi.utils.SignUtils;
 import com.muyu.minimalism.utils.MD5Utils;
 import com.muyu.minimalism.utils.Logs;
@@ -21,12 +25,23 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class OkUser extends OkObject {
-    private String userName;
+    private String nickname = "未设置昵称";
+    private String userName = "";
     private String password;
     private String uuid;
     private String token;
+    private String headimg = "";
+    private int sex = 0;
 
     public OkUser() {}
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setHeadimg(String headimg) {
+        this.headimg = headimg;
+    }
 
     public void setUsername(String username) {
         this.userName = username;
@@ -34,6 +49,10 @@ public class OkUser extends OkObject {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
     }
 
     public void setUuid(String uuid) {
@@ -46,6 +65,18 @@ public class OkUser extends OkObject {
 
     public String getUserName() {
         return userName;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public int getSex() {
+        return sex;
+    }
+
+    public String getHeadimg() {
+        return headimg;
     }
 
     public String getPassword() {
@@ -62,16 +93,24 @@ public class OkUser extends OkObject {
 
 
     private String getRegisterUrl() {
+        JsonObject object = new JsonObject();
+        object.addProperty("nickname", nickname);
+        object.addProperty("sex", sex);
+        object.addProperty("head", headimg);
+        String json = new Gson().toJson(object);
+
         SortedMap<String, String> map = new TreeMap<>();
         map.put("s", "App.User.Register");
         map.put("app_key", OkayApi.get().getAppKey());
         map.put("username", userName);
         map.put("password", MD5Utils.md5(password));
+        map.put("ext_info", json);
         String sign = SignUtils.getSign(map);
         return OkayApi.get().getHost() + "?s=App.User.Register"
                 + "&username=" + userName
                 + "&password=" + MD5Utils.md5(password)
                 + "&app_key=" + OkayApi.get().getAppKey()
+                + "&ext_info=" + json
                 + "&sign=" + sign;
     }
 
@@ -91,12 +130,47 @@ public class OkUser extends OkObject {
                 + "&sign=" + sign;
     }
 
-    public void registerInBackground(@NonNull RegisterCallback callback) {
+    private String getLoginInfoUrl() {
+        SortedMap<String, String> map = new TreeMap<>();
+        String api = "App.User.Profile";
+        map.put("s", api);
+        map.put("app_key", OkayApi.get().getAppKey());
+        map.put("uuid", uuid);
+        map.put("token", token);
+        String sign = SignUtils.getSign(map);
+        return OkayApi.get().getHost() + "?s=" + api
+                + "&app_key=" + OkayApi.get().getAppKey()
+                + "&uuid=" + uuid
+                + "&token=" + token
+                + "&sign=" + sign;
+    }
+
+    public void registerInBackground(String headImgPath, @NonNull RegisterCallback callback) {
+        if (headImgPath != null) {
+            new OkImage(headImgPath).upload(new UploadCallback() {
+                @Override
+                public void onSuccess(String url) {
+                    headimg = url;
+                    postRegister(callback);
+                }
+
+                @Override
+                public void onFail(OkException e) {
+                    OkException oe = new OkException(e.getMessage());
+                    callback.done(oe);
+                }
+            });
+        } else {
+            postRegister(callback);
+        }
+    }
+
+    private void postRegister(@NonNull RegisterCallback callback) {
         OkHttpClient client = Network.getClient();
         final Request req = new Request.Builder()
-                            .url(getRegisterUrl())
-                            .get()
-                            .build();
+                .url(getRegisterUrl())
+                .get()
+                .build();
         Call call = client.newCall(req);
         call.enqueue(new Callback() {
             @Override
@@ -112,6 +186,7 @@ public class OkUser extends OkObject {
                     if (jsonData != null) {
                         String errCode = jsonData.get("err_code").getAsString();
                         if (errCode.equals("0")) {
+                            uuid = jsonData.get("uuid").getAsString();
                             callback.done(null);
                         } else {
                             String msg = jsonData.get("err_msg").getAsString();
@@ -156,8 +231,33 @@ public class OkUser extends OkObject {
                             String token = jsonData.get("token").getAsString();
                             setUuid(uuid);
                             setToken(token);
-                            OkayApi.get().setUser(OkUser.this);
-                            callback.done(OkUser.this, null);
+
+                            postCommonRequest(new CommonCallback() {
+                                @Override
+                                public void onSuccess(String json) {
+                                    JsonParser parser = new JsonParser();
+                                    JsonObject data = parser.parse(json).getAsJsonObject();
+                                    data = data.get("info").getAsJsonObject();
+                                    data = data.get("ext_info").getAsJsonObject();
+                                    nickname = data.get("nickname").getAsString();
+                                    sex = data.get("sex").getAsInt();
+                                    headimg = data.get("head").getAsString();
+                                    OkayApi.get().setUser(OkUser.this);
+                                    callback.done(OkUser.this, null);
+                                }
+
+                                @Override
+                                public void onFail(OkException e) {
+                                    String msg = jsonData.get("err_msg").getAsString();
+                                    Logs.e(msg);
+                                    callback.done(OkUser.this, null);
+                                }
+                            }, new UrlCallback() {
+                                @Override
+                                public String getUrl() {
+                                    return getLoginInfoUrl();
+                                }
+                            });
                         } else {
                             String msg = jsonData.get("err_msg").getAsString();
                             Logs.e(msg);

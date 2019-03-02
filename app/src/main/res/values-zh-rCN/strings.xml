@@ -19,16 +19,20 @@
 
     <!-- Strings related to login -->
     <string name="title_activity_login">登录</string>
-    <string name="login_title">手机号码登录</string>
-    <string name="prompt_phone">手机号码</string>
+    <string name="login_title">手机号登录</string>
+    <string name="register_title">手机号注册</string>
+    <string name="prompt_phone">手机号码 +86</string>
     <string name="prompt_password">密码(6~20位字母或数字)</string>
     <string name="action_sign_in">登录</string>
     <string name="action_sign_up">快速注册</string>
+    <string name="action_to_sign_in">已有账号，去登录</string>
     <string name="action_sign_in_short">登录</string>
     <string name="error_invalid_mobile">手机号码不正确</string>
     <string name="error_invalid_password">密码长度不够</string>
     <string name="error_incorrect_password">密码不正确</string>
     <string name="error_field_required">不能为空</string>
+    <string name="error_field_required_nickname">昵称不能为空</string>
+    <string name="register_nickname">昵称</string>
 
     <!-- image selector -->
     <string name="image_selector_title">相机胶卷</string>

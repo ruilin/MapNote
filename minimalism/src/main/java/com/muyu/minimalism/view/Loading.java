@@ -1,4 +1,4 @@
-package com.muyu.minimalism;
+package com.muyu.minimalism.view;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -7,11 +7,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.muyu.minimalism.R;
 import com.muyu.minimalism.utils.StringUtils;
 
-public abstract class Loading extends Dialog {
+public class Loading extends Dialog {
 
-    public abstract void cancel();
     private TextView tv;
 
     public Loading(Context context) {

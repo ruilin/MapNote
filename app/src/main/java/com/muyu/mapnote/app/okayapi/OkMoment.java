@@ -63,14 +63,13 @@ public class OkMoment extends OkObject {
     }
 
     private String getPostUrl() {
-        String nickname = "ruilin";
         String apiKey = "App.Market_Minimoments.PostMoment";
         SortedMap<String, String> map = new TreeMap<>();
         map.put("s", apiKey);
         map.put("app_key", OkayApi.get().getAppKey());
         map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
         map.put("token", OkayApi.get().getCurrentUser().getToken());
-        map.put("moment_nickname", nickname);
+        map.put("moment_nickname", OkayApi.get().getCurrentUser().getNickname());
         map.put("moment_access", "0");
         map.put("moment_lat", String.valueOf(lat));
         map.put("moment_lng", String.valueOf(lng));
@@ -82,7 +81,7 @@ public class OkMoment extends OkObject {
         sb.append("&app_key=" + OkayApi.get().getAppKey());
         sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
         sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
-        sb.append("&moment_nickname=" + nickname);
+        sb.append("&moment_nickname=" + OkayApi.get().getCurrentUser().getNickname());
         sb.append("&moment_access=" + "0");
         sb.append("&moment_lat=" + String.valueOf(lat));
         sb.append("&moment_lng=" + String.valueOf(lng));

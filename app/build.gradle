@@ -158,5 +158,5 @@ dependencies {
     // 友盟
     implementation 'com.umeng.umsdk:analytics:8.0.0'
     implementation 'com.umeng.umsdk:common:2.0.0'
-    implementation  'com.umeng.umsdk:utdid:1.1.5.3'
+    implementation 'com.umeng.umsdk:utdid:1.1.5.3'
 }

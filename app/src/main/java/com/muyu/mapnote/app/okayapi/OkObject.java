@@ -204,4 +204,50 @@ public class OkObject {
             }
         });
     }
+
+    public void postCommonRequest(CommonCallback callback, UrlCallback getUrl) {
+        OkHttpClient client = Network.getClient();
+        final Request req = new Request.Builder()
+                .url(getUrl.getUrl())
+                .get()
+                .build();
+        Call call = client.newCall(req);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                OkException oe = new OkException(e.getMessage());
+                callback.onFail(oe);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    JsonObject jsonData = getResponseJson(response);
+                    if (jsonData != null) {
+                        String errCode = jsonData.get("err_code").getAsString();
+                        if (errCode.equals("0")) {
+                            callback.onSuccess(jsonData.toString());
+                        } else {
+                            String msg = jsonData.get("err_msg").getAsString();
+                            Logs.e(msg);
+                            OkException oe = new OkException(msg);
+                            callback.onFail(oe);
+                        }
+                    } else {
+                        OkException oe = new OkException("连接失败");
+                        callback.onFail(oe);
+                    }
+                } catch (OkException e) {
+                    callback.onFail(e);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    callback.onFail(new OkException(e.getMessage()));
+                }
+            }
+        });
+    }
+
+    interface UrlCallback {
+        String getUrl();
+    }
 }

@@ -104,10 +104,10 @@ public enum LocationHelper {
         Location location = getLastLocation();
         if (location != null) {
             long timeInterval = System.currentTimeMillis() - location.getTime();
-            // 15分钟内有效
-            if (timeInterval  < 15 * 60 * 1000) {
+            // 3个小时内有效
+//            if (timeInterval  < 3 * 60 * 60 * 1000) {
                 return true;
-            }
+//            }
         }
         return false;
     }

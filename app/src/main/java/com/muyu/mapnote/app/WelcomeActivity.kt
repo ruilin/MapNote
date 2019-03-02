@@ -40,7 +40,7 @@ class WelcomeActivity : MapBaseActivity() {
         banner.visibility = View.GONE
         SysUtils.runOnUiThreadDelayed( {
             enter()
-        }, 3000)
+        }, 2000)
 
     }
 

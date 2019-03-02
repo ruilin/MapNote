@@ -36,8 +36,10 @@ import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.map.user.UserController;
 import com.muyu.mapnote.note.PublishActivity;
+import com.muyu.mapnote.user.activity.FeedbackActivity;
 import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
+import com.muyu.minimalism.utils.ShareUtils;
 import com.muyu.minimalism.utils.SysUtils;
 import com.muyu.minimalism.view.DialogUtils;
 import com.muyu.minimalism.view.Msg;
@@ -267,7 +269,9 @@ public class MapActivity extends MapBaseActivity
                 } else if (id == R.id.nav_manage) {
                     mMapController.setMapStyle(Style.TRAFFIC_DAY);
                 } else if (id == R.id.nav_share) {
-
+                    ShareUtils.shareToWeChat(MapActivity.this, "下载<" + getResources().getString(R.string.app_name) + ">APP，记录你的旅行足迹！");
+                } else if (id == R.id.nav_feedback) {
+                    startActivity(FeedbackActivity.class);
                 }
 
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -11,10 +11,10 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:background="@color/bgGray"
-    tools:context=".user.activity.LoginActivity">
+    tools:context=".user.activity.RegisterActivity">
 
     <ImageView
-        android:id="@+id/login_back"
+        android:id="@+id/register_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
@@ -38,16 +38,61 @@
             android:layout_marginLeft="5dp"
             android:textSize="24sp"
             android:textColor="@color/black"
-            android:text="@string/login_title"/>
+            android:text="@string/register_title"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+        <android.support.design.widget.TextInputLayout
+            android:textColorHint="@color/textGray2"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/register_et_nickname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/EditText"
+                android:hint="@string/register_nickname"
+                android:textColor="@color/black"
+                android:inputType="text"
+                android:maxLines="1"
+                android:maxLength="20"
+                android:singleLine="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <FrameLayout
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginLeft="10dp"
+            >
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/gray0"
+                android:padding="20dp"
+                android:src="@mipmap/ic_takephoto"/>
+
+            <ImageView
+                android:id="@+id/register_head"
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+    </LinearLayout>
     <android.support.design.widget.TextInputLayout
         android:textColorHint="@color/textGray2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/login_et_mobile"
+            android:id="@+id/register_et_mobile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/EditText"
@@ -69,7 +114,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
-                android:id="@+id/login_et_password"
+                android:id="@+id/register_et_password"
                 android:theme="@style/EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -100,28 +145,15 @@
         android:layout_marginTop="18dp"
         android:orientation="horizontal">
         <Button
-            android:id="@+id/login_bt_login"
+            android:id="@+id/register_bt_register"
             style="?android:textAppearanceSmall"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="40dp"
             android:background="@drawable/selector_button"
-            android:text="@string/action_sign_in"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/login_bt_register"
-            style="?android:textAppearanceSmall"
-            android:visibility="gone"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="40dp"
-            android:textSize="16sp"
-            android:backgroundTint="@color/colorPrimaryDark"
             android:text="@string/action_sign_up"
             android:textColor="@color/white"
+            android:textSize="16sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -136,7 +168,7 @@
             android:orientation="horizontal">
             <TextView
                 android:visibility="gone"
-                android:id="@+id/login_to_forget"
+                android:id="@+id/register_to_forget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|bottom"
@@ -152,14 +184,14 @@
                 android:layout_gravity="center"
                 android:background="@color/lineGray"/>
             <TextView
-                android:id="@+id/login_to_register"
+                android:id="@+id/register_to_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|bottom"
                 android:padding="10dp"
                 android:textSize="14sp"
                 android:textColor="@color/colorPrimaryDark"
-                android:text="@string/action_sign_up"/>
+                android:text="@string/action_to_sign_in"/>
         </LinearLayout>
     </RelativeLayout>
 

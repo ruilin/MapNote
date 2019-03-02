@@ -32,13 +32,12 @@ import com.muyu.mapnote.app.okayapi.callback.MomentPostCallback;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.poi.SearchHelper;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
-import com.muyu.minimalism.Loading;
-import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.Logs;
 import com.muyu.minimalism.utils.MathUtils;
 import com.muyu.minimalism.utils.SysUtils;
 import com.muyu.minimalism.view.BottomMenu;
 import com.muyu.minimalism.view.DialogUtils;
+import com.muyu.minimalism.view.Loading;
 import com.muyu.minimalism.view.MediaLoader;
 import com.muyu.minimalism.view.Msg;
 import com.muyu.minimalism.view.imagebox.ZzImageBox;
@@ -77,12 +76,7 @@ public class PublishActivity extends MapBaseActivity {
                 .setAlbumLoader(new MediaLoader())
                 .build());
 
-        loading = new Loading(this) {
-            @Override
-            public void cancel() {
-
-            }
-        };
+        loading = new Loading(this);
     }
 
     private void initPlace() {

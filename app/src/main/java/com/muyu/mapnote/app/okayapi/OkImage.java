@@ -33,8 +33,6 @@ public class OkImage extends OkObject {
         SortedMap<String, String> map = new TreeMap<>();
         map.put("s", "App.CDN.UploadImg");
         map.put("app_key", OkayApi.get().getAppKey());
-        map.put("username", OkayApi.get().getCurrentUser().getUserName());
-        map.put("password", MD5Utils.md5(OkayApi.get().getCurrentUser().getPassword()));
         String sign = SignUtils.getSign(map);
         return OkayApi.get().getHost()
                 + "/?s=App.CDN.UploadImg&app_key=" + OkayApi.get().getAppKey()
