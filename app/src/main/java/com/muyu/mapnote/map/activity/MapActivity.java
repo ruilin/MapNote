@@ -302,15 +302,19 @@ public class MapActivity extends MapBaseActivity
             @Override
             public void onClick(View view) {
                 if (OkayApi.get().isLogined()) {
-                    if (LocationHelper.INSTANCE.isLocationFresh())
-                        startActivity(PublishActivity.class);
-                    else
-                        Msg.show("无法获取最新定位，请检查系统设置");
+                    toPublishActivity();
                 } else {
                     startActivity(LoginActivity.class);
                 }
             }
         });
+    }
+
+    public void toPublishActivity() {
+        if (LocationHelper.INSTANCE.isLocationFresh())
+            startActivity(PublishActivity.class);
+        else
+            Msg.show("无法获取最新定位，请检查系统设置");
     }
 
     @Override

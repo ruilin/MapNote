@@ -47,14 +47,14 @@ public class UserController extends ActivityController {
                 Glide.with(getActivity()).load(user.getHeadimg()).into((ImageView)headView.findViewById(R.id.nav_head_iv));
             } else {
                 ((ImageView) headView.findViewById(R.id.nav_head_iv)).setImageResource(
-                        user.getSex() == 0 ? R.drawable.head_girl_1 : R.drawable.head_boy_1);
+                        user.getSex() == 0 ? R.drawable.head_girl_1 : R.drawable.head_def);
             }
             navigationView.getMenu().findItem(R.id.nav_user).setTitle("退出登录");
         } else {
             ((TextView)headView.findViewById(R.id.nav_username)).setText("未登录");
             ((TextView)headView.findViewById(R.id.nav_account)).setText("---");
             navigationView.getMenu().findItem(R.id.nav_user).setTitle("登录");
-            ((ImageView) headView.findViewById(R.id.nav_head_iv)).setImageResource(R.drawable.head_girl_1);
+            ((ImageView) headView.findViewById(R.id.nav_head_iv)).setImageResource(R.drawable.head_def);
         }
     }
 

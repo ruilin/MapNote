@@ -2,6 +2,7 @@ package com.muyu.mapnote.footmark;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.PolylineOptions;
+import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
@@ -29,12 +31,14 @@ import com.muyu.mapnote.app.okayapi.OkMoment;
 import com.muyu.mapnote.app.okayapi.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.callback.MomentListCallback;
 import com.muyu.mapnote.map.MapOptEvent;
+import com.muyu.mapnote.map.activity.MapActivity;
 import com.muyu.mapnote.map.map.MapSettings;
 import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.note.DetailActivity;
 import com.muyu.minimalism.framework.app.BaseFragment;
 import com.muyu.minimalism.utils.StringUtils;
+import com.muyu.minimalism.view.Msg;
 import com.muyu.minimalism.view.recyclerview.CommonRecyclerAdapter;
 import com.muyu.minimalism.view.recyclerview.CommonViewHolder;
 
@@ -53,11 +57,13 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
     private Marker mMarker;
     private int oldSelected = -1;
     private SwipeRefreshLayout mRefreshView;
-    private TextView emptyView;
+    private View emptyView;
     public static FootmarkFragment newInstance() {
         return new FootmarkFragment();
     }
     private CommonRecyclerAdapter adapter;
+    private CameraUpdate mapCamera;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -79,24 +85,34 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
 
                 if (mMap != null && !okMomentItems.isEmpty()) {
                     if (okMomentItems.size() > 1) {
+                        /* 初始化地图视角 */
                         PolylineOptions opt = new PolylineOptions();
                         List<OkMomentItem> list = mViewModel.getMyMoment().getValue();
                         for (OkMomentItem item : list) {
                             opt.add(LocationHelper.getChinaLatlng(item.moment_lat, item.moment_lng));
                         }
-                        opt.color(FootmarkFragment.this.getActivity().getResources().getColor(R.color.colorPrimary));
+                        opt.color(FootmarkFragment.this.getActivity().getResources().getColor(R.color.orangered));
                         opt.width(4);
                         mMap.addPolyline(opt);
                         LatLngBounds bounds = new LatLngBounds.Builder()
                                 .includes(opt.getPoints())
                                 .build();
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+                        mapCamera = CameraUpdateFactory.newLatLngBounds(bounds, 100);
+                        mMap.animateCamera(mapCamera);
                     } else {
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                                new LatLng(okMomentItems.get(0).moment_lat, okMomentItems.get(0).moment_lng), 13));
+                        mapCamera = CameraUpdateFactory.newLatLngZoom(new LatLng(okMomentItems.get(0).moment_lat, okMomentItems.get(0).moment_lng), 10);
+                        mMap.animateCamera(mapCamera);
                     }
                     LatLng latlng = LocationHelper.getChinaLatlng(okMomentItems.get(0).moment_lat, okMomentItems.get(0).moment_lng);
                     mark(latlng);
+                } else {
+                    Location loc = LocationHelper.INSTANCE.getLastLocation();
+                    if (loc != null) {
+                        LatLng latLng = new LatLng(loc.getLatitude(), loc.getLongitude());
+                        mapCamera = CameraUpdateFactory.newLatLngZoom(latLng, 1);
+                        mMap.animateCamera(mapCamera);
+                        mark(latLng);
+                    }
                 }
             }
         });
@@ -155,6 +171,20 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
 
+        mLayout.findViewById(R.id.footmark_map_reset).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetMapCamera();
+            }
+        });
+
+        mLayout.findViewById(R.id.footmark_publish_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MapActivity)getActivity()).toPublishActivity();
+            }
+        });
+
         /** refresh */
         mRefreshView = mLayout.findViewById(R.id.footmark_refresh);
         mRefreshView.setColorSchemeColors(getResources().getColor(R.color.orange),
@@ -204,13 +234,21 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
             public void onSuccess(ArrayList<OkMomentItem> list) {
                 mViewModel.getMyMoment().postValue(list);
                 mRefreshView.setRefreshing(false);
+                Msg.show("数据已刷新");
             }
 
             @Override
             public void onFail(OkException e) {
                 mRefreshView.setRefreshing(false);
+                Msg.show("网络异常");
             }
         });
+    }
+
+    private void resetMapCamera() {
+        if (mapCamera != null) {
+            mMap.animateCamera(mapCamera);
+        }
     }
 
     @Override

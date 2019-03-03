@@ -22,8 +22,10 @@
 
     <Button
         android:id="@+id/welcome_banner_item_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shape_search_bar"
+        android:layout_width="100dp"
+        android:layout_height="42dp"
+        android:background="@drawable/selector_button_round"
+        android:textColor="@color/white"
+        android:textSize="16sp"
         android:text="进入地图"/>
 </LinearLayout>

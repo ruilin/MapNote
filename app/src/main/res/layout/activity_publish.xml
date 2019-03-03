@@ -26,7 +26,7 @@
         app:leftDrawable="@mipmap/common_back"
         app:rightType="textView"
         app:rightText="发表"
-        app:rightTextColor="@color/black"
+        app:rightTextColor="@color/colorPrimaryDark"
         />
 
     <LinearLayout
