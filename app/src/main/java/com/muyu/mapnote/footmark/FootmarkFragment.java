@@ -2,6 +2,7 @@ package com.muyu.mapnote.footmark;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -37,18 +38,21 @@ import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.note.DetailActivity;
 import com.muyu.minimalism.framework.app.BaseFragment;
+import com.muyu.minimalism.utils.FileUtils;
 import com.muyu.minimalism.utils.StringUtils;
+import com.muyu.minimalism.utils.SysUtils;
 import com.muyu.minimalism.view.Msg;
 import com.muyu.minimalism.view.recyclerview.CommonRecyclerAdapter;
 import com.muyu.minimalism.view.recyclerview.CommonViewHolder;
-
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback {
+public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback, View.OnClickListener {
 
     private FootmarkViewModel mViewModel;
     private View mLayout;
@@ -63,18 +67,21 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
     }
     private CommonRecyclerAdapter adapter;
     private CameraUpdate mapCamera;
+    private boolean isChange;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mLayout = inflater.inflate(R.layout.fragment_footmark, container, false);
         emptyView = mLayout.findViewById(R.id.foot_empty);
+        EventBus.getDefault().register(this);
         return mLayout;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         mViewModel = ViewModelProviders.of(this).get(FootmarkViewModel.class);
         mViewModel.getMyMoment().observe(this, new Observer<ArrayList<OkMomentItem>>() {
             @Override
@@ -108,7 +115,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                 } else {
                     Location loc = LocationHelper.INSTANCE.getLastLocation();
                     if (loc != null) {
-                        LatLng latLng = new LatLng(loc.getLatitude(), loc.getLongitude());
+                        LatLng latLng = LocationHelper.getChinaLatlng(loc.getLatitude(), loc.getLongitude());
                         mapCamera = CameraUpdateFactory.newLatLngZoom(latLng, 1);
                         mMap.animateCamera(mapCamera);
                         mark(latLng);
@@ -171,19 +178,10 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
 
-        mLayout.findViewById(R.id.footmark_map_reset).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                resetMapCamera();
-            }
-        });
-
-        mLayout.findViewById(R.id.footmark_publish_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MapActivity)getActivity()).toPublishActivity();
-            }
-        });
+        mLayout.findViewById(R.id.footmark_map_reset).setOnClickListener(this);
+        mLayout.findViewById(R.id.footmark_publish_btn).setOnClickListener(this);
+        mLayout.findViewById(R.id.footmark_map_share).setOnClickListener(this);
+        mLayout.findViewById(R.id.footmark_map_change).setOnClickListener(this);
 
         /** refresh */
         mRefreshView = mLayout.findViewById(R.id.footmark_refresh);
@@ -196,6 +194,45 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                 update();
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.footmark_map_reset:
+                resetMapCamera();
+                break;
+            case R.id.footmark_publish_btn:
+                ((MapActivity)getActivity()).toPublishActivity();
+                break;
+            case R.id.footmark_map_change:
+                setMapStyle();
+                isChange = !isChange;
+                break;
+            case R.id.footmark_map_share:
+                /* 地图截屏分享 */
+                ImageView snap = FootmarkFragment.this.mLayout.findViewById(R.id.footmark_snapshot);
+                mMap.snapshot(new MapboxMap.SnapshotReadyCallback() {
+                    @Override
+                    public void onSnapshotReady(@NonNull Bitmap bitmap) {
+                        SysUtils.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                snap.setImageBitmap(bitmap);
+                            }
+                        });
+                    }
+                });
+                break;
+        }
+    }
+
+    private void setMapStyle() {
+        if (isChange) {
+            mMap.setStyle(Style.OUTDOORS);
+        } else {
+            mMap.setStyle(Style.SATELLITE);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -211,6 +248,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
     public void onMapReady(MapboxMap mapboxMap) {
         mMap = mapboxMap;
         mMap.setMaxZoomPreference(15);
+        setMapStyle();
         MapSettings.initMapStyle(mapboxMap, mMapView, new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
@@ -285,6 +323,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
     public void onDestroyView() {
         super.onDestroyView();
         mMapView.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

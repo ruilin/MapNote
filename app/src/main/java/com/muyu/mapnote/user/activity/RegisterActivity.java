@@ -42,9 +42,11 @@ import com.muyu.minimalism.utils.SPUtils;
 import com.muyu.minimalism.utils.SysUtils;
 import com.muyu.minimalism.view.BottomMenu;
 import com.muyu.minimalism.view.Loading;
+import com.muyu.minimalism.view.MediaLoader;
 import com.muyu.minimalism.view.Msg;
 import com.yanzhenjie.album.Action;
 import com.yanzhenjie.album.Album;
+import com.yanzhenjie.album.AlbumConfig;
 import com.yanzhenjie.album.AlbumFile;
 import com.yanzhenjie.album.api.widget.Widget;
 
@@ -65,6 +67,11 @@ public class RegisterActivity extends MapBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         SysUtils.setStatusBarColor(this, getResources().getColor(R.color.white));
+
+        Album.initialize(AlbumConfig.newBuilder(this)
+                .setAlbumLoader(new MediaLoader())
+                .build());
+
         findViewById(R.id.register_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

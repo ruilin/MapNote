@@ -25,6 +25,7 @@ import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.Config;
 import com.muyu.mapnote.app.MapApplication;
 import com.muyu.mapnote.app.MapBaseActivity;
+import com.muyu.mapnote.app.Umeng;
 import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkImage;
 import com.muyu.mapnote.app.okayapi.OkMoment;
@@ -309,4 +310,15 @@ public class PublishActivity extends MapBaseActivity {
         takePhotoToDir();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Umeng.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Umeng.onPause(this);
+    }
 }

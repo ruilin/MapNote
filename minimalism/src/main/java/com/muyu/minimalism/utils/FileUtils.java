@@ -1,11 +1,15 @@
 package com.muyu.minimalism.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Environment;
 
 import com.muyu.minimalism.framework.app.BaseApplication;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class FileUtils {
 
@@ -25,6 +29,30 @@ public class FileUtils {
             return path;
         } else {
             return BaseApplication.getInstance().getFilesDir().getAbsolutePath();
+        }
+    }
+
+    public static void saveBitmap(Bitmap bitmap, String bitName) throws IOException {
+        File file = new File(getRootPath() + bitName);
+        if(file.exists()){
+            file.delete();
+        }
+        FileOutputStream out;
+        try{
+            out = new FileOutputStream(file);
+            if(bitmap.compress(Bitmap.CompressFormat.PNG, 90, out))
+            {
+                out.flush();
+                out.close();
+            }
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
         }
     }
 }
