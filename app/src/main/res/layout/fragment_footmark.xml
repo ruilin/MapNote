@@ -96,7 +96,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:paddingBottom="20dp"
+                    android:paddingBottom="30dp"
                     android:orientation="vertical">
                     <TextView
                         android:layout_width="wrap_content"
@@ -104,8 +104,9 @@
                         android:gravity="center"
                         android:visibility="visible"
                         android:textColor="@color/gray3"
+                        android:paddingHorizontal="50dp"
                         android:textSize="16sp"
-                        android:text="还没有发表记录，快来发一个吧"/>
+                        android:text="发表游记将会在地图上留下印记，并连成轨迹线哦，快发一个吧~"/>
                     <Button
                         android:id="@+id/footmark_publish_btn"
                         android:layout_width="100dp"
