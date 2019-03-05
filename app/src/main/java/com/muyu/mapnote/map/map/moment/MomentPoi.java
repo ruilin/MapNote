@@ -13,6 +13,7 @@ public class MomentPoi extends Poi implements Parcelable {
     public String createtime = "";
     public int like = 0;
     public String nickname = "";
+    public String headimg = "";
     public String content = "";
     public String place = "";
 
@@ -30,6 +31,7 @@ public class MomentPoi extends Poi implements Parcelable {
         out.writeString(createtime);
         out.writeInt(like);
         out.writeString(nickname);
+        out.writeString(headimg);
         out.writeString(content);
         out.writeString(place);
     }

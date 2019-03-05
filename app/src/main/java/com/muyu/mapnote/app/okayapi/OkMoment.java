@@ -63,6 +63,11 @@ public class OkMoment extends OkObject {
     }
 
     private String getPostUrl() {
+//        JsonObject object = new JsonObject();
+//        object.addProperty("headimg", OkayApi.get().getCurrentUser().getHeadimg());
+//        String json = new Gson().toJson(object);
+        String json = "";
+
         String apiKey = "App.Market_Minimoments.PostMoment";
         SortedMap<String, String> map = new TreeMap<>();
         map.put("s", apiKey);
@@ -74,6 +79,8 @@ public class OkMoment extends OkObject {
         map.put("moment_lat", String.valueOf(lat));
         map.put("moment_lng", String.valueOf(lng));
         map.put("moment_place", place);
+        map.put("moment_url", OkayApi.get().getCurrentUser().getHeadimg());
+        map.put("ext_data", json);
 
         StringBuffer sb = new StringBuffer();
         sb.append(OkayApi.get().getHost());
@@ -86,6 +93,8 @@ public class OkMoment extends OkObject {
         sb.append("&moment_lat=" + String.valueOf(lat));
         sb.append("&moment_lng=" + String.valueOf(lng));
         sb.append("&moment_place=" + place);
+        sb.append("&moment_url=" + OkayApi.get().getCurrentUser().getHeadimg());
+        sb.append("&ext_data=" + json);
         if (!StringUtils.isEmpty(content)) {
             sb.append("&moment_content=" + content);
             map.put("moment_content", content);

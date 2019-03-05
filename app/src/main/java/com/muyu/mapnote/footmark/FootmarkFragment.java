@@ -140,8 +140,8 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                 }
                 TextView tv = view.findViewById(R.id.footmark_content);
                 tv.setText(poi.moment_content);
-                tv = view.findViewById(R.id.footmark_username);
-                tv.setText(poi.moment_nickname);
+                tv = view.findViewById(R.id.footmark_time);
+                tv.setText(poi.moment_createtime);
                 tv = view.findViewById(R.id.footmark_pupup_like);
                 tv.setText(String.valueOf(poi.moment_like));
 

@@ -50,6 +50,11 @@ public class DetailActivity extends MapBaseActivity {
         if (poi != null) {
             TextView userTv = findViewById(R.id.detail_user);
             userTv.setText(poi.nickname);
+
+            if (!StringUtils.isEmpty(poi.headimg)) {
+                Glide.with(this).load(poi.headimg).into((ImageView) findViewById(R.id.detail_head));
+            }
+
             TextView contentTv = findViewById(R.id.detail_content);
             if (!StringUtils.isEmpty(poi.content)) {
                 contentTv.setText(poi.content);

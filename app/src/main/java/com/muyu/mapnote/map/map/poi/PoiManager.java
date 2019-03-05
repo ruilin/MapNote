@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
@@ -20,6 +22,7 @@ import com.muyu.mapnote.map.map.moment.MomentMarker;
 import com.muyu.mapnote.map.map.moment.MomentMarkerOptions;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.minimalism.framework.app.BaseApplication;
+import com.muyu.minimalism.utils.StringUtils;
 import com.muyu.minimalism.utils.bitmap.BitmapUtils;
 import com.muyu.minimalism.utils.GpsUtils;
 import com.muyu.minimalism.utils.bitmap.CanvasUtils;
@@ -49,6 +52,12 @@ public class PoiManager {
         poi.createtime = item.moment_createtime;
         poi.like = item.moment_like;
         poi.place = item.moment_place;
+        poi.headimg = item.moment_url;
+//        if (!StringUtils.isEmpty(item.ext_data)) {
+//            JsonObject obj = new JsonParser().parse(item.ext_data).getAsJsonObject();
+//            poi.headimg = obj.get("headimg").getAsString();
+//        }
+
         GpsUtils.Gps gps = GpsUtils.gcj_To_Gps84(item.moment_lat, item.moment_lng);
         poi.lat = gps.getWgLat();
         poi.lng = gps.getWgLon();
