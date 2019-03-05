@@ -218,7 +218,8 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                         SysUtils.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                snap.setImageBitmap(bitmap);
+                                ShareDialog.showDialog(FootmarkFragment.this.getActivity(), bitmap);
+//                                snap.setImageBitmap(bitmap);
                             }
                         });
                     }
