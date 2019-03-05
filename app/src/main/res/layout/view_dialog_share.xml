@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    android:padding="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
@@ -9,15 +11,16 @@
         android:id="@+id/dialog_share_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="centerInside"
+        android:scaleType="centerCrop"
         android:src="@drawable/nav_head_bg"/>
     <EditText
+        android:id="@+id/dialog_share_ed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="2dp"
         android:background="@color/white"
-        android:textSize="15sp"
-        android:text="下载地图印记，描绘属于我的旅行足迹吧！"
+        android:textSize="14sp"
+        android:text="我用地图印记，生成出自己的旅行足迹，来看看我走过哪些地方！"
         android:gravity="left|top"
         android:maxLength="500"
         android:padding="10dp"

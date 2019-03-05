@@ -1,12 +1,16 @@
 package com.muyu.mapnote.footmark;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -39,6 +43,7 @@ import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.note.DetailActivity;
 import com.muyu.minimalism.framework.app.BaseFragment;
 import com.muyu.minimalism.utils.FileUtils;
+import com.muyu.minimalism.utils.Logs;
 import com.muyu.minimalism.utils.StringUtils;
 import com.muyu.minimalism.utils.SysUtils;
 import com.muyu.minimalism.view.Msg;
@@ -68,6 +73,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
     private CommonRecyclerAdapter adapter;
     private CameraUpdate mapCamera;
     private boolean isChange;
+    private Bitmap shareBitmap;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -218,7 +224,10 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                         SysUtils.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                ShareDialog.showDialog(FootmarkFragment.this.getActivity(), bitmap);
+                                shareBitmap = bitmap;
+                                if (verifyStoragePermissions(getActivity())) {
+                                    ShareDialog.showDialog(FootmarkFragment.this.getActivity(), bitmap);
+                                }
 //                                snap.setImageBitmap(bitmap);
                             }
                         });
@@ -287,6 +296,39 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
     private void resetMapCamera() {
         if (mapCamera != null) {
             mMap.animateCamera(mapCamera);
+        }
+    }
+
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            "android.permission.READ_EXTERNAL_STORAGE",
+            "android.permission.WRITE_EXTERNAL_STORAGE" };
+
+    public static boolean verifyStoragePermissions(Activity activity) {
+
+        try {
+            //检测是否有写的权限
+            int permission = ActivityCompat.checkSelfPermission(activity,
+                    "android.permission.WRITE_EXTERNAL_STORAGE");
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                // 没有写的权限，去申请写的权限，会弹出对话框
+                ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, REQUEST_EXTERNAL_STORAGE);
+                return false;
+            } else {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (shareBitmap != null) {
+            ShareDialog.showDialog(this.getActivity(), shareBitmap);
+            shareBitmap = null;
         }
     }
 

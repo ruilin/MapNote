@@ -238,10 +238,12 @@ public class OkUser extends OkObject {
                                     JsonParser parser = new JsonParser();
                                     JsonObject data = parser.parse(json).getAsJsonObject();
                                     data = data.get("info").getAsJsonObject();
-                                    data = data.get("ext_info").getAsJsonObject();
-                                    nickname = data.get("nickname").getAsString();
-                                    sex = data.get("sex").getAsInt();
-                                    headimg = data.get("head").getAsString();
+                                    if (data.get("ext_info") != null) {
+                                        data = data.get("ext_info").getAsJsonObject();
+                                        nickname = data.get("nickname").getAsString();
+                                        sex = data.get("sex").getAsInt();
+                                        headimg = data.get("head").getAsString();
+                                    }
                                     OkayApi.get().setUser(OkUser.this);
                                     callback.done(OkUser.this, null);
                                 }
@@ -250,7 +252,7 @@ public class OkUser extends OkObject {
                                 public void onFail(OkException e) {
                                     String msg = jsonData.get("err_msg").getAsString();
                                     Logs.e(msg);
-                                    callback.done(OkUser.this, null);
+                                    callback.done(OkUser.this, e);
                                 }
                             }, new UrlCallback() {
                                 @Override

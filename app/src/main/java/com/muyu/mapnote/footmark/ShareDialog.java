@@ -1,19 +1,32 @@
 package com.muyu.mapnote.footmark;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.muyu.mapnote.R;
+import com.muyu.minimalism.framework.app.BaseActivity;
+import com.muyu.minimalism.utils.FileUtils;
+
+import java.io.File;
+
+import com.muyu.minimalism.utils.Share2;
+import com.muyu.minimalism.utils.ShareContentType;
 
 public class ShareDialog {
 
-    public static void showDialog(Context context, Bitmap bmp) {
+    public static void showDialog(final Activity context, Bitmap bmp) {
         //1.创建一个Dialog对象，如果是AlertDialog对象的话，弹出的自定义布局四周会有一些阴影，效果不好
         Dialog mDialog = new Dialog(context);
 
@@ -41,6 +54,8 @@ public class ShareDialog {
         //设置点击其它地方不让消失弹窗
         mDialog.setCancelable(false);
 
+        EditText editText = dialogView.findViewById(R.id.dialog_share_ed);
+
         ((ImageView)dialogView.findViewById(R.id.dialog_share_image)).setImageBitmap(bmp);
         dialogView.findViewById(R.id.dialog_share_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,9 +63,25 @@ public class ShareDialog {
                 mDialog.dismiss();
             }
         });
+
         dialogView.findViewById(R.id.dialog_share_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+
+                Uri uri = FileUtils.getImageUri(context, bmp);
+                new Share2.Builder(context)
+                        // 指定分享的文件类型
+                        .setContentType(ShareContentType.IMAGE)
+                        // 设置要分享的文件 Uri
+                        .setShareFileUri(uri)
+                        // 设置分享选择器的标题
+                        .setTitle("分享我的足迹")
+                        .setTextContent(editText.getText().toString())
+                        .build()
+                        // 发起分享
+                        .shareBySystem();
                 mDialog.dismiss();
             }
         });
