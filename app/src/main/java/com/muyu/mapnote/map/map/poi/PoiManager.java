@@ -93,7 +93,7 @@ public class PoiManager {
                 icon = iconFactory.fromResource(R.drawable.green_marker);
                 break;
             case POI_TYPE_FOOTMARK:
-                icon = iconFactory.fromResource(R.drawable.green_marker);
+                icon = iconFactory.fromResource(R.drawable.yellow_marker);
                 break;
         }
         return map.addMarker(new MarkerOptions()
