@@ -2,6 +2,7 @@ package com.muyu.mapnote.app
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.PixelFormat
 import android.os.Bundle
 import com.ms.banner.Banner
 import com.ms.banner.holder.BannerViewHolder
@@ -21,8 +22,6 @@ import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
 
 
-
-
 class WelcomeActivity : MapBaseActivity() {
     var list = mutableListOf<String>()
     lateinit var adView: View
@@ -40,7 +39,7 @@ class WelcomeActivity : MapBaseActivity() {
         banner.visibility = View.GONE
         SysUtils.runOnUiThreadDelayed( {
             enter()
-        }, 2000)
+        }, 1000)
 
     }
 

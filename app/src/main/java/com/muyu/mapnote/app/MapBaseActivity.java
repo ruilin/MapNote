@@ -7,12 +7,10 @@ public class MapBaseActivity extends BaseActivity {
     @Override
     public void onResume() {
         super.onResume();
-        Umeng.onResume(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Umeng.onPause(this);
     }
 }
