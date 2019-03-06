@@ -3,6 +3,7 @@ package com.muyu.mapnote.footmark;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,6 +27,8 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkMoment;
@@ -99,7 +102,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                             opt.add(LocationHelper.getChinaLatlng(item.moment_lat, item.moment_lng));
                         }
                         opt.color(FootmarkFragment.this.getActivity().getResources().getColor(R.color.orangered));
-                        opt.width(4);
+                        opt.width(3);
                         mMap.addPolyline(opt);
                         LatLngBounds bounds = new LatLngBounds.Builder()
                                 .includes(opt.getPoints())
@@ -121,6 +124,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                         mark(latLng);
                     }
                 }
+//                initSymbol();
             }
         });
 
@@ -194,6 +198,18 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                 update();
             }
         });
+    }
+
+    private void initSymbol() {
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_foot_dot);
+        mMap.getStyle().addImage("my-marker-image", icon);
+
+        SymbolLayer symbolLayer = new SymbolLayer("layer-id", "source-id");
+        symbolLayer.setProperties(
+                PropertyFactory.iconImage("my-marker-image")
+        );
+
+        mMap.getStyle().addLayer(symbolLayer);
     }
 
     @Override

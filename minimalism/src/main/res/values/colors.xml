@@ -16,6 +16,7 @@
     <color name="hotpink">#FF69B4</color> <!--热粉红色 -->
     <color name="tomato">#FF6347</color> <!--西红柿色 -->
     <color name="orangered">#ff4500</color><!--红橙色 -->
+    <color name="red">#DC143C</color><!--红色 -->
     <color name="paleturquoise">#afeeee</color> <!-- 苍宝石绿 -->
     <color name="greenyellow">#adff2f</color> <!-- 黄绿色 -->
 
