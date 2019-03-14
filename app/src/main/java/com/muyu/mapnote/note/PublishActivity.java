@@ -78,6 +78,8 @@ public class PublishActivity extends MapBaseActivity {
                 .build());
 
         loading = new Loading(this);
+
+        popBottomMenu();
     }
 
     private void initPlace() {
@@ -205,19 +207,23 @@ public class PublishActivity extends MapBaseActivity {
             @Override
             public void onAddClick() {
                 Log.d("ZzImageBox", "all images\n"+imageBox.getAllImages().toString());
-                BottomMenu.show(PublishActivity.this, new String[]{"拍照", "从相册选取"}, new BottomMenu.OnItemClickedListener() {
-                    @Override
-                    public void OnItemClicked(int position) {
-                        switch (position) {
-                            case 0:
-                                takePhotoToDir();
-                                break;
-                            case 1:
-                                showSelector();
-                                break;
-                        }
-                    }
-                });
+                popBottomMenu();
+            }
+        });
+    }
+
+    private void popBottomMenu() {
+        BottomMenu.show(PublishActivity.this, new String[]{"拍照", "从相册选取"}, new BottomMenu.OnItemClickedListener() {
+            @Override
+            public void OnItemClicked(int position) {
+                switch (position) {
+                    case 0:
+                        takePhotoToDir();
+                        break;
+                    case 1:
+                        showSelector();
+                        break;
+                }
             }
         });
     }
