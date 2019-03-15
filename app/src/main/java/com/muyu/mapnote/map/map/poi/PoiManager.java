@@ -2,6 +2,7 @@ package com.muyu.mapnote.map.map.poi;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -10,26 +11,41 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.geometry.LatLngQuad;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
+import com.mapbox.mapboxsdk.style.sources.ImageSource;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.okayapi.OkMomentItem;
+import com.muyu.mapnote.footmark.FootmarkFragment;
 import com.muyu.mapnote.map.map.moment.MomentMarker;
 import com.muyu.mapnote.map.map.moment.MomentMarkerOptions;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
+import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.app.BaseApplication;
 import com.muyu.minimalism.utils.StringUtils;
 import com.muyu.minimalism.utils.bitmap.BitmapUtils;
 import com.muyu.minimalism.utils.GpsUtils;
 import com.muyu.minimalism.utils.bitmap.CanvasUtils;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+
+import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
 
 public class PoiManager {
 
@@ -93,7 +109,7 @@ public class PoiManager {
                 icon = iconFactory.fromResource(R.drawable.green_marker);
                 break;
             case POI_TYPE_FOOTMARK:
-                icon = iconFactory.fromResource(R.drawable.yellow_marker);
+                icon = iconFactory.fromResource(R.mipmap.ic_foot_select);
                 break;
         }
         return map.addMarker(new MarkerOptions()
@@ -175,5 +191,48 @@ public class PoiManager {
 
     public static void removePoiByKey(MapboxMap map, String key) {
         map.removeMarker(mKeywordPoiMap.get(key));
+    }
+
+
+    private static final String ID_IMAGE_SOURCE = "animated_image_source";
+    private static final String ID_IMAGE_LAYER = "animated_image_layer";
+
+    private void setMarkerLayer(BaseActivity activity, MapboxMap map, final List<MomentPoi> poiList) {
+        if (map != null && poiList.size() > 0) {
+            map.getStyle(new Style.OnStyleLoaded() {
+                @Override
+                public void onStyleLoaded(@NonNull Style style) {
+                    List<Feature> markerCoordinates = new ArrayList<>();
+                    for (int i = poiList.size() - 1; i >= 0; --i) {
+                        MomentPoi poi = poiList.get(i);
+                        markerCoordinates.add(Feature.fromGeometry(Point.fromLngLat(poi.lat, poi.lng)));
+                    }
+                    style.addSource(new GeoJsonSource("marker-source",
+                            FeatureCollection.fromFeatures(markerCoordinates)));
+                    new LatLngQuad.
+//                    style.addSource(new ImageSource(ID_IMAGE_SOURCE, ));
+
+                    // 添加资源图片到地图
+                    style.addImage("my-marker-image", BitmapFactory.decodeResource(
+                            activity.getResources(), R.drawable.map_default_map_marker));
+
+                    // Adding an offset so that the bottom of the blue icon gets fixed to the coordinate, rather than the
+                    // middle of the icon being fixed to the coordinate point.
+                    style.addLayer(new SymbolLayer("marker-layer", "marker-source")
+                            .withProperties(PropertyFactory.iconImage("my-marker-image"),
+                                    iconOffset(new Float[]{0f, 0f}))
+                    );
+
+                    // Add the selected marker source and layer
+                    style.addSource(new GeoJsonSource("selected-marker"));
+
+                    // Adding an offset so that the bottom of the blue icon gets fixed to the coordinate, rather than the
+                    // middle of the icon being fixed to the coordinate point.
+                    style.addLayer(new SymbolLayer("selected-marker-layer", "selected-marker")
+                            .withProperties(PropertyFactory.iconImage("my-marker-image"),
+                                    iconOffset(new Float[]{0f, 0f})));
+                }
+            });
+        }
     }
 }

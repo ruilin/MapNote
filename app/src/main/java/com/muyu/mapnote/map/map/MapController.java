@@ -138,7 +138,6 @@ public class MapController extends ActivityController implements PermissionsList
         initNavigation();
         initUi();
 //        enableLocationPlugin();
-
         mListener.onMapCreated(mapboxMap, mapView);
 
         for (SubController controller : getSubControllers()) {

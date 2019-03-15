@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -37,7 +38,6 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
-import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
@@ -75,7 +75,7 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineDasharray;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineTranslate;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 
-public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback, View.OnClickListener {
+public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback, View.OnClickListener, Style.OnStyleLoaded {
 
     private FootmarkViewModel mViewModel;
     private View mLayout;
@@ -106,6 +106,8 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
         return mLayout;
     }
 
+    ArrayList<OkMomentItem> mOkMomentItems;
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -115,54 +117,10 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
             @Override
             public void onChanged(@Nullable ArrayList<OkMomentItem> okMomentItems) {
                 emptyView.setVisibility(okMomentItems.size() > 0 ? View.GONE : View.VISIBLE);
-
+                mOkMomentItems = okMomentItems;
                 adapter.setDataList(okMomentItems);
 
-                if (mMap != null && !okMomentItems.isEmpty()) {
-                    if (okMomentItems.size() > 1) {
-                        /* 标记当前选择 */
-                        LatLng latlng = LocationHelper.getChinaLatlng(okMomentItems.get(0).moment_lat, okMomentItems.get(0).moment_lng);
-                        mark(latlng);
-
-                        /* 初始化地图视角 */
-//                        PolylineOptions opt = new PolylineOptions();
-                        List<OkMomentItem> list = mViewModel.getMyMoment().getValue();
-                        ArrayList<Point> points = new ArrayList<>();
-                        ArrayList<LatLng> latLngs = new ArrayList<>();
-                        for (OkMomentItem item : list) {
-                            LatLng latLng = LocationHelper.getChinaLatlng(item.moment_lat, item.moment_lng);
-                            latLngs.add(latLng);
-                            Point point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
-                            points.add(point);
-                        }
-                        drawPolyline(points);
-                        setMarkList(latLngs);
-
-//                        for (OkMomentItem item : list) {
-//                            opt.add(LocationHelper.getChinaLatlng(item.moment_lat, item.moment_lng));
-//                        }
-//                        opt.color(FootmarkFragment.this.getActivity().getResources().getColor(R.color.orangered));
-//                        opt.width(3);
-//                        mMap.addPolyline(opt);
-                        LatLngBounds bounds = new LatLngBounds.Builder()
-                                .includes(latLngs)
-                                .build();
-                        mapCamera = CameraUpdateFactory.newLatLngBounds(bounds, 110);
-                        mMap.animateCamera(mapCamera);
-
-                    } else {
-                        mapCamera = CameraUpdateFactory.newLatLngZoom(new LatLng(okMomentItems.get(0).moment_lat, okMomentItems.get(0).moment_lng), 10);
-                        mMap.animateCamera(mapCamera);
-                    }
-                } else {
-                    Location loc = LocationHelper.INSTANCE.getLastLocation();
-                    if (loc != null) {
-                        LatLng latLng = LocationHelper.getChinaLatlng(loc.getLatitude(), loc.getLongitude());
-                        mapCamera = CameraUpdateFactory.newLatLngZoom(latLng, 1);
-                        mMap.animateCamera(mapCamera);
-                        mark(latLng);
-                    }
-                }
+                updateMap();
             }
         });
 
@@ -238,28 +196,6 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
         });
     }
 
-    private void initSymbol(Style style) {
-//        symbolManager = new SymbolManager(mMapView, mMap, style);
-//        symbolManager.setIconAllowOverlap(true);
-//        symbolManager.setTextAllowOverlap(true);
-//
-//        style.addLayer(new SymbolLayer("marker-layer", "marker-source")
-//                .withProperties(PropertyFactory.iconImage("my-marker-image"),
-//                        iconOffset(new Float[]{0f, -9f})));
-//        style.addSource(new GeoJsonSource("selected-marker"));
-    }
-
-    private void setSymbol(LatLng latLng) {
-        // create a symbol
-        SymbolOptions symbolOptions = new SymbolOptions()
-                .withLatLng(latLng)
-                .withIconImage("circle-15")
-                .withIconSize(1.3f)
-                .withZIndex(10)
-                .setDraggable(true);
-        symbolManager.create(symbolOptions);
-    }
-
     /**
      * Set up a GeoJsonSource and LineLayer in order to show the directions route from the device location
      * to the place picker location
@@ -267,14 +203,14 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
     private void initDottedLineSourceAndLayer(@NonNull Style style) {
         lineFeatureCollection = FeatureCollection.fromFeatures(new Feature[] {});
         style.addSource(new GeoJsonSource("SOURCE_ID", lineFeatureCollection));
-        style.addLayerBelow(
-                new LineLayer(
-                        "DIRECTIONS_LAYER_ID", "SOURCE_ID").withProperties(
-                        lineWidth(3f),
+        style.addLayer(
+                new LineLayer("DIRECTIONS_LAYER_ID", "SOURCE_ID")
+                        .withProperties(
+                        lineWidth(2.5f),
                         lineColor(getResources().getColor(R.color.rose)),
                         lineTranslate(new Float[] {0f, 4f}),
                         lineDasharray(new Float[] {3.0f, 1.0f})
-                ), "road-label-small");
+                ));
     }
 
     private void drawPolyline(final List<Point> points) {
@@ -282,6 +218,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
             mMap.getStyle(new Style.OnStyleLoaded() {
                 @Override
                 public void onStyleLoaded(@NonNull Style style) {
+                    initDottedLineSourceAndLayer(style);
                     List<Feature> directionsRouteFeatureList = new ArrayList<>();
                     directionsRouteFeatureList.add(Feature.fromGeometry(LineString.fromLngLats(points)));
                     lineFeatureCollection = FeatureCollection.fromFeatures(directionsRouteFeatureList);
@@ -291,6 +228,55 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                     }
                 }
             });
+        }
+    }
+
+    private synchronized void updateMap() {
+        ArrayList<OkMomentItem> okMomentItems = mOkMomentItems;
+        if (mMap != null && !okMomentItems.isEmpty()) {
+            if (okMomentItems.size() > 1) {
+                /* 标记当前选择 */
+                LatLng latlng = LocationHelper.getChinaLatlng(okMomentItems.get(0).moment_lat, okMomentItems.get(0).moment_lng);
+                mark(latlng);
+
+                /* 初始化地图视角 */
+//                        PolylineOptions opt = new PolylineOptions();
+                List<OkMomentItem> list = mViewModel.getMyMoment().getValue();
+                ArrayList<Point> points = new ArrayList<>();
+                ArrayList<LatLng> latLngs = new ArrayList<>();
+                for (OkMomentItem item : list) {
+                    LatLng latLng = LocationHelper.getChinaLatlng(item.moment_lat, item.moment_lng);
+                    latLngs.add(latLng);
+                    Point point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+                    points.add(point);
+                }
+                setMarkerLayer(points);
+                drawPolyline(points);
+                setSEMarkers(latLngs);
+//                        for (OkMomentItem item : list) {
+//                            opt.add(LocationHelper.getChinaLatlng(item.moment_lat, item.moment_lng));
+//                        }
+//                        opt.color(FootmarkFragment.this.getActivity().getResources().getColor(R.color.orangered));
+//                        opt.width(3);
+//                        mMap.addPolyline(opt);
+                LatLngBounds bounds = new LatLngBounds.Builder()
+                        .includes(latLngs)
+                        .build();
+                mapCamera = CameraUpdateFactory.newLatLngBounds(bounds, 110);
+                mMap.animateCamera(mapCamera);
+
+            } else {
+                mapCamera = CameraUpdateFactory.newLatLngZoom(new LatLng(okMomentItems.get(0).moment_lat, okMomentItems.get(0).moment_lng), 10);
+                mMap.animateCamera(mapCamera);
+            }
+        } else {
+            Location loc = LocationHelper.INSTANCE.getLastLocation();
+            if (loc != null) {
+                LatLng latLng = LocationHelper.getChinaLatlng(loc.getLatitude(), loc.getLongitude());
+                mapCamera = CameraUpdateFactory.newLatLngZoom(latLng, 1);
+                mMap.animateCamera(mapCamera);
+                mark(latLng);
+            }
         }
     }
 
@@ -304,7 +290,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                 ((MapActivity)getActivity()).toPublishActivity();
                 break;
             case R.id.footmark_map_change:
-                setMapStyle();
+                setMapStyle(false);
                 isChange = !isChange;
                 break;
             case R.id.footmark_map_share:
@@ -328,12 +314,19 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
         }
     }
 
-    private void setMapStyle() {
-        if (isChange) {
+    private void setMapStyle(boolean isFirst) {
+        if (isFirst) {
             mMap.setStyle(Style.OUTDOORS);
+        } else if (isChange) {
+            mMap.setStyle(Style.OUTDOORS, this);
         } else {
-            mMap.setStyle(Style.SATELLITE);
+            mMap.setStyle(Style.SATELLITE, this);
         }
+    }
+
+    @Override
+    public void onStyleLoaded(@NonNull Style style) {
+        updateMap();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -349,16 +342,51 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
     public void onMapReady(MapboxMap mapboxMap) {
         mMap = mapboxMap;
         mMap.setMaxZoomPreference(15);
-        setMapStyle();
+        setMapStyle(true);
         MapSettings.initMapStyle(mapboxMap, mMapView, new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
-                initSymbol(style);
-                initDottedLineSourceAndLayer(style);
+
             }
         });
         update();
         mRefreshView.setRefreshing(true);
+    }
+
+    private void setMarkerLayer(final List<Point> points) {
+        if (mMap != null && points.size() > 2) {
+            mMap.getStyle(new Style.OnStyleLoaded() {
+                @Override
+                public void onStyleLoaded(@NonNull Style style) {
+                    List<Feature> markerCoordinates = new ArrayList<>();
+                    for (int i = points.size() - 2; i > 0; --i) {
+                        markerCoordinates.add(Feature.fromGeometry(points.get(i)));
+                    }
+                    style.addSource(new GeoJsonSource("marker-source",
+                            FeatureCollection.fromFeatures(markerCoordinates)));
+
+                    // 添加资源图片到地图
+                    style.addImage("my-marker-image", BitmapFactory.decodeResource(
+                            FootmarkFragment.this.getResources(), R.mipmap.ic_foot_dot));
+
+                    // Adding an offset so that the bottom of the blue icon gets fixed to the coordinate, rather than the
+                    // middle of the icon being fixed to the coordinate point.
+                    style.addLayer(new SymbolLayer("marker-layer", "marker-source")
+                            .withProperties(PropertyFactory.iconImage("my-marker-image"),
+                                    iconOffset(new Float[]{0f, 0f}))
+                    );
+
+                    // Add the selected marker source and layer
+                    style.addSource(new GeoJsonSource("selected-marker"));
+
+                    // Adding an offset so that the bottom of the blue icon gets fixed to the coordinate, rather than the
+                    // middle of the icon being fixed to the coordinate point.
+                    style.addLayer(new SymbolLayer("selected-marker-layer", "selected-marker")
+                            .withProperties(PropertyFactory.iconImage("my-marker-image"),
+                                    iconOffset(new Float[]{0f, 0f})));
+                }
+            });
+        }
     }
 
     private void mark(LatLng latlng) {
@@ -370,7 +398,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
 //        setSymbol(latlng);
     }
 
-    private void setMarkList(List<LatLng> points) {
+    private void setSEMarkers(List<LatLng> points) {
         for (Marker marker : mMarkerList) {
             mMap.removeMarker(marker);
         }
