@@ -137,17 +137,23 @@ public class MapActivity extends MapBaseActivity
                         R.mipmap.main_home,
                         R.string.main_menu_home)
                         .setInactiveIconResource(R.mipmap.main_home_disable)
-                        .setActiveColorResource(R.color.colorPrimaryDark))
+                        .setInActiveColor(R.color.black)
+                        .setActiveColorResource(R.color.colorPrimaryDark)
+                )
                 .addItem(new BottomNavigationItem(
                         R.mipmap.main_path,
                         R.string.main_menu_route)
                         .setInactiveIconResource(R.mipmap.main_path_disable)
-                        .setActiveColorResource(R.color.colorPrimaryDark))
+                        .setInActiveColor(R.color.black)
+                        .setActiveColorResource(R.color.colorPrimaryDark)
+                )
                 .addItem(new BottomNavigationItem(
                         R.mipmap.main_more,
                         R.string.main_menu_more)
                         .setInactiveIconResource(R.mipmap.main_more_disable)
-                        .setActiveColorResource(R.color.colorPrimaryDark))
+                        .setInActiveColor(R.color.black)
+                        .setActiveColorResource(R.color.colorPrimaryDark)
+                )
                 .setFirstSelectedPosition(0)//默认显示面板
                 .initialise();//初始化
 

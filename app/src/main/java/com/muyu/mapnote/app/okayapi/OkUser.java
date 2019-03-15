@@ -240,9 +240,15 @@ public class OkUser extends OkObject {
                                     data = data.get("info").getAsJsonObject();
                                     if (data.get("ext_info") != null) {
                                         data = data.get("ext_info").getAsJsonObject();
-                                        nickname = data.get("nickname").getAsString();
-                                        sex = data.get("sex").getAsInt();
-                                        headimg = data.get("head").getAsString();
+                                        if (data.get("nickname") != null) {
+                                            nickname = data.get("nickname").getAsString();
+                                        }
+                                        if (data.get("sex") != null) {
+                                            sex = data.get("sex").getAsInt();
+                                        }
+                                        if (data.get("head") != null) {
+                                            headimg = data.get("head").getAsString();
+                                        }
                                     }
                                     OkayApi.get().setUser(OkUser.this);
                                     callback.done(OkUser.this, null);

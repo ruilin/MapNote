@@ -10,7 +10,7 @@
     tools:context=".user.activity.FeedbackActivity">
 
     <com.wuhenzhizao.titlebar.widget.CommonTitleBar
-        android:id="@+id/detail_title"
+        android:id="@+id/feedback_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:fillStatusBar="true"

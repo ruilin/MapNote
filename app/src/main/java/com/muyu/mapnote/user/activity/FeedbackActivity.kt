@@ -10,6 +10,7 @@ import com.muyu.mapnote.app.okayapi.OkFeedback
 import com.muyu.mapnote.app.okayapi.callback.CommonCallback
 import com.muyu.minimalism.view.Loading
 import com.muyu.minimalism.view.Msg
+import com.wuhenzhizao.titlebar.widget.CommonTitleBar
 
 class FeedbackActivity : AppCompatActivity() {
 
@@ -20,8 +21,9 @@ class FeedbackActivity : AppCompatActivity() {
         var content = findViewById<EditText>(R.id.feedback_content)
         var contact = findViewById<EditText>(R.id.feedback_contact)
         var button = findViewById<Button>(R.id.feedback_commit)
+        var titleBar = findViewById<CommonTitleBar>(R.id.feedback_title)
 
-        button.setOnClickListener{
+        button.setOnClickListener {
             if (content.text.isEmpty()) {
                 Msg.show("请输入内容")
             } else {
@@ -41,7 +43,15 @@ class FeedbackActivity : AppCompatActivity() {
                             }
                         })
             }
-
         }
+
+        titleBar.setListener {
+            v, action, extra ->
+            if (action == CommonTitleBar.ACTION_LEFT_BUTTON) {
+                finish()
+            }
+        }
+
+
     }
 }
