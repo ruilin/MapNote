@@ -197,42 +197,42 @@ public class PoiManager {
     private static final String ID_IMAGE_SOURCE = "animated_image_source";
     private static final String ID_IMAGE_LAYER = "animated_image_layer";
 
-    private void setMarkerLayer(BaseActivity activity, MapboxMap map, final List<MomentPoi> poiList) {
-        if (map != null && poiList.size() > 0) {
-            map.getStyle(new Style.OnStyleLoaded() {
-                @Override
-                public void onStyleLoaded(@NonNull Style style) {
-                    List<Feature> markerCoordinates = new ArrayList<>();
-                    for (int i = poiList.size() - 1; i >= 0; --i) {
-                        MomentPoi poi = poiList.get(i);
-                        markerCoordinates.add(Feature.fromGeometry(Point.fromLngLat(poi.lat, poi.lng)));
-                    }
-                    style.addSource(new GeoJsonSource("marker-source",
-                            FeatureCollection.fromFeatures(markerCoordinates)));
-                    new LatLngQuad.
-//                    style.addSource(new ImageSource(ID_IMAGE_SOURCE, ));
-
-                    // 添加资源图片到地图
-                    style.addImage("my-marker-image", BitmapFactory.decodeResource(
-                            activity.getResources(), R.drawable.map_default_map_marker));
-
-                    // Adding an offset so that the bottom of the blue icon gets fixed to the coordinate, rather than the
-                    // middle of the icon being fixed to the coordinate point.
-                    style.addLayer(new SymbolLayer("marker-layer", "marker-source")
-                            .withProperties(PropertyFactory.iconImage("my-marker-image"),
-                                    iconOffset(new Float[]{0f, 0f}))
-                    );
-
-                    // Add the selected marker source and layer
-                    style.addSource(new GeoJsonSource("selected-marker"));
-
-                    // Adding an offset so that the bottom of the blue icon gets fixed to the coordinate, rather than the
-                    // middle of the icon being fixed to the coordinate point.
-                    style.addLayer(new SymbolLayer("selected-marker-layer", "selected-marker")
-                            .withProperties(PropertyFactory.iconImage("my-marker-image"),
-                                    iconOffset(new Float[]{0f, 0f})));
-                }
-            });
-        }
-    }
+//    private void setMarkerLayer(BaseActivity activity, MapboxMap map, final List<MomentPoi> poiList) {
+//        if (map != null && poiList.size() > 0) {
+//            map.getStyle(new Style.OnStyleLoaded() {
+//                @Override
+//                public void onStyleLoaded(@NonNull Style style) {
+//                    List<Feature> markerCoordinates = new ArrayList<>();
+//                    for (int i = poiList.size() - 1; i >= 0; --i) {
+//                        MomentPoi poi = poiList.get(i);
+//                        markerCoordinates.add(Feature.fromGeometry(Point.fromLngLat(poi.lat, poi.lng)));
+//                    }
+//                    style.addSource(new GeoJsonSource("marker-source",
+//                            FeatureCollection.fromFeatures(markerCoordinates)));
+//                    new LatLngQuad.
+////                    style.addSource(new ImageSource(ID_IMAGE_SOURCE, ));
+//
+//                    // 添加资源图片到地图
+//                    style.addImage("my-marker-image", BitmapFactory.decodeResource(
+//                            activity.getResources(), R.drawable.map_default_map_marker));
+//
+//                    // Adding an offset so that the bottom of the blue icon gets fixed to the coordinate, rather than the
+//                    // middle of the icon being fixed to the coordinate point.
+//                    style.addLayer(new SymbolLayer("marker-layer", "marker-source")
+//                            .withProperties(PropertyFactory.iconImage("my-marker-image"),
+//                                    iconOffset(new Float[]{0f, 0f}))
+//                    );
+//
+//                    // Add the selected marker source and layer
+//                    style.addSource(new GeoJsonSource("selected-marker"));
+//
+//                    // Adding an offset so that the bottom of the blue icon gets fixed to the coordinate, rather than the
+//                    // middle of the icon being fixed to the coordinate point.
+//                    style.addLayer(new SymbolLayer("selected-marker-layer", "selected-marker")
+//                            .withProperties(PropertyFactory.iconImage("my-marker-image"),
+//                                    iconOffset(new Float[]{0f, 0f})));
+//                }
+//            });
+//        }
+//    }
 }

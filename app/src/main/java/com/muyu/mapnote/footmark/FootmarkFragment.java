@@ -320,7 +320,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
         } else if (isChange) {
             mMap.setStyle(Style.OUTDOORS, this);
         } else {
-            mMap.setStyle(Style.SATELLITE, this);
+            mMap.setStyle(Style.SATELLITE_STREETS, this);
         }
     }
 
