@@ -9,6 +9,7 @@
     tools:context=".map.activity.MapActivity">
 
     <FrameLayout
+        android:id="@+id/map_main_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
@@ -18,16 +19,24 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <!-- 用于MapView -->
             <include layout="@layout/view_home_map" />
 
             <include layout="@layout/view_home_search" />
+
+            <include layout="@layout/view_dialog_route"
+                android:layout_gravity="center_vertical|start"
+                android:layout_width="46dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="100dp"/>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/map_fab_add"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="bottom|end"
-                android:layout_marginRight="14dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginBottom="140dp"
                 android:tint="@color/colorPrimaryDark"
                 android:elevation="5dp"
@@ -41,7 +50,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="bottom|end"
-                android:layout_marginRight="14dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginBottom="80dp"
                 android:tint="@color/colorPrimaryDark"
                 android:elevation="5dp"

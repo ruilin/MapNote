@@ -11,13 +11,16 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.minimalism.framework.controller.SubController;
 
 public abstract class MapPluginController extends SubController {
-    private MapboxMap mMap;
+    private MapController mMap;
+    private MapboxMap mMapboxMap;
     private MapView mMapView;
+    private MapController map;
     private PermissionsManager mPermissionsManager;
 
-    protected void onMapCreated(MapboxMap map, MapView mapView) {
+    protected void onMapCreated(MapController map) {
         mMap = map;
-        mMapView = mapView;
+        mMapboxMap = map.mapboxMap;
+        mMapView = map.mapView;
     }
 
     public void onMapClick(@NonNull LatLng point, @NonNull PointF screenPoint) {}
@@ -33,11 +36,15 @@ public abstract class MapPluginController extends SubController {
     public void onRequestPermissionsResult(boolean granted) {
     }
 
-    protected MapboxMap getMap() {
+    public MapController getMap() {
         return mMap;
     }
 
-    protected MapView getMapView() {
+    public MapboxMap getMapboxMap() {
+        return mMapboxMap;
+    }
+
+    public MapView getMapView() {
         return mMapView;
     }
 }

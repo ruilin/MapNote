@@ -34,6 +34,7 @@ import com.muyu.mapnote.map.map.location.LocationController;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.mapnote.map.map.poi.Poi;
 import com.muyu.mapnote.map.map.poi.PoiManager;
+import com.muyu.mapnote.map.map.route.RouteController;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.map.map.poi.PoiController;
 import com.muyu.minimalism.framework.app.BaseActivity;
@@ -56,8 +57,10 @@ public class MapController extends ActivityController implements PermissionsList
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
     private FragmentActivity mActivity;
     private PermissionsManager permissionsManager;
-    private MapboxMap mapboxMap;
     private LocationLayerPlugin locationPlugin;
+    public MapboxMap mapboxMap;
+    public MapView mapView;
+
     private Location originLocation;
     boolean isFirst = true;
 
@@ -67,7 +70,7 @@ public class MapController extends ActivityController implements PermissionsList
     private NavigationMapRoute navigationMapRoute;
 
     private View mLayout;
-    private MapView mapView;
+    private View mMainLayout;
     private SupportMapFragment mMapFragment;
 
     private OnMapEventListener mListener;
@@ -76,6 +79,7 @@ public class MapController extends ActivityController implements PermissionsList
 //    private PoiSearchController mPoiSearchController = new PoiSearchController();
     private PoiController mPoiSearchController = new PoiController();
     private LocationController mLocationController = new LocationController();
+    private RouteController mRouteController = new RouteController();
 
     public MapController(OnMapEventListener listener) {
         this.mListener = listener;
@@ -86,10 +90,12 @@ public class MapController extends ActivityController implements PermissionsList
         super.onCreate(activity);
         mActivity = activity;
         mLayout = mActivity.findViewById(R.id.map_content);
+        mMainLayout = mActivity.findViewById(R.id.map_main_layout);
 
 //        addController(activity, mPoiSearchController);
         addController(activity, mPoiSearchController);
         addController(activity, mLocationController);
+        addController(activity, mRouteController);
 
         // 默认设置
         MapboxMapOptions options = new MapboxMapOptions();
@@ -141,7 +147,7 @@ public class MapController extends ActivityController implements PermissionsList
         mListener.onMapCreated(mapboxMap, mapView);
 
         for (SubController controller : getSubControllers()) {
-            ((MapPluginController) controller).onMapCreated(mapboxMap, mapView);
+            ((MapPluginController) controller).onMapCreated(this);
         }
     }
 
@@ -265,6 +271,14 @@ public class MapController extends ActivityController implements PermissionsList
                 }
             });
         }
+    }
+
+    public RouteController getRoute() {
+        return mRouteController;
+    }
+
+    public View getLayout() {
+        return mMainLayout;
     }
 
     public void processLocation() {

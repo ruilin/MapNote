@@ -4,7 +4,7 @@
     <!-- Button正常状态下的背景 -->
     <item android:drawable="@drawable/shape_button_normal_white" android:state_pressed="false"/>
     <!-- Button按下时的背景 -->
-    <item android:drawable="@drawable/shape_button_pressed" android:state_pressed="true"/>
+    <item android:drawable="@drawable/shape_button_normal_gray" android:state_pressed="true"/>
 
-    <item android:drawable="@drawable/shape_button_pressed" android:state_selected="true"/>
+    <item android:drawable="@drawable/shape_button_normal_gray" android:state_selected="true"/>
 </selector>

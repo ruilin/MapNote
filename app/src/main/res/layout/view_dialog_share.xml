@@ -35,7 +35,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
-            android:background="@drawable/selector_button_white"
+            android:background="@drawable/selector_button_gray"
             android:textColor="@color/textGray4"
             android:textSize="16sp"
             android:text="取消"

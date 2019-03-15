@@ -46,7 +46,7 @@ public abstract class SubController {
         mControllerList.clear();
     }
 
-    protected BaseActivity getActivity() {
+    public BaseActivity getActivity() {
         return mActivity;
     }
 }

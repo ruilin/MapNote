@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 
-import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -13,13 +12,11 @@ import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.mapboxsdk.plugins.locationlayer.modes.RenderMode;
+import com.muyu.mapnote.map.map.MapController;
 import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.minimalism.view.Msg;
-
-import java.util.List;
 
 public class LocationController extends MapPluginController {
     private PermissionsManager permissionsManager;
@@ -29,8 +26,8 @@ public class LocationController extends MapPluginController {
     boolean isFirst = true;
 
     @Override
-    protected void onMapCreated(MapboxMap map, MapView mapView) {
-        super.onMapCreated(map, mapView);
+    protected void onMapCreated(MapController map) {
+        super.onMapCreated(map);
     }
 
     @SuppressWarnings({"MissingPermission"})
@@ -48,10 +45,10 @@ public class LocationController extends MapPluginController {
         initializeLocationEngine();
 
         // Get an instance of the component
-        locationComponent = getMap().getLocationComponent();
+        locationComponent = getMapboxMap().getLocationComponent();
 
         // Activate with options
-        locationComponent.activateLocationComponent(getActivity(), getMap().getStyle());
+        locationComponent.activateLocationComponent(getActivity(), getMapboxMap().getStyle());
 
         // Enable to make component visible
         locationComponent.setLocationComponentEnabled(true);
@@ -99,7 +96,7 @@ public class LocationController extends MapPluginController {
     }
 
     public void setCameraPosition(double lat, double lng) {
-        getMap().animateCamera(CameraUpdateFactory.newLatLngZoom(
+        getMapboxMap().animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(lat, lng), 13));
     }
 

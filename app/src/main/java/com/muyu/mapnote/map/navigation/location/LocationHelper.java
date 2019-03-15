@@ -100,6 +100,17 @@ public enum LocationHelper {
         return null;
     }
 
+    public Location getLastLocationCheckChina() {
+        if (mLocationClient != null) {
+            AMapLocation location = mLocationClient.getLastKnownLocation();
+            LatLng latLng = getChinaLatlng(location.getLatitude(), location.getLongitude());
+            location.setLatitude(latLng.getLatitude());
+            location.setLongitude(latLng.getLongitude());
+            return toLocation(location);
+        }
+        return null;
+    }
+
     public boolean isLocationFresh() {
         Location location = getLastLocation();
         if (location != null) {
