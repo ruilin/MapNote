@@ -80,34 +80,40 @@ public class RouteController extends MapPluginController implements View.OnClick
                     }
                     navigationMapRoute.addRoute(currentRoute);
 
+                    route = null;
+                    loading.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.setVisibility(View.GONE);
+                        }
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
+                    error();
+                    return;
                 }
-                route = null;
-                loading.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        loading.setVisibility(View.GONE);
-                    }
-                });
             }
 
             @Override
             public void onFailure(Call<DirectionsResponse> call, Throwable throwable) {
                 Logs.e("Error: " + throwable.getMessage());
-                route = null;
-
-                loading.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        view.setVisibility(View.GONE);
-                        loading.setVisibility(View.GONE);
-                        Msg.show("路线规划失败");
-                    }
-                });
+                error();
             }
         });
         //navigationMapRoute.removeRoute();
+    }
+
+    private void error() {
+        route = null;
+
+        loading.post(new Runnable() {
+            @Override
+            public void run() {
+                view.setVisibility(View.GONE);
+                loading.setVisibility(View.GONE);
+                Msg.show("路线规划失败");
+            }
+        });
     }
 
     public void startNavigation() {
@@ -123,18 +129,16 @@ public class RouteController extends MapPluginController implements View.OnClick
 
     @Override
     public void onClick(View v) {
+        if (loading.getVisibility() == View.VISIBLE) {
+            return;
+        }
         switch (v.getId()) {
             case R.id.view_route_nav:
                 startNavigation();
                 break;
             case R.id.view_route_cancel:
-                if (route != null) {
-                    route.cancelCall();
-                    route = null;
-                }
                 if (navigationMapRoute != null) {
                     navigationMapRoute.removeRoute();
-                    navigationMapRoute = null;
                 }
                 view.setVisibility(View.GONE);
                 break;

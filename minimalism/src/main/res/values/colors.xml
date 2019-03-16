@@ -6,6 +6,7 @@
 
     <color name="trans">#00FFFFFF</color>
     <color name="white">#FFF</color>
+    <color name="white_trans">#99FFFFFF</color>
     <color name="ivory">#FFFFF0</color>
     <color name="black">#222</color>
     <color name="cornsilk">#FFF8DC</color>

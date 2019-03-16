@@ -50,7 +50,7 @@
         android:id="@+id/view_route_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gray_trans"
+        android:background="@color/white_trans"
         android:gravity="center"
         android:orientation="vertical">
         <ProgressBar

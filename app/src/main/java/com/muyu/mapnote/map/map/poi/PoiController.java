@@ -29,9 +29,10 @@ import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.mapnote.map.map.moment.MomentMarker;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
-import com.muyu.mapnote.map.navigation.route.RouteHelper;
 import com.muyu.mapnote.note.MomentPopupView;
 import com.tencent.lbssearch.object.result.SearchResultObject;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,9 +64,16 @@ public class PoiController extends MapPluginController {
             @Nullable
             @Override
             public View getInfoWindow(@NonNull Marker marker) {
+                if (marker instanceof MomentMarker) {
+
+                }
                 View view = PoiController.this.getActivity().getLayoutInflater().inflate(R.layout.marker_info_search, null);
                 ((TextView) view.findViewById(R.id.marker_info_search_title)).setText(marker.getTitle());
                 ((TextView) view.findViewById(R.id.marker_info_search_content)).setText(marker.getSnippet());
+                TextView routeView = view.findViewById(R.id.marker_info_route);
+                routeView.setText("[查看路线]");
+                routeView.setVisibility(View.VISIBLE);
+
                 ImageView imgView = view.findViewById(R.id.marker_info_search_img);
                 Icon icon = marker.getIcon();
                 Bitmap bitmap = null;

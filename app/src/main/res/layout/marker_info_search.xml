@@ -60,6 +60,15 @@
                 android:layout_marginTop="4dp"
                 android:textSize="12sp"
                 tool:text="但是广东省东莞市更好大圣归来精神独立国家但是广东省东莞市更好大圣归来精神独立国家但是广东省东莞市更好大圣归来精神独立国家"/>
+
+            <TextView
+                android:id="@+id/marker_info_route"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"
+                android:visibility="visible"
+                android:textSize="12sp"
+                tool:text="[查看路线]"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
