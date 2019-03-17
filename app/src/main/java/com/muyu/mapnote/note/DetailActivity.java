@@ -32,6 +32,7 @@ import com.yanzhenjie.album.AlbumConfig;
 import java.util.ArrayList;
 
 public class DetailActivity extends MapBaseActivity {
+    boolean checkable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,10 +133,16 @@ public class DetailActivity extends MapBaseActivity {
 
         CheckBox checkBox = titleBar.getRightCustomView().findViewById(R.id.detail_like);
         checkBox.setChecked(LikeManager.get().hadPut(poi.id));
-        checkBox.setClickable(!LikeManager.get().hadPut(poi.id));
+        checkable = !LikeManager.get().hadPut(poi.id);
+        checkBox.setClickable(checkable);
+        checkBox.setFocusable(checkable);
+        checkBox.setEnabled(checkable);
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!checkable) {
+                    return;
+                }
                 if (poi != null) {
                     OkMoment.postLike(poi.id, new CommonCallback() {
                         @Override
@@ -164,9 +171,15 @@ public class DetailActivity extends MapBaseActivity {
         });
     }
 
-    public static void startDetailPage(BaseActivity activity, String id) {
+    public static void startDetailPage(BaseActivity activity, String layerId) {
         Intent intent = new Intent(activity, DetailActivity.class);
-        intent.putExtra("MomentId", id);
+        intent.putExtra("MomentId", layerId);
         activity.startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LikeManager.get().finish();
     }
 }

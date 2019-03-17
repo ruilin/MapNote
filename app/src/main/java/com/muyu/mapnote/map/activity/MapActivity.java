@@ -49,9 +49,11 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class MapActivity extends MapBaseActivity
-        implements OnMapEventListener {
+        implements OnMapEventListener, Style.OnStyleLoaded {
 
     private MapController mMapController;
     private UserController mUserController;
@@ -67,6 +69,7 @@ public class MapActivity extends MapBaseActivity
     private final int MAIN_MENU_MORE = 2;
     private int lastMemuIndex = MAIN_MENU_HOME;
 
+    private ArrayList<OkMomentItem> mMomentlist = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +95,7 @@ public class MapActivity extends MapBaseActivity
 
     private void initController() {
         mMapController = new MapController(this);
+        mMapController.setMapStyleReloadListener(this);
         addController(mMapController);
         mUserController = new UserController();
         addController(mUserController);
@@ -102,16 +106,14 @@ public class MapActivity extends MapBaseActivity
             OkMoment.getAllMoment(new MomentListCallback() {
                 @Override
                 public void onSuccess(ArrayList<OkMomentItem> list) {
-                    SysUtils.runOnUiThread(new Runnable() {
+                    mMomentlist = list;
+                    Collections.sort(mMomentlist, new Comparator<OkMomentItem>() {
                         @Override
-                        public void run() {
-                            Msg.show("成功");
-                            for (OkMomentItem item : list) {
-                                MomentPoi poi = PoiManager.toMomentPoi(item);
-                                mMapController.showMoment(poi);
-                            }
+                        public int compare(OkMomentItem o1, OkMomentItem o2) {
+                            return o1.moment_like > o2.moment_like ? 1 : -1;
                         }
                     });
+                    showMoments(list);
                 }
 
                 @Override
@@ -120,6 +122,16 @@ public class MapActivity extends MapBaseActivity
                 }
             });
         }
+    }
+
+    public void showMoments(ArrayList<OkMomentItem> list) {
+        SysUtils.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Msg.show("成功");
+                mMapController.showMoments(list);
+            }
+        });
     }
 
     /**
@@ -328,6 +340,13 @@ public class MapActivity extends MapBaseActivity
 //        mSearchPlaceController = new GoogleSearchHelper(map);
 //        addController(mSearchPlaceController);
         updateMoments();
+    }
+
+    @Override
+    public void onStyleLoaded(@NonNull Style style) {
+        if (mMomentlist != null) {
+            showMoments(mMomentlist);
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

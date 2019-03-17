@@ -3,6 +3,7 @@ package com.muyu.mapnote.map.map.poi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PointF;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -56,7 +57,7 @@ public class PoiManager {
     public final static byte POI_TYPE_FOOTMARK = 4;
 
     private static Hashtable<String, Marker> mKeywordPoiMap = new Hashtable<>();
-    private static Hashtable<String, MomentMarker> mMomentPoiMap = new Hashtable<>();
+    private static Hashtable<String, MomentPoi> mMomentPoiMap = new Hashtable<>();
 
     public static MomentPoi toMomentPoi(OkMomentItem item) {
         MomentPoi poi = new MomentPoi();
@@ -130,42 +131,59 @@ public class PoiManager {
         mKeywordPoiMap.put(poi.title, marker);
     }
 
-    public static void showMoment(Context context, MapboxMap map, MomentPoi poi) {
-        IconFactory iconFactory = IconFactory.getInstance(BaseApplication.getInstance());
-        Icon icon = iconFactory.fromResource(R.drawable.green_marker);
-//        Marker marker = map.addMarker(new MarkerOptions()
-//                .position(new LatLng(poi.lat, poi.lng))
-//                .title(poi.title)
-//                .snippet(poi.address)
-//                .icon(icon)
-//        );
-        MomentMarkerOptions options = new MomentMarkerOptions();
-        options.position(new LatLng(poi.lat, poi.lng))
-                .title(poi.nickname)
-                .snippet("……")
-                .icon(icon);
-        options.momentPoi(poi);
-        MomentMarker marker = (MomentMarker)map.addMarker(options);
-        if (poi.pictureUrlLiat.size() > 0) {
-            Glide.with(context).asBitmap().load(poi.pictureUrlLiat.get(0)).into(new SimpleTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                    Bitmap smallBitmap = BitmapUtils.changeBitmapSize(resource, 100, 100);
-                    Bitmap circle = CanvasUtils.drawCircleBitmap(smallBitmap);
-                    marker.setIcon(iconFactory.fromBitmap(circle));
-                }
-            });
-        }
-        mMomentPoiMap.put(poi.id, marker);
-    }
+//    public static void showMoment(Context context, MapboxMap map, MomentPoi poi) {
+//        IconFactory iconFactory = IconFactory.getInstance(BaseApplication.getInstance());
+//        Icon icon = iconFactory.fromResource(R.drawable.green_marker);
+////        Marker marker = map.addMarker(new MarkerOptions()
+////                .position(new LatLng(poi.lat, poi.lng))
+////                .title(poi.title)
+////                .snippet(poi.address)
+////                .icon(icon)
+////        );
+//        MomentMarkerOptions options = new MomentMarkerOptions();
+//        options.position(new LatLng(poi.lat, poi.lng))
+//                .title(poi.nickname)
+//                .snippet("……")
+//                .icon(icon);
+//        options.momentPoi(poi);
+//        MomentMarker marker = (MomentMarker)map.addMarker(options);
+//        if (poi.pictureUrlLiat.size() > 0) {
+//            Glide.with(context).asBitmap().load(poi.pictureUrlLiat.get(0)).into(new SimpleTarget<Bitmap>() {
+//                @Override
+//                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                    Bitmap smallBitmap = BitmapUtils.changeBitmapSize(resource, 100, 100);
+//                    Bitmap circle = CanvasUtils.drawCircleBitmap(smallBitmap);
+//                    marker.setIcon(iconFactory.fromBitmap(circle));
+//                }
+//            });
+//        }
+//        mMomentPoiMap.put(poi.id, marker);
+//    }
 
     public static MomentPoi getMomentPoi(String id) {
-        MomentMarker marker = mMomentPoiMap.get(id);
-        if (marker != null) {
-            return marker.getMomentPoi();
-        } else {
-            return null;
+        String layerId = "layer_" + id;
+        MomentPoi poi = mMomentPoiMap.get(layerId);
+        return poi;
+    }
+
+    public static List<String> getMomentLayerIdList() {
+        ArrayList<String> list = new ArrayList<>();
+        for(Iterator<Map.Entry<String, MomentPoi>> iterator = mMomentPoiMap.entrySet().iterator(); iterator.hasNext();) {
+            Map.Entry<String, MomentPoi> entry = iterator.next();
+            list.add(entry.getKey());
         }
+        return list;
+    }
+
+    public static MomentPoi searchMomentByScreenPoint(MapboxMap map, PointF screenPoint) {
+        for(Iterator<Map.Entry<String, MomentPoi>> iterator = mMomentPoiMap.entrySet().iterator(); iterator.hasNext();) {
+            Map.Entry<String, MomentPoi> entry = iterator.next();
+            List<Feature> features = map.queryRenderedFeatures(screenPoint, entry.getKey());
+            if (!features.isEmpty()) {
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 
     public static void removePoiByType(MapboxMap map, byte type) {
@@ -175,15 +193,15 @@ public class PoiManager {
             case POI_TYPE_SEARCH_FIRST:
                 break;
             case POI_TYPE_SEARCH_OTHER:
-                for(Iterator<Map.Entry<String, Marker>> iterator = mKeywordPoiMap.entrySet().iterator(); iterator.hasNext();){
+                for(Iterator<Map.Entry<String, Marker>> iterator = mKeywordPoiMap.entrySet().iterator(); iterator.hasNext();) {
                     Map.Entry<String, Marker> entry = iterator.next();
                     map.removeMarker(entry.getValue());
                 }
                 break;
             case POI_TYPE_MOMENT:
-                for(Iterator<Map.Entry<String, MomentMarker>> iterator = mMomentPoiMap.entrySet().iterator(); iterator.hasNext();){
-                    Map.Entry<String, MomentMarker> entry = iterator.next();
-                    map.removeMarker(entry.getValue());
+                for(Iterator<Map.Entry<String, MomentPoi>> iterator = mMomentPoiMap.entrySet().iterator(); iterator.hasNext();) {
+                    Map.Entry<String, MomentPoi> entry = iterator.next();
+                    map.getStyle().removeLayer(entry.getKey());
                 }
                 break;
         }
@@ -193,23 +211,29 @@ public class PoiManager {
         map.removeMarker(mKeywordPoiMap.get(key));
     }
 
-
     public static void showMoment(BaseActivity activity, Style style, MomentPoi poi) {
         Glide.with(activity).asBitmap().load(poi.pictureUrlLiat.get(0)).into(new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                 Bitmap smallBitmap = BitmapUtils.changeBitmapSize(resource, 100, 100);
                 Bitmap circle = CanvasUtils.drawCircleBitmap(smallBitmap);
-                addMarker(style, poi, circle);
+                String layerId = addMarker(style, poi, circle);
+                mMomentPoiMap.put(layerId, poi);
             }
         });
     }
 
-    private static void addMarker(Style style, MomentPoi poi, Bitmap bitmap) {
+    private synchronized static String addMarker(Style style, MomentPoi poi, Bitmap bitmap) {
 //        List<Feature> markerCoordinates = new ArrayList<>();
 //        markerCoordinates.add(Feature.fromGeometry(Point.fromLngLat(poi.lat, poi.lng)));
         String sourceId = "source_" + poi.id;
         String imageId = "icon_" + poi.id;
+        String layerId = "layer_" + poi.id;
+
+        style.removeLayer(layerId);
+        style.removeImage(imageId);
+        style.removeSource(sourceId);
+
         style.addSource(new GeoJsonSource(sourceId,
                 FeatureCollection.fromFeature(Feature.fromGeometry(Point.fromLngLat(poi.lng, poi.lat)))));
 
@@ -218,10 +242,11 @@ public class PoiManager {
 
         // Adding an offset so that the bottom of the blue icon gets fixed to the coordinate, rather than the
         // middle of the icon being fixed to the coordinate point.
-        style.addLayerAt(new SymbolLayer("layer_" + poi.id, sourceId)
+        style.addLayerAt(new SymbolLayer(layerId, sourceId)
                 .withProperties(PropertyFactory.iconImage(imageId),
                         iconOffset(new Float[]{0f, 0f})),
-                style.getLayers().size() - 3
+                style.getLayers().size() - 5
         );
+        return layerId;
     }
 }

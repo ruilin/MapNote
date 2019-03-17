@@ -250,7 +250,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                     Point point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
                     points.add(point);
                 }
-                setMarkerLayer(points);
+//                setMarkerLayer(points);
                 drawPolyline(points);
                 setSEMarkers(latLngs);
 //                        for (OkMomentItem item : list) {

@@ -1,6 +1,7 @@
 package com.muyu.mapnote.note;
 
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,31 +12,34 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
-import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
-import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
+import com.mapbox.geojson.Point;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
+import com.muyu.mapnote.map.map.route.RouteController;
+import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.minimalism.framework.app.BaseActivity;
 
+import org.w3c.dom.Text;
+
 public class MomentPopupView extends PopupWindow {
-    private BaseActivity mContext;
+    private MapPluginController controller;
     private MomentPoi poi;
 
-    public MomentPopupView(BaseActivity context, MomentPoi poi) {
-        super(context);
-        this.mContext = context;
+    public MomentPopupView(MapPluginController controller, MomentPoi poi) {
+        super(controller.getActivity());
+        this.controller = controller;
         this.poi = poi;
         init();
     }
 
     private void init() {
-        LayoutInflater inflater = LayoutInflater.from(mContext);
+        LayoutInflater inflater = LayoutInflater.from(controller.getActivity());
         View view = inflater.inflate(R.layout.view_dialog_moment, null);
 
         if (!poi.pictureUrlLiat.isEmpty()) {
-            Glide.with(mContext).load(poi.pictureUrlLiat.get(0)).into((ImageView) view.findViewById(R.id.moment_pupup_iv));
+            Glide.with(controller.getActivity()).load(poi.pictureUrlLiat.get(0)).into((ImageView) view.findViewById(R.id.moment_pupup_iv));
         }
         TextView tv = view.findViewById(R.id.footmark_content);
         tv.setText(poi.content);
@@ -44,10 +48,28 @@ public class MomentPopupView extends PopupWindow {
         tv = view.findViewById(R.id.footmark_pupup_like);
         tv.setText(String.valueOf(poi.like));
 
+        TextView addr = view.findViewById(R.id.dialog_moment_addr);
+        addr.setText(poi.place);
+
+        view.findViewById(R.id.dialog_moment_route).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Location myLocation = LocationHelper.INSTANCE.getLastLocation();
+                if (myLocation != null) {
+                    LatLng myLatlng = LocationHelper.getChinaLatlng(myLocation.getLatitude(), myLocation.getLongitude());
+                    Point start = Point.fromLngLat(myLatlng.getLongitude(), myLatlng.getLatitude());
+                    Point destination = Point.fromLngLat(poi.lng, poi.lat);
+                    controller.getMap().getRoute().route(start, destination);
+                }
+            }
+        });
+
+        Glide.with(controller.getActivity()).load(poi.headimg).into((ImageView) view.findViewById(R.id.dialog_moment_head));
+
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DetailActivity.startDetailPage(mContext, poi.id);
+                DetailActivity.startDetailPage(controller.getActivity(), poi.id);
                 dismiss();
             }
         });
@@ -56,7 +78,7 @@ public class MomentPopupView extends PopupWindow {
     }
 
     private void initWindow() {
-        DisplayMetrics d = mContext.getResources().getDisplayMetrics();
+        DisplayMetrics d = controller.getActivity().getResources().getDisplayMetrics();
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         this.setFocusable(false);   // false 点击外面，事件不穿透

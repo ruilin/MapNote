@@ -19,7 +19,7 @@ public abstract class ActivityController {
         }
     }
 
-    protected BaseActivity getActivity() {
+    public BaseActivity getActivity() {
         return mActivity;
     }
 

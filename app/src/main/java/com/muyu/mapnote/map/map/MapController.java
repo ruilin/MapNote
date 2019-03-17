@@ -30,6 +30,7 @@ import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.app.okayapi.OkMomentItem;
 import com.muyu.mapnote.map.map.location.LocationController;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.mapnote.map.map.poi.Poi;
@@ -61,18 +62,13 @@ public class MapController extends ActivityController implements PermissionsList
     public MapboxMap mapboxMap;
     public MapView mapView;
 
-    private Location originLocation;
-    boolean isFirst = true;
-
-    private Marker destinationMarker;
-    private LatLng destinationCoord;
     private DirectionsRoute currentRoute;
     private NavigationMapRoute navigationMapRoute;
 
     private View mLayout;
     private View mMainLayout;
     private SupportMapFragment mMapFragment;
-
+    private Style.OnStyleLoaded styleLoadListener;
     private OnMapEventListener mListener;
 
     /* 插件 */
@@ -152,7 +148,18 @@ public class MapController extends ActivityController implements PermissionsList
     }
 
     public void setMapStyle(String style) {
-        mapboxMap.setStyle(style);
+        mapboxMap.setStyle(style, new Style.OnStyleLoaded() {
+            @Override
+            public void onStyleLoaded(@NonNull Style style) {
+                if (styleLoadListener != null) {
+                    styleLoadListener.onStyleLoaded(style);
+                }
+            }
+        });
+    }
+
+    public void setMapStyleReloadListener(Style.OnStyleLoaded listener) {
+        this.styleLoadListener = listener;
     }
 
     private void initUi() {
@@ -296,8 +303,11 @@ public class MapController extends ActivityController implements PermissionsList
         PoiManager.createPoi(mapboxMap, poi);
     }
 
-    public void showMoment(MomentPoi poi) {
-        PoiManager.showMoment(getActivity(), mapboxMap.getStyle(), poi);
+    public void showMoments(List<OkMomentItem> list) {
+        for (OkMomentItem item : list) {
+            MomentPoi poi = PoiManager.toMomentPoi(item);
+            PoiManager.showMoment(getActivity(), mapboxMap.getStyle(), poi);
+        }
     }
 
     public void cleanKeywordPois() {
