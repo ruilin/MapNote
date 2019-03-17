@@ -297,7 +297,7 @@ public class MapController extends ActivityController implements PermissionsList
     }
 
     public void showMoment(MomentPoi poi) {
-        PoiManager.showMoment(getActivity(), mapboxMap, poi);
+        PoiManager.showMoment(getActivity(), mapboxMap.getStyle(), poi);
     }
 
     public void cleanKeywordPois() {
