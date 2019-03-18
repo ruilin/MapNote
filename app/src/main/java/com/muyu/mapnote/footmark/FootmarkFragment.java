@@ -202,15 +202,20 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
      */
     private void initDottedLineSourceAndLayer(@NonNull Style style) {
         lineFeatureCollection = FeatureCollection.fromFeatures(new Feature[] {});
-        style.addSource(new GeoJsonSource("SOURCE_ID", lineFeatureCollection));
-        style.addLayer(
-                new LineLayer("DIRECTIONS_LAYER_ID", "SOURCE_ID")
+        String layerId = "DIRECTIONS_LAYER_ID";
+        String sourceId = "SOURCE_ID";
+        style.removeLayer(layerId);
+        style.removeSource(sourceId);
+        style.addSource(new GeoJsonSource(sourceId, lineFeatureCollection));
+        style.addLayerAbove(
+                new LineLayer(layerId, sourceId)
                         .withProperties(
-                        lineWidth(2.5f),
+                        lineWidth(2.0f),
                         lineColor(getResources().getColor(R.color.rose)),
                         lineTranslate(new Float[] {0f, 4f}),
                         lineDasharray(new Float[] {3.0f, 1.0f})
-                ));
+                ),
+        "country-label");
     }
 
     private void drawPolyline(final List<Point> points) {
@@ -320,7 +325,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
         } else if (isChange) {
             mMap.setStyle(Style.OUTDOORS, this);
         } else {
-            mMap.setStyle(Style.SATELLITE_STREETS, this);
+            mMap.setStyle(Style.SATELLITE, this);
         }
     }
 
@@ -353,41 +358,41 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
         mRefreshView.setRefreshing(true);
     }
 
-    private void setMarkerLayer(final List<Point> points) {
-        if (mMap != null && points.size() > 2) {
-            mMap.getStyle(new Style.OnStyleLoaded() {
-                @Override
-                public void onStyleLoaded(@NonNull Style style) {
-                    List<Feature> markerCoordinates = new ArrayList<>();
-                    for (int i = points.size() - 2; i > 0; --i) {
-                        markerCoordinates.add(Feature.fromGeometry(points.get(i)));
-                    }
-                    style.addSource(new GeoJsonSource("marker-source",
-                            FeatureCollection.fromFeatures(markerCoordinates)));
-
-                    // 添加资源图片到地图
-                    style.addImage("my-marker-image", BitmapFactory.decodeResource(
-                            FootmarkFragment.this.getResources(), R.mipmap.ic_foot_dot));
-
-                    // Adding an offset so that the bottom of the blue icon gets fixed to the coordinate, rather than the
-                    // middle of the icon being fixed to the coordinate point.
-                    style.addLayer(new SymbolLayer("marker-layer", "marker-source")
-                            .withProperties(PropertyFactory.iconImage("my-marker-image"),
-                                    iconOffset(new Float[]{0f, 0f}))
-                    );
-
-                    // Add the selected marker source and layer
-                    style.addSource(new GeoJsonSource("selected-marker"));
-
-                    // Adding an offset so that the bottom of the blue icon gets fixed to the coordinate, rather than the
-                    // middle of the icon being fixed to the coordinate point.
-                    style.addLayer(new SymbolLayer("selected-marker-layer", "selected-marker")
-                            .withProperties(PropertyFactory.iconImage("my-marker-image"),
-                                    iconOffset(new Float[]{0f, 0f})));
-                }
-            });
-        }
-    }
+//    private void setMarkerLayer(final List<Point> points) {
+//        if (mMap != null && points.size() > 2) {
+//            mMap.getStyle(new Style.OnStyleLoaded() {
+//                @Override
+//                public void onStyleLoaded(@NonNull Style style) {
+//                    List<Feature> markerCoordinates = new ArrayList<>();
+//                    for (int i = points.size() - 2; i > 0; --i) {
+//                        markerCoordinates.add(Feature.fromGeometry(points.get(i)));
+//                    }
+//                    style.addSource(new GeoJsonSource("marker-source",
+//                            FeatureCollection.fromFeatures(markerCoordinates)));
+//
+//                    // 添加资源图片到地图
+//                    style.addImage("my-marker-image", BitmapFactory.decodeResource(
+//                            FootmarkFragment.this.getResources(), R.mipmap.ic_foot_dot));
+//
+//                    // Adding an offset so that the bottom of the blue icon gets fixed to the coordinate, rather than the
+//                    // middle of the icon being fixed to the coordinate point.
+//                    style.addLayer(new SymbolLayer("marker-layer", "marker-source")
+//                            .withProperties(PropertyFactory.iconImage("my-marker-image"),
+//                                    iconOffset(new Float[]{0f, 0f}))
+//                    );
+//
+//                    // Add the selected marker source and layer
+//                    style.addSource(new GeoJsonSource("selected-marker"));
+//
+//                    // Adding an offset so that the bottom of the blue icon gets fixed to the coordinate, rather than the
+//                    // middle of the icon being fixed to the coordinate point.
+//                    style.addLayer(new SymbolLayer("selected-marker-layer", "selected-marker")
+//                            .withProperties(PropertyFactory.iconImage("my-marker-image"),
+//                                    iconOffset(new Float[]{0f, 0f})));
+//                }
+//            });
+//        }
+//    }
 
     private void mark(LatLng latlng) {
         if (mMarker == null) {
@@ -403,10 +408,6 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
             mMap.removeMarker(marker);
         }
         mMarkerList.clear();
-//        for (LatLng latlng : points) {
-//            Marker marker = createMarker(latlng);
-//            mMarkerList.add(marker);
-//        }
         if (points.size() > 2) {
             IconFactory iconFactory = IconFactory.getInstance(BaseApplication.getInstance());
             Icon icon = iconFactory.fromResource(R.mipmap.ic_foot_end);

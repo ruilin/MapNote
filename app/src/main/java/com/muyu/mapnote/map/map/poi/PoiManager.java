@@ -121,7 +121,7 @@ public class PoiManager {
         );
     }
 
-    public static void createPoi(MapboxMap map, Poi poi) {
+    public static Marker createPoi(MapboxMap map, Poi poi) {
         byte poiType = PoiManager.POI_TYPE_SEARCH_OTHER;
 //        if (isFirst) {
 //            poiType = PoiHelper.POI_TYPE_SEARCH_FIRST;
@@ -129,6 +129,7 @@ public class PoiManager {
 //        }
         Marker marker = createPoi(map, poi.title, poi.address, new LatLng(poi.lat, poi.lng), poiType);
         mKeywordPoiMap.put(poi.title, marker);
+        return marker;
     }
 
 //    public static void showMoment(Context context, MapboxMap map, MomentPoi poi) {
@@ -223,7 +224,7 @@ public class PoiManager {
         });
     }
 
-    private synchronized static String addMarker(Style style, MomentPoi poi, Bitmap bitmap) {
+    public synchronized static String addMarker(Style style, MomentPoi poi, Bitmap bitmap) {
 //        List<Feature> markerCoordinates = new ArrayList<>();
 //        markerCoordinates.add(Feature.fromGeometry(Point.fromLngLat(poi.lat, poi.lng)));
         String sourceId = "source_" + poi.id;

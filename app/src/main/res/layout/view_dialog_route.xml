@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="46dp"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:gravity="center_vertical"
-    android:background="@drawable/shape_route_dialog"
     android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/map_view_route"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:background="@drawable/shape_moment_dialog"
         android:gravity="center_vertical"
         android:orientation="vertical">
         <TextView
@@ -23,19 +25,21 @@
             android:textSize="11sp"
             android:drawableTop="@mipmap/ic_navigation"
             android:drawableTint="@color/colorPrimaryDark"
-            android:paddingVertical="10dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="5dp"
             android:textStyle="bold"
             android:text="导航"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginHorizontal="6dp"
+            android:layout_marginHorizontal="1dp"
             android:visibility="visible"
             android:background="@color/gray0"/>
         <TextView
             android:id="@+id/view_route_cancel"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
             android:gravity="center"
             android:focusable="true"
             android:textStyle="bold"
