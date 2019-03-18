@@ -14,7 +14,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <android.support.design.widget.CoordinatorLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -30,7 +30,7 @@
                 android:layout_width="46dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginBottom="100dp"/>
+                android:layout_marginBottom="20dp"/>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/map_fab_add"
@@ -59,7 +59,7 @@
                 app:backgroundTint="@color/white"
                 app:rippleColor="#e7d16b"
                 app:srcCompat="@mipmap/ic_loc" />
-        </android.support.design.widget.CoordinatorLayout>
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/map_frag_footmark"

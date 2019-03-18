@@ -34,12 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/nav_header_title"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="18sp"
-            android:shadowRadius="2"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowColor="@color/black"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         <TextView
@@ -47,11 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:textColor="@color/gray0"
-            android:shadowRadius="2"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowColor="@color/black"
+            android:textColor="@color/textGray4"
             android:text="@string/nav_header_subtitle" />
 
     </LinearLayout>

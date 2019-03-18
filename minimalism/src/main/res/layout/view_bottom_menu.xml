@@ -15,12 +15,12 @@
         android:id="@+id/bottom_menu_cancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp"
+        android:padding="13dp"
         android:background="@drawable/selector_text_view"
         android:layout_marginTop="6dp"
         android:clickable="true"
         android:gravity="center"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textColor="@color/black"
         android:text="取消"/>
 </LinearLayout>

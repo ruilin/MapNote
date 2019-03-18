@@ -207,15 +207,26 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
         style.removeLayer(layerId);
         style.removeSource(sourceId);
         style.addSource(new GeoJsonSource(sourceId, lineFeatureCollection));
-        style.addLayerAbove(
-                new LineLayer(layerId, sourceId)
-                        .withProperties(
-                        lineWidth(2.0f),
-                        lineColor(getResources().getColor(R.color.rose)),
-                        lineTranslate(new Float[] {0f, 4f}),
-                        lineDasharray(new Float[] {3.0f, 1.0f})
-                ),
-        "country-label");
+        try {
+            style.addLayerAbove(
+                    new LineLayer(layerId, sourceId)
+                            .withProperties(
+                            lineWidth(2.0f),
+                            lineColor(getResources().getColor(R.color.rose)),
+                            lineTranslate(new Float[] {0f, 4f}),
+                            lineDasharray(new Float[] {3.0f, 1.0f})
+                    ),
+            "country-label");
+        } catch (Exception e) {
+            style.addLayer(
+                    new LineLayer(layerId, sourceId)
+                            .withProperties(
+                                    lineWidth(2.0f),
+                                    lineColor(getResources().getColor(R.color.rose)),
+                                    lineTranslate(new Float[] {0f, 4f}),
+                                    lineDasharray(new Float[] {3.0f, 1.0f})
+                            ));
+        }
     }
 
     private void drawPolyline(final List<Point> points) {
@@ -325,7 +336,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
         } else if (isChange) {
             mMap.setStyle(Style.OUTDOORS, this);
         } else {
-            mMap.setStyle(Style.SATELLITE, this);
+            mMap.setStyle(Style.SATELLITE_STREETS, this);
         }
     }
 
