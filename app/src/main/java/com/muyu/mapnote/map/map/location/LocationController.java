@@ -85,7 +85,7 @@ public class LocationController extends MapPluginController {
                     locationComponent.forceLocationUpdate(location);
                 }
             });
-            Location lastLocation = LocationHelper.INSTANCE.getLastLocation();
+            Location lastLocation = LocationHelper.INSTANCE.getLastLocationCheckChina();
             if (lastLocation != null) {
                 originLocation = lastLocation;
                 setCameraPosition(lastLocation.getLatitude(), lastLocation.getLongitude());
@@ -107,12 +107,14 @@ public class LocationController extends MapPluginController {
                 Msg.show("无法获取定位权限");
                 return true;
             }
-            originLocation = locationComponent.getLastKnownLocation();
+            // originLocation = locationComponent.getLastKnownLocation();
+            originLocation = LocationHelper.INSTANCE.getLastLocationCheckChina();
         }
         if (originLocation == null) {
             Msg.show("无法获取定位");
         } else {
             setCameraPosition(originLocation.getLatitude(), originLocation.getLongitude());
+            locationComponent.forceLocationUpdate(originLocation);
         }
         return true;
     }

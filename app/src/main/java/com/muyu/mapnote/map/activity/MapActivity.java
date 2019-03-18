@@ -304,7 +304,7 @@ public class MapActivity extends MapBaseActivity
      * 悬浮按钮
      */
     public void initFloatButton() {
-        FloatingActionButton fab = findViewById(R.id.map_fab_loc);
+        View fab = findViewById(R.id.map_fab_loc);
         fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
