@@ -183,11 +183,11 @@ public class MapActivity extends MapBaseActivity
                         }
                         break;
                     case MAIN_MENU_PATH:
-                        if (!OkayApi.get().isLogined()) {
-                            bottomNavigationBar.selectTab(MAIN_MENU_HOME);
-                            startActivity(LoginActivity.class);
-                            return;
-                        }
+//                        if (!OkayApi.get().isLogined()) {
+//                            bottomNavigationBar.selectTab(MAIN_MENU_HOME);
+//                            startActivity(LoginActivity.class);
+//                            return;
+//                        }
                         lastMemuIndex = MAIN_MENU_PATH;
                         if (footmarkFragment == null) {
                             footmarkFragment = FootmarkFragment.newInstance();
@@ -344,7 +344,9 @@ public class MapActivity extends MapBaseActivity
 
     @Override
     public void onStyleLoaded(@NonNull Style style) {
-        if (mMomentlist != null) {
+        if (mMomentlist == null) {
+            updateMoments();
+        } else {
             showMoments(mMomentlist);
         }
     }

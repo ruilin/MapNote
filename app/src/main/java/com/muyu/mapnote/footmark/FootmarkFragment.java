@@ -46,6 +46,7 @@ import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkMoment;
 import com.muyu.mapnote.app.okayapi.OkMomentItem;
+import com.muyu.mapnote.app.okayapi.OkayApi;
 import com.muyu.mapnote.app.okayapi.callback.MomentListCallback;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.activity.MapActivity;
@@ -249,7 +250,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
 
     private synchronized void updateMap() {
         ArrayList<OkMomentItem> okMomentItems = mOkMomentItems;
-        if (mMap != null && !okMomentItems.isEmpty()) {
+        if (mMap != null && okMomentItems != null && !okMomentItems.isEmpty()) {
             if (okMomentItems.size() > 1) {
                 /* 标记当前选择 */
                 LatLng latlng = LocationHelper.getChinaLatlng(okMomentItems.get(0).moment_lat, okMomentItems.get(0).moment_lng);
@@ -365,8 +366,8 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
 
             }
         });
-        update();
         mRefreshView.setRefreshing(true);
+        update();
     }
 
 //    private void setMarkerLayer(final List<Point> points) {
@@ -447,6 +448,10 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
     }
 
     public void update() {
+        if (!OkayApi.get().isLogined()) {
+            mRefreshView.setRefreshing(false);
+            return;
+        }
         OkMoment.getMyMoment(new MomentListCallback() {
             @Override
             public void onSuccess(ArrayList<OkMomentItem> list) {
