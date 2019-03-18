@@ -102,7 +102,7 @@ public class MapActivity extends MapBaseActivity
     }
 
     public void updateMoments() {
-        if (OkayApi.get().isLogined()) {
+//        if (OkayApi.get().isLogined()) {
             OkMoment.getAllMoment(new MomentListCallback() {
                 @Override
                 public void onSuccess(ArrayList<OkMomentItem> list) {
@@ -121,7 +121,7 @@ public class MapActivity extends MapBaseActivity
 
                 }
             });
-        }
+//        }
     }
 
     public void showMoments(ArrayList<OkMomentItem> list) {

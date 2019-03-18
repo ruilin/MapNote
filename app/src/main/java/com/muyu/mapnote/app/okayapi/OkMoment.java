@@ -115,15 +115,15 @@ public class OkMoment extends OkObject {
         sb.append(OkayApi.get().getHost());
         sb.append("/?s=" + apiKey);
         sb.append("&app_key=" + OkayApi.get().getAppKey());
-        sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
-        sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
+//        sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
+//        sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
         sb.append("&perpage=100");
 
         SortedMap<String, String> map = new TreeMap<>();
         map.put("s", apiKey);
         map.put("app_key", OkayApi.get().getAppKey());
-        map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
-        map.put("token", OkayApi.get().getCurrentUser().getToken());
+//        map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
+//        map.put("token", OkayApi.get().getCurrentUser().getToken());
         //map.put("lastid", "2");
         map.put("perpage", "100");
         String sign = SignUtils.getSign(map);

@@ -71,7 +71,7 @@ public class PoiController extends MapPluginController {
 
                 Location myLocation = LocationHelper.INSTANCE.getLastLocation();
                 if (myLocation != null) {
-                    LatLng myLatlng = LocationHelper.getChinaLatlng(myLocation.getLatitude(), myLocation.getLongitude());
+                    LatLng myLatlng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
                     Point start = Point.fromLngLat(myLatlng.getLongitude(), myLatlng.getLatitude());
                     Point destination = Point.fromLngLat(marker.getPosition().getLongitude(), marker.getPosition().getLatitude());
                     getMap().getRoute().route(start, destination);
