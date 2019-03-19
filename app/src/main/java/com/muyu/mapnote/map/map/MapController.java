@@ -173,6 +173,9 @@ public class MapController extends ActivityController implements PermissionsList
                 } else {
                     onPermissionResult(true);
                 }
+                if (styleLoadListener != null) {
+                    styleLoadListener.onStyleLoaded(style);
+                }
             }
         });
 
@@ -284,6 +287,10 @@ public class MapController extends ActivityController implements PermissionsList
         return mRouteController;
     }
 
+    public LocationController getLocation() {
+        return mLocationController;
+    }
+
     public View getLayout() {
         return mMainLayout;
     }
@@ -304,6 +311,7 @@ public class MapController extends ActivityController implements PermissionsList
     }
 
     public void showMoments(List<OkMomentItem> list) {
+        PoiManager.removePoiByType(mapboxMap, PoiManager.POI_TYPE_MOMENT);
         for (OkMomentItem item : list) {
             MomentPoi poi = PoiManager.toMomentPoi(item);
             PoiManager.showMoment(getActivity(), mapboxMap.getStyle(), poi);

@@ -171,9 +171,9 @@ public class DetailActivity extends MapBaseActivity {
         });
     }
 
-    public static void startDetailPage(BaseActivity activity, String layerId) {
+    public static void startDetailPage(BaseActivity activity, String id) {
         Intent intent = new Intent(activity, DetailActivity.class);
-        intent.putExtra("MomentId", layerId);
+        intent.putExtra("MomentId", id);
         activity.startActivity(intent);
     }
 

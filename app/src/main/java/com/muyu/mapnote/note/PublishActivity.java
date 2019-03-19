@@ -83,8 +83,13 @@ public class PublishActivity extends MapBaseActivity {
     }
 
     private void initPlace() {
-        placeTextView = findViewById(R.id.publish_place_text);
         Location loc = LocationHelper.INSTANCE.getLastLocation();
+        if (loc == null) {
+            Msg.show("无法获取定位");
+            finish();
+            return;
+        }
+        placeTextView = findViewById(R.id.publish_place_text);
         placeTextView.setText("经纬度(" + MathUtils.round(loc.getLatitude(), 8) + "," + MathUtils.round(loc.getLongitude(), 8) + ")");
         SearchHelper.searchLocationInfo(this, LocationHelper.INSTANCE.getLastLocation(), new SearchHelper.OnSearchLocationCallback() {
             @Override

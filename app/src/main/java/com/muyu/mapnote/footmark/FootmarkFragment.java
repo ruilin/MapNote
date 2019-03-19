@@ -179,7 +179,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                                     @Override
                                     public void onSuccess(String result) {
                                         Msg.show("删除成功");
-                                        update();
+                                        MapOptEvent.updateMap();
                                         mRefreshView.post(new Runnable() {
                                             @Override
                                             public void run() {

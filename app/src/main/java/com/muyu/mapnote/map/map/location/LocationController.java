@@ -5,14 +5,14 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 
+import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.plugins.locationlayer.modes.RenderMode;
+import com.mapbox.mapboxsdk.location.modes.RenderMode;
+import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.muyu.mapnote.map.map.MapController;
 import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
@@ -28,16 +28,6 @@ public class LocationController extends MapPluginController {
     @Override
     protected void onMapCreated(MapController map) {
         super.onMapCreated(map);
-    }
-
-    @SuppressWarnings({"MissingPermission"})
-    private void enableLocationPlugin() {
-        // Create an instance of LOST location engine
-        initializeLocationEngine();
-
-//        locationPlugin = new LocationLayerPlugin(getMapView(), getMap());
-//        locationPlugin.setLocationLayerEnabled(true);
-//        locationPlugin.setRenderMode(RenderMode.COMPASS);
     }
 
     @SuppressWarnings( {"MissingPermission"})
@@ -58,6 +48,8 @@ public class LocationController extends MapPluginController {
 
         // Set the component's render mode
         locationComponent.setRenderMode(RenderMode.COMPASS);
+
+        locationComponent.setLocationEngine(null);
 
     }
 
@@ -117,5 +109,9 @@ public class LocationController extends MapPluginController {
             locationComponent.forceLocationUpdate(originLocation);
         }
         return true;
+    }
+
+    public Location getLastLocation() {
+        return originLocation;
     }
 }

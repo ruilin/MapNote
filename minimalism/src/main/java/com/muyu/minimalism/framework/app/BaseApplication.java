@@ -9,6 +9,7 @@ import android.os.StrictMode;
 import android.util.Log;
 
 import com.muyu.minimalism.BuildConfig;
+import com.muyu.minimalism.utils.Logs;
 import com.muyu.minimalism.view.Msg;
 import com.muyu.minimalism.utils.SPUtils;
 
@@ -35,7 +36,7 @@ public abstract class BaseApplication extends Application {
         Instance = this;
 
         if (BuildConfig.DEBUG) {
-            Log.e("xxx", "sHA1: " + sHA1(this));
+            Logs.e("sHA1: " + sHA1(this));
         }
         initPhotoError();
         Msg.create(this);
@@ -46,7 +47,7 @@ public abstract class BaseApplication extends Application {
 
     }
 
-    private void initPhotoError(){
+    private void initPhotoError() {
         // android 7.0系统解决拍照的问题
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());

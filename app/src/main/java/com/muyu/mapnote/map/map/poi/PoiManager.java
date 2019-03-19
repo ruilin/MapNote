@@ -162,8 +162,7 @@ public class PoiManager {
 //    }
 
     public static MomentPoi getMomentPoi(String id) {
-        String layerId = "layer_" + id;
-        MomentPoi poi = mMomentPoiMap.get(layerId);
+        MomentPoi poi = mMomentPoiMap.get(id);
         return poi;
     }
 
@@ -179,7 +178,7 @@ public class PoiManager {
     public static MomentPoi searchMomentByScreenPoint(MapboxMap map, PointF screenPoint) {
         for(Iterator<Map.Entry<String, MomentPoi>> iterator = mMomentPoiMap.entrySet().iterator(); iterator.hasNext();) {
             Map.Entry<String, MomentPoi> entry = iterator.next();
-            List<Feature> features = map.queryRenderedFeatures(screenPoint, entry.getKey());
+            List<Feature> features = map.queryRenderedFeatures(screenPoint, "layer_" + entry.getKey());
             if (!features.isEmpty()) {
                 return entry.getValue();
             }
@@ -202,7 +201,8 @@ public class PoiManager {
             case POI_TYPE_MOMENT:
                 for(Iterator<Map.Entry<String, MomentPoi>> iterator = mMomentPoiMap.entrySet().iterator(); iterator.hasNext();) {
                     Map.Entry<String, MomentPoi> entry = iterator.next();
-                    map.getStyle().removeLayer(entry.getKey());
+                    Style style = map.getStyle();
+                    removeMarker(style, entry.getKey());
                 }
                 break;
         }
@@ -219,9 +219,19 @@ public class PoiManager {
                 Bitmap smallBitmap = BitmapUtils.changeBitmapSize(resource, 100, 100);
                 Bitmap circle = CanvasUtils.drawCircleBitmap(smallBitmap);
                 String layerId = addMarker(style, poi, circle);
-                mMomentPoiMap.put(layerId, poi);
+                mMomentPoiMap.put(poi.id, poi);
             }
         });
+    }
+
+    private static void removeMarker(Style style, String id) {
+        String sourceId = "source_" + id;
+        String imageId = "icon_" + id;
+        String layerId = "layer_" + id;
+
+        style.removeLayer(layerId);
+        style.removeImage(imageId);
+        style.removeSource(sourceId);
     }
 
     public synchronized static String addMarker(Style style, MomentPoi poi, Bitmap bitmap) {
@@ -231,9 +241,7 @@ public class PoiManager {
         String imageId = "icon_" + poi.id;
         String layerId = "layer_" + poi.id;
 
-        style.removeLayer(layerId);
-        style.removeImage(imageId);
-        style.removeSource(sourceId);
+        removeMarker(style, poi.id);
 
         style.addSource(new GeoJsonSource(sourceId,
                 FeatureCollection.fromFeature(Feature.fromGeometry(Point.fromLngLat(poi.lng, poi.lat)))));
