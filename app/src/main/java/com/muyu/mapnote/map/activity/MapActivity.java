@@ -339,7 +339,7 @@ public class MapActivity extends MapBaseActivity
     public void onMapCreated(MapboxMap map, @SuppressLint("NotChinaMapView") MapView mapView) {
 //        mSearchPlaceController = new GoogleSearchHelper(map);
 //        addController(mSearchPlaceController);
-        updateMoments();
+//        updateMoments();
     }
 
     @Override

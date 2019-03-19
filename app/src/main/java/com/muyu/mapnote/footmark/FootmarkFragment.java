@@ -3,6 +3,7 @@ package com.muyu.mapnote.footmark;
 import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -47,6 +48,7 @@ import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkMoment;
 import com.muyu.mapnote.app.okayapi.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.OkayApi;
+import com.muyu.mapnote.app.okayapi.callback.CommonCallback;
 import com.muyu.mapnote.app.okayapi.callback.MomentListCallback;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.activity.MapActivity;
@@ -54,10 +56,12 @@ import com.muyu.mapnote.map.map.MapSettings;
 import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.note.DetailActivity;
+import com.muyu.mapnote.note.LikeManager;
 import com.muyu.minimalism.framework.app.BaseApplication;
 import com.muyu.minimalism.framework.app.BaseFragment;
 import com.muyu.minimalism.utils.StringUtils;
 import com.muyu.minimalism.utils.SysUtils;
+import com.muyu.minimalism.view.DialogUtils;
 import com.muyu.minimalism.view.Msg;
 import com.muyu.minimalism.view.recyclerview.CommonRecyclerAdapter;
 import com.muyu.minimalism.view.recyclerview.CommonViewHolder;
@@ -168,7 +172,34 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
 
                     @Override
                     public void onItemLongClickListener(int position) {
+                        DialogUtils.show(getContext(), "删除", "确定删除该条记录吗？", new DialogUtils.DialogCallback() {
+                            @Override
+                            public void onPositiveClick(DialogInterface dialog) {
+                                OkMoment.postDelete(String.valueOf(poi.id), new CommonCallback() {
+                                    @Override
+                                    public void onSuccess(String result) {
+                                        Msg.show("删除成功");
+                                        update();
+                                        mRefreshView.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                mRefreshView.setRefreshing(true);
+                                            }
+                                        });
+                                    }
 
+                                    @Override
+                                    public void onFail(OkException e) {
+                                        SysUtils.runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Msg.show(e.getMessage());
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
             }
