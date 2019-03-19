@@ -54,7 +54,7 @@ public class MomentPopupView extends PopupWindow {
         view.findViewById(R.id.dialog_moment_route).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Location myLocation = LocationHelper.INSTANCE.getLastLocation();
+                Location myLocation = LocationHelper.INSTANCE.getLastLocationCheckChina();
                 if (myLocation != null) {
                     LatLng myLatlng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
                     Point start = Point.fromLngLat(myLatlng.getLongitude(), myLatlng.getLatitude());

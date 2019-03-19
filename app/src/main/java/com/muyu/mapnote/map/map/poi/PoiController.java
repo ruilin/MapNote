@@ -69,7 +69,7 @@ public class PoiController extends MapPluginController {
             @Override
             public boolean onInfoWindowClick(@NonNull Marker marker) {
 
-                Location myLocation = LocationHelper.INSTANCE.getLastLocation();
+                Location myLocation = LocationHelper.INSTANCE.getLastLocationCheckChina();
                 if (myLocation != null) {
                     LatLng myLatlng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
                     Point start = Point.fromLngLat(myLatlng.getLongitude(), myLatlng.getLatitude());

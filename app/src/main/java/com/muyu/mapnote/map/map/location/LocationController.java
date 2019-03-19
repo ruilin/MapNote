@@ -69,6 +69,7 @@ public class LocationController extends MapPluginController {
             LocationHelper.INSTANCE.addListener(new LocationHelper.OnLocationListener() {
                 @Override
                 public void onLocationUpdate(Location location) {
+                    /* 刷新定位 */
                     originLocation = location;
                     if (isFirst) {
                         setCameraPosition(location.getLatitude(), location.getLongitude());
