@@ -107,7 +107,7 @@
                         android:textColor="@color/gray3"
                         android:paddingHorizontal="50dp"
                         android:textSize="16sp"
-                        android:text="发表游记将会分享到地图上，并绘成您的旅行轨迹哦，快发一个吧~"/>
+                        android:text="发表游记将会记录到地图上，并绘成您的旅行轨迹哦，快发一个吧~"/>
                     <Button
                         android:id="@+id/footmark_publish_btn"
                         android:layout_width="100dp"

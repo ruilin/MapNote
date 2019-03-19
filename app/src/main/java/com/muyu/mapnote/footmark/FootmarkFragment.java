@@ -140,8 +140,9 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
             public void bindData(CommonViewHolder holder, OkMomentItem poi, int position) {
                 View view = holder.itemView;
                 view.setSelected(true);
+                ImageView imageView = view.findViewById(R.id.moment_pupup_iv);
                 if (!StringUtils.isEmpty(poi.moment_picture1)) {
-                    Glide.with(getActivity()).load(poi.moment_picture1).into((ImageView) view.findViewById(R.id.moment_pupup_iv));
+                    Glide.with(getActivity()).load(poi.moment_picture1).into(imageView);
                 }
                 TextView tv = view.findViewById(R.id.footmark_content);
                 tv.setText(poi.moment_content);
@@ -150,14 +151,27 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                 tv = view.findViewById(R.id.footmark_pupup_like);
                 tv.setText(String.valueOf(poi.moment_like));
 
-                view.findViewById(R.id.footmark_detail).setOnClickListener(new View.OnClickListener() {
+                view.findViewById(R.id.footmark_item_line_top).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.footmark_item_line_bottom).setVisibility(View.VISIBLE);
+
+                if (position == 0) {
+                    view.findViewById(R.id.footmark_item_line_top).setVisibility(View.INVISIBLE);
+                }
+                if (position == adapter.getItemCount() - 1) {
+                    view.findViewById(R.id.footmark_item_line_bottom).setVisibility(View.INVISIBLE);
+                }
+
+                View.OnClickListener clickDetail = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         DetailActivity.startDetailPage(FootmarkFragment.this.baseActivity(), String.valueOf(poi.id));
                         view.setSelected(true);
                         oldSelected = position;
                     }
-                });
+                };
+                imageView.setOnClickListener(clickDetail);
+                view.findViewById(R.id.footmark_detail).setOnClickListener(clickDetail);
+
                 holder.setCommonClickListener(new CommonViewHolder.onItemCommonClickListener() {
                     @Override
                     public void onItemClickListener(int position) {
