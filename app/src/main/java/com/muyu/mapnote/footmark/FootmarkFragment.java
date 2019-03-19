@@ -310,7 +310,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                 LatLngBounds bounds = new LatLngBounds.Builder()
                         .includes(latLngs)
                         .build();
-                mapCamera = CameraUpdateFactory.newLatLngBounds(bounds, 110);
+                mapCamera = CameraUpdateFactory.newLatLngBounds(bounds, 150);
                 mMap.animateCamera(mapCamera);
 
             } else {

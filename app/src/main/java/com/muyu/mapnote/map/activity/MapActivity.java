@@ -40,6 +40,7 @@ import com.muyu.mapnote.user.activity.FeedbackActivity;
 import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.ShareUtils;
+import com.muyu.minimalism.utils.StatusBarUtil;
 import com.muyu.minimalism.utils.SysUtils;
 import com.muyu.minimalism.view.DialogUtils;
 import com.muyu.minimalism.view.Msg;
@@ -74,7 +75,8 @@ public class MapActivity extends MapBaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-        setStatusBarColor(Color.WHITE);
+//        setStatusBarColor(Color.WHITE);
+        setStatusBarTrans(true);
 
         EventBus.getDefault().register(this);
 

@@ -22,7 +22,17 @@
             <!-- 用于MapView -->
             <include layout="@layout/view_home_map" />
 
-            <include layout="@layout/view_home_search" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/trans"
+                android:orientation="vertical">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="23dp"
+                    android:background="@color/trans"/>
+                <include layout="@layout/view_home_search" />
+            </LinearLayout>
 
             <include layout="@layout/view_dialog_route"
                 android:background="@drawable/shape_route_dialog"
