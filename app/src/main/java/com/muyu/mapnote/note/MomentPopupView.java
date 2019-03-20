@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.app.ImageLoader;
 import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.mapnote.map.map.route.RouteController;
@@ -64,7 +65,7 @@ public class MomentPopupView extends PopupWindow {
             }
         });
 
-        Glide.with(controller.getActivity()).load(poi.headimg).into((ImageView) view.findViewById(R.id.dialog_moment_head));
+        ImageLoader.load(controller.getActivity(), poi.headimg, view.findViewById(R.id.dialog_moment_head));
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
