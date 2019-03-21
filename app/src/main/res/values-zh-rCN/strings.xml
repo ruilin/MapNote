@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">旅行印记</string>
+    <string name="app_name">地图记</string>
     <string name="app_slogan">记录每一个脚印</string>
     <string name="title_activity_map">MapActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

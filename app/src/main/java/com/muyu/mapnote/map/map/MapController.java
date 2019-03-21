@@ -289,6 +289,10 @@ public class MapController extends ActivityController implements PermissionsList
         }
     }
 
+    public void cleanDialog() {
+        mPoiSearchController.removeDialog();
+    }
+
     public RouteController getRoute() {
         return mRouteController;
     }

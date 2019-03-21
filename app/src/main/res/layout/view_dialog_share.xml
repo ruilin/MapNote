@@ -20,7 +20,7 @@
         android:layout_marginTop="2dp"
         android:background="@color/white"
         android:textSize="14sp"
-        android:text="我正在用旅行印记APP，生成出自己的旅行记录，来看看我走过哪些地方！"
+        android:text="我正在用地图记APP，生成出自己的旅行记录，来看看我走过哪些地方！"
         android:gravity="left|top"
         android:maxLength="500"
         android:padding="10dp"

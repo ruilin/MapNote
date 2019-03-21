@@ -37,8 +37,8 @@
                 android:layout_marginTop="36dp"
                 android:elevation="3dp"
                 android:layout_gravity="right|top"
-                android:background="@drawable/selector_round_button"
-                android:tint="@color/colorPrimaryDark"
+                android:background="@drawable/selector_round_button_footmark"
+                android:tint="@color/white"
                 android:padding="8dp"
                 android:src="@mipmap/ic_share_map"/>
 
@@ -54,8 +54,8 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:elevation="3dp"
-                    android:background="@drawable/selector_round_button"
-                    android:tint="@color/colorPrimaryDark"
+                    android:background="@drawable/selector_round_button_footmark"
+                    android:tint="@color/white"
                     android:padding="8dp"
                     android:src="@mipmap/ic_change"/>
 
@@ -65,8 +65,8 @@
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:elevation="3dp"
-                    android:background="@drawable/selector_round_button"
-                    android:tint="@color/colorPrimaryDark"
+                    android:background="@drawable/selector_round_button_footmark"
+                    android:tint="@color/white"
                     android:padding="8dp"
                     android:src="@mipmap/ic_scale"/>
             </LinearLayout>

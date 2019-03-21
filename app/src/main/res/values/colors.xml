@@ -13,4 +13,6 @@
     <color name="textGray4">#666</color>
     <color name="lineGray">#aaa</color>
     <color name="bgGray">#eee</color>
+
+    <color name="black_trans">#5000</color>
 </resources>

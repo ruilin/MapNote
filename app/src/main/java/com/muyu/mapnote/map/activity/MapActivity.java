@@ -172,6 +172,7 @@ public class MapActivity extends MapBaseActivity
         bottomNavigationBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position) {
+                mMapController.cleanDialog();
                 switch (position) {
                     case MAIN_MENU_HOME:
                         lastMemuIndex = MAIN_MENU_HOME;
@@ -247,7 +248,9 @@ public class MapActivity extends MapBaseActivity
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {}
             @Override
-            public void onDrawerStateChanged(int newState) {}
+            public void onDrawerStateChanged(int newState) {
+                mMapController.cleanDialog();
+            }
 
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {

@@ -89,9 +89,7 @@ public class PoiController extends MapPluginController {
         if (marker instanceof MomentMarker) {
             MomentPoi poi = ((MomentMarker) marker).getMomentPoi();
 //            DetailActivity.startDetailPage(getActivity(), ((MomentMarker)marker).getMomentPoi().id);
-            if (dialog != null) {
-                dialog.dismiss();
-            }
+            removeDialog();
             dialog = new MomentPopupView(this, poi);
             dialog.show(getActivity().getCurrentFocus());
             return false;
@@ -102,18 +100,19 @@ public class PoiController extends MapPluginController {
     @Override
     public void onMapClick(@NonNull LatLng point, @NonNull PointF screenPoint) {
         MomentPoi poi = PoiManager.searchMomentByScreenPoint(getMapboxMap(), screenPoint);
+        removeDialog();
         if (poi != null) {
-            if (dialog != null) {
-                dialog.dismiss();
-            }
             dialog = new MomentPopupView(this, poi);
             dialog.show(getActivity().getCurrentFocus());
         } else {
-            if (dialog != null) {
-                dialog.dismiss();
-                dialog = null;
-            }
             super.onMapClick(point, screenPoint);
+        }
+    }
+
+    public void removeDialog() {
+        if (dialog != null) {
+            dialog.dismiss();
+            dialog = null;
         }
     }
 
