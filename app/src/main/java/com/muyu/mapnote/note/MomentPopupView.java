@@ -65,7 +65,7 @@ public class MomentPopupView extends PopupWindow {
             }
         });
 
-        ImageLoader.load(controller.getActivity(), poi.headimg, view.findViewById(R.id.dialog_moment_head));
+        ImageLoader.loadHead(controller.getActivity(), poi.headimg, view.findViewById(R.id.dialog_moment_head));
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +83,7 @@ public class MomentPopupView extends PopupWindow {
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         this.setFocusable(false);   // false 点击外面，事件不穿透
-        this.setOutsideTouchable(true);
+        this.setOutsideTouchable(false);
         this.update();
         //实例化一个ColorDrawable颜色为半透明
         ColorDrawable dw = new ColorDrawable(0x00000000);

@@ -9,7 +9,7 @@ import com.muyu.mapnote.R;
 
 public class ImageLoader {
 
-    public static void load(Activity activity, String url, ImageView imageView) {
+    public static void loadHead(Activity activity, String url, ImageView imageView) {
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(R.drawable.head_def);
         requestOptions.error(R.drawable.head_def);

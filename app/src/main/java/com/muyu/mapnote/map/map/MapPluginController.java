@@ -25,6 +25,8 @@ public abstract class MapPluginController extends SubController {
 
     public void onMapClick(@NonNull LatLng point, @NonNull PointF screenPoint) {}
 
+    public void onMapMoveStart(int reason) {}
+
     public boolean onMarkerClick(@NonNull Marker marker) {
         return false;
     }

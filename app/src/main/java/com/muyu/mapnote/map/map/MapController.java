@@ -204,6 +204,12 @@ public class MapController extends ActivityController implements PermissionsList
             public void onCameraMoveStarted(int reason) {
                 String string = String.format(Locale.US, "OnCameraMoveStarted: %s", REASONS[reason - 1]);
                 Logs.d(string);
+                ArrayList<SubController> pluginList = MapController.this.getSubControllers();
+                for (SubController plugin : pluginList) {
+                    if (plugin instanceof MapPluginController) {
+                        ((MapPluginController) plugin).onMapMoveStart(reason);
+                    }
+                }
             }
         });
 

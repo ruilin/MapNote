@@ -82,8 +82,8 @@ dependencies {
 
     // 定位
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.11.0'
-    implementation 'com.mapbox.mapboxsdk:mapbox-android-navigation:+'
-    implementation('com.mapbox.mapboxsdk:mapbox-android-navigation-ui:+') {
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-navigation:0.33.0'
+    implementation('com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.33.0') {
         transitive = true
     }
     // 图层插件
