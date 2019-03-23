@@ -24,7 +24,6 @@ import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.maps.SupportMapFragment;
-import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
@@ -58,7 +57,6 @@ public class MapController extends ActivityController implements PermissionsList
     private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
     private FragmentActivity mActivity;
     private PermissionsManager permissionsManager;
-    private LocationLayerPlugin locationPlugin;
     public MapboxMap mapboxMap;
     public MapView mapView;
 
@@ -301,6 +299,10 @@ public class MapController extends ActivityController implements PermissionsList
         return mLocationController;
     }
 
+    public PoiController getPoi() {
+        return mPoiSearchController;
+    }
+
     public View getLayout() {
         return mMainLayout;
     }
@@ -322,10 +324,15 @@ public class MapController extends ActivityController implements PermissionsList
 
     public void showMoments(List<OkMomentItem> list) {
         PoiManager.removePoiByType(mapboxMap, PoiManager.POI_TYPE_MOMENT);
-        for (OkMomentItem item : list) {
-            MomentPoi poi = PoiManager.toMomentPoi(item);
-            PoiManager.showMoment(getActivity(), mapboxMap.getStyle(), poi);
-        }
+        mapboxMap.getStyle(new Style.OnStyleLoaded() {
+            @Override
+            public void onStyleLoaded(@NonNull Style style) {
+                for (OkMomentItem item : list) {
+                    MomentPoi poi = PoiManager.toMomentPoi(item);
+                    PoiManager.showMoment(getActivity(), style, poi);
+                }
+            }
+        });
     }
 
     public void cleanKeywordPois() {

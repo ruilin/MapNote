@@ -29,4 +29,5 @@
     <color name="gray3">#888</color>
     <color name="gray4">#777</color>
     <color name="gray_trans">#88000000</color>
+    <color name="toast_trans">#a000</color>
 </resources>

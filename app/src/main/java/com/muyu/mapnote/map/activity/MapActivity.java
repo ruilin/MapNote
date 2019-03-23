@@ -41,6 +41,7 @@ import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.utils.ShareUtils;
 import com.muyu.minimalism.utils.SysUtils;
 import com.muyu.minimalism.view.DialogUtils;
+import com.muyu.minimalism.view.Loading;
 import com.muyu.minimalism.view.Msg;
 
 import org.greenrobot.eventbus.EventBus;
@@ -67,6 +68,7 @@ public class MapActivity extends MapBaseActivity
     private final int MAIN_MENU_PATH = 1;
     private final int MAIN_MENU_MORE = 2;
     private int lastMemuIndex = MAIN_MENU_HOME;
+    private Loading loading;
 
     private ArrayList<OkMomentItem> mMomentlist = null;
     @Override
@@ -77,15 +79,22 @@ public class MapActivity extends MapBaseActivity
         setStatusBarTrans(true);
 
         EventBus.getDefault().register(this);
-
+        loading = new Loading(this);
         View searchView = findViewById(R.id.view_home_et);
         searchView.setOnClickListener((View v) -> {
+            mMapController.cleanDialog();
             SearchActivity.startSearch(MapActivity.this, searchKeyWord.getText().toString());
 //            if (mSearchPlaceController != null)
 //                mSearchPlaceController.toSearhMode();
         });
         searchKeyWord = findViewById(R.id.view_home_tv);
 
+        findViewById(R.id.view_home_refresh).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateMoments();
+            }
+        });
         initMenu();
         initFloatButton();
         initLeftSizeMenu();
@@ -102,10 +111,12 @@ public class MapActivity extends MapBaseActivity
     }
 
     public void updateMoments() {
+        loading.show("地图刷新中……");
 //        if (OkayApi.get().isLogined()) {
             OkMoment.getAllMoment(new MomentListCallback() {
                 @Override
                 public void onSuccess(ArrayList<OkMomentItem> list) {
+                    loading.cancel();
                     mMomentlist = list;
                     Collections.sort(mMomentlist, new Comparator<OkMomentItem>() {
                         @Override
@@ -118,7 +129,7 @@ public class MapActivity extends MapBaseActivity
 
                 @Override
                 public void onFail(OkException e) {
-
+                    loading.cancel();
                 }
             });
 //        }
@@ -128,7 +139,7 @@ public class MapActivity extends MapBaseActivity
         SysUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Msg.show("成功");
+                Msg.show("地图已刷新");
                 mMapController.showMoments(list);
             }
         });
@@ -325,6 +336,22 @@ public class MapActivity extends MapBaseActivity
                toPublishActivity();
             }
         });
+
+        fab = findViewById(R.id.map_fab_foot);
+        fab.setVisibility(View.VISIBLE);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogUtils.show(MapActivity.this, "标记", "先标记当前位置，标记后可点击该位置发布游记哦~", new DialogUtils.DialogCallback() {
+                    @Override
+                    public void onPositiveClick(DialogInterface dialog) {
+                        mMapController.getPoi().addFootRecord(LocationHelper.INSTANCE.getLastLocationCheckChina());
+                    }
+                });
+            }
+        });
+
+
     }
 
     public void toPublishActivity() {

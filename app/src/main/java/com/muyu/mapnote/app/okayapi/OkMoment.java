@@ -1,6 +1,7 @@
 package com.muyu.mapnote.app.okayapi;
 
 import android.location.Location;
+import android.text.Html;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -17,6 +18,7 @@ import com.muyu.minimalism.utils.Logs;
 import com.muyu.minimalism.utils.MathUtils;
 import com.muyu.minimalism.utils.StringUtils;
 
+import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -96,6 +98,7 @@ public class OkMoment extends OkObject {
         sb.append("&moment_url=" + OkayApi.get().getCurrentUser().getHeadimg());
         sb.append("&ext_data=" + json);
         if (!StringUtils.isEmpty(content)) {
+            content = content.replace("\n", "<br/>");
             sb.append("&moment_content=" + content);
             map.put("moment_content", content);
         }
@@ -117,7 +120,7 @@ public class OkMoment extends OkObject {
         sb.append("&app_key=" + OkayApi.get().getAppKey());
 //        sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
 //        sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
-        sb.append("&perpage=100");
+//        sb.append("&perpage=100");
 
         SortedMap<String, String> map = new TreeMap<>();
         map.put("s", apiKey);
@@ -125,7 +128,7 @@ public class OkMoment extends OkObject {
 //        map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
 //        map.put("token", OkayApi.get().getCurrentUser().getToken());
         //map.put("lastid", "2");
-        map.put("perpage", "100");
+//        map.put("perpage", "100");
         String sign = SignUtils.getSign(map);
 
         sb.append("&sign=" + sign);
@@ -325,6 +328,9 @@ public class OkMoment extends OkObject {
                             Gson gson = new Gson();
                             for(JsonElement obj : array){
                                 OkMomentItem item = gson.fromJson( obj , OkMomentItem.class);
+                                if (!StringUtils.isEmpty(item.moment_content)) {
+                                    item.moment_content = item.moment_content.replace("<br/>", "\n");
+                                }
                                 list.add(item);
                             }
                             callback.onSuccess(list);

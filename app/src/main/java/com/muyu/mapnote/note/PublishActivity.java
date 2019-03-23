@@ -33,6 +33,7 @@ import com.muyu.mapnote.app.okayapi.callback.MomentPostCallback;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.poi.SearchHelper;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
+import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.Logs;
 import com.muyu.minimalism.utils.MathUtils;
 import com.muyu.minimalism.utils.SysUtils;
@@ -62,16 +63,19 @@ public class PublishActivity extends MapBaseActivity {
     private TextView placeTextView;
     private Loading loading;
     private boolean isPublished = false;
-
+    private Location footRecord;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
         editText = findViewById(R.id.publish_et);
         isPublished = false;
+
+        footRecord = getIntent().getParcelableExtra("LocationRecord");
+
         initTitleBar();
         initImageBox();
-        initPlace();
+        initPlace(footRecord);
 
         Album.initialize(AlbumConfig.newBuilder(this)
                 .setAlbumLoader(new MediaLoader())
@@ -82,8 +86,10 @@ public class PublishActivity extends MapBaseActivity {
         popBottomMenu();
     }
 
-    private void initPlace() {
-        Location loc = LocationHelper.INSTANCE.getLastLocation();
+    private void initPlace(Location loc) {
+        if (loc == null) {
+            loc = LocationHelper.INSTANCE.getLastLocation();
+        }
         if (loc == null) {
             Msg.show("无法获取定位");
             finish();
@@ -134,7 +140,7 @@ public class PublishActivity extends MapBaseActivity {
                                     .setContent(editText.getText().toString())
                                     .setLocation(LocationHelper.INSTANCE.getLastLocation(), placeTextView.getText().toString());
                             for (int i = 0; i < imageBox.getCount(); i++) {
-                                moment.addImage(new OkImage(imageBox.getImagePathAt(i), 90));
+                                moment.addImage(new OkImage(imageBox.getImagePathAt(i), 98));
                             }
                             moment.postInBackground(new MomentPostCallback() {
                                 @Override
@@ -142,6 +148,7 @@ public class PublishActivity extends MapBaseActivity {
                                     isPublished = true;
                                     loading.dismiss();
                                     MapOptEvent.updateMap();
+                                    MapOptEvent.removeFootRecord(footRecord);
                                     finish();
                                     Msg.show("发表成功");
                                 }
@@ -331,5 +338,11 @@ public class PublishActivity extends MapBaseActivity {
     public void onPause() {
         super.onPause();
         Umeng.onPause(this);
+    }
+
+    public static void startPublishPage(BaseActivity activity, Location location) {
+        Intent intent = new Intent(activity, PublishActivity.class);
+        intent.putExtra("LocationRecord", location);
+        activity.startActivity(intent);
     }
 }

@@ -36,11 +36,11 @@
 
             <include layout="@layout/view_dialog_route"
                 android:background="@drawable/shape_route_dialog"
-                android:layout_gravity="center_vertical|end"
+                android:layout_gravity="bottom|start"
                 android:layout_width="46dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="150dp"/>
 
             <ImageView
                 android:id="@+id/map_fab_add"
@@ -48,13 +48,25 @@
                 android:layout_height="42dp"
                 android:layout_gravity="bottom|end"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="140dp"
+                android:layout_marginBottom="200dp"
                 android:padding="11dp"
                 android:tint="@color/colorPrimaryDark"
                 android:background="@drawable/selector_round_button"
                 android:elevation="2dp"
                 app:srcCompat="@mipmap/ic_plus"/>
 
+            <ImageView
+                android:id="@+id/map_fab_foot"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_gravity="bottom|end"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="150dp"
+                android:padding="10dp"
+                android:tint="@color/colorPrimaryDark"
+                android:background="@drawable/selector_round_button"
+                android:elevation="2dp"
+                app:srcCompat="@mipmap/ic_foot"/>
             <!--<android.support.design.widget.FloatingActionButton-->
                 <!--android:id="@+id/map_fab_add"-->
                 <!--android:layout_width="50dp"-->

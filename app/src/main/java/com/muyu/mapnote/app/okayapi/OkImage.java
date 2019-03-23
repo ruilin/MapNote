@@ -26,7 +26,7 @@ public class OkImage extends OkObject {
     private String path;
 
     public OkImage(@NotNull String filePath) {
-        path = BitmapUtils.compressImage(filePath, Config.genPhotoPathRandom(), 30);
+        path = BitmapUtils.compressImage(filePath, Config.genPhotoPathRandom(), 50);
     }
 
     public OkImage(@NotNull String filePath, int quality) {

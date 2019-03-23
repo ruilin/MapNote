@@ -12,6 +12,7 @@ public class MapOptEvent<T> {
     public static final byte MAP_EVENT_LOGIN_SUCCESS = 2;
     public static final byte MAP_EVENT_LOGOUT = 3;
     public static final byte MAP_EVENT_DATA_UPDATE = 4;
+    public static final byte MAP_EVENT_REMOVE_FOOT = 5;
 
     public byte eventId = 0;
     public T object;
@@ -33,5 +34,9 @@ public class MapOptEvent<T> {
 
     public static void updateMap() {
         EventBus.getDefault().post(new MapOptEvent<>(MAP_EVENT_DATA_UPDATE, null, "data update"));
+    }
+
+    public static void removeFootRecord(Location location) {
+        EventBus.getDefault().post(new MapOptEvent<>(MAP_EVENT_REMOVE_FOOT, location, "remove foot"));
     }
 }

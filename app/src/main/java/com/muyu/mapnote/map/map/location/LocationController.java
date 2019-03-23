@@ -90,7 +90,7 @@ public class LocationController extends MapPluginController {
 
     public void setCameraPosition(double lat, double lng) {
         getMapboxMap().animateCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(lat, lng), 15));
+                    new LatLng(lat, lng), 12));
     }
 
     @Override

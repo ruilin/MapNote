@@ -58,8 +58,10 @@
         android:gravity="center"
         android:orientation="vertical">
         <ProgressBar
-            style="@android:style/Widget.ProgressBar.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            style="@style/Base.Widget.AppCompat.ProgressBar"
+            android:indeterminateTint="@color/colorPrimaryDark"
+            android:indeterminateTintMode="src_atop"
+            android:layout_width="22dp"
+            android:layout_height="22dp" />
     </LinearLayout>
 </FrameLayout>

@@ -1,17 +1,16 @@
 package com.muyu.mapnote.map.map.poi;
 
-import android.content.Context;
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
+import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.Point;
@@ -20,22 +19,17 @@ import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.geometry.LatLngQuad;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
-import com.mapbox.mapboxsdk.style.sources.ImageSource;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.okayapi.OkMomentItem;
-import com.muyu.mapnote.footmark.FootmarkFragment;
-import com.muyu.mapnote.map.map.moment.MomentMarker;
-import com.muyu.mapnote.map.map.moment.MomentMarkerOptions;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.app.BaseApplication;
-import com.muyu.minimalism.utils.StringUtils;
+import com.muyu.minimalism.utils.MathUtils;
 import com.muyu.minimalism.utils.bitmap.BitmapUtils;
 import com.muyu.minimalism.utils.GpsUtils;
 import com.muyu.minimalism.utils.bitmap.CanvasUtils;
@@ -58,6 +52,7 @@ public class PoiManager {
 
     private static Hashtable<String, Marker> mKeywordPoiMap = new Hashtable<>();
     private static Hashtable<String, MomentPoi> mMomentPoiMap = new Hashtable<>();
+    private static Hashtable<String, Marker> mFootPoiMap = new Hashtable<>();
 
     public static MomentPoi toMomentPoi(OkMomentItem item) {
         MomentPoi poi = new MomentPoi();
@@ -205,6 +200,12 @@ public class PoiManager {
                     removeMarker(style, entry.getKey());
                 }
                 break;
+            case POI_TYPE_FOOTMARK:
+                for(Iterator<Map.Entry<String, Marker>> iterator = mFootPoiMap.entrySet().iterator(); iterator.hasNext();) {
+                    Map.Entry<String, Marker> entry = iterator.next();
+                    map.removeMarker(entry.getValue());
+                }
+                break;
         }
     }
 
@@ -218,7 +219,7 @@ public class PoiManager {
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                 Bitmap smallBitmap = BitmapUtils.changeBitmapSize(resource, 100, 100);
                 Bitmap circle = CanvasUtils.drawCircleBitmap(smallBitmap);
-                String layerId = addMarker(style, poi, circle);
+                String layerId = addMarker(style, poi.id, poi.lat, poi.lng, circle);
                 mMomentPoiMap.put(poi.id, poi);
             }
         });
@@ -234,17 +235,17 @@ public class PoiManager {
         style.removeSource(sourceId);
     }
 
-    public synchronized static String addMarker(Style style, MomentPoi poi, Bitmap bitmap) {
+    public synchronized static String addMarker(Style style, String id, double lat, double lng, Bitmap bitmap) {
 //        List<Feature> markerCoordinates = new ArrayList<>();
 //        markerCoordinates.add(Feature.fromGeometry(Point.fromLngLat(poi.lat, poi.lng)));
-        String sourceId = "source_" + poi.id;
-        String imageId = "icon_" + poi.id;
-        String layerId = "layer_" + poi.id;
+        String sourceId = "source_" + id;
+        String imageId = "icon_" + id;
+        String layerId = "layer_" + id;
 
-        removeMarker(style, poi.id);
+        removeMarker(style, id);
 
         style.addSource(new GeoJsonSource(sourceId,
-                FeatureCollection.fromFeature(Feature.fromGeometry(Point.fromLngLat(poi.lng, poi.lat)))));
+                FeatureCollection.fromFeature(Feature.fromGeometry(Point.fromLngLat(lng, lat)))));
 
         // 添加资源图片到地图
         style.addImage(imageId, bitmap);
