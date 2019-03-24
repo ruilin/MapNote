@@ -399,6 +399,10 @@ public class OkMoment extends OkObject {
     }
 
     public static void postLike(String id, CommonCallback callback) {
+        if (!OkayApi.get().isLogined()) {
+            callback.onFail(new OkException("请先登录", OkException.CODE_NOT_LOGIN));
+            return;
+        }
         OkHttpClient client = Network.getClient();
         final Request req = new Request.Builder()
                 .url(getGiveLikeUrl(id))

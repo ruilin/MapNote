@@ -22,12 +22,6 @@ public class OkComment extends OkObject {
     String targetId;
     String content;
 
-    String message_nickname;
-    String message_content;
-    String message_post_time;
-    String headimg;
-    String message_contact;
-
     public OkComment(String targetId, String content) {
         this.targetId = targetId;
         this.content = content;
@@ -122,16 +116,16 @@ public class OkComment extends OkObject {
                         sb.append(OkayApi.get().getHost());
                         sb.append("/?s=" + apiKey);
                         sb.append("&app_key=" + OkayApi.get().getAppKey());
-                        sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
-                        sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
+//                        sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
+//                        sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
                         sb.append("&message_key=" + targetId);
                         sb.append("&more_select=headimg,message_contact");
 
                         SortedMap<String, String> map = new TreeMap<>();
                         map.put("s", apiKey);
                         map.put("app_key", OkayApi.get().getAppKey());
-                        map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
-                        map.put("token", OkayApi.get().getCurrentUser().getToken());
+//                        map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
+//                        map.put("token", OkayApi.get().getCurrentUser().getToken());
                         map.put("message_key", targetId);
                         map.put("more_select", "headimg,message_contact");
 

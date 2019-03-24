@@ -94,7 +94,7 @@ public class MapController extends ActivityController implements PermissionsList
         // 默认设置
         MapboxMapOptions options = new MapboxMapOptions();
         options.maxZoomPreference(19);
-        LatLng paris = new LatLng(52.5173,13.3889);
+        LatLng paris = new LatLng(39.9071567,116.39158504);
         options.camera(new CameraPosition.Builder()
                 .target(paris)
                 .zoom(2.4)

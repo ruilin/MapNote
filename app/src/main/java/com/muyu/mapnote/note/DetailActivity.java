@@ -14,11 +14,13 @@ import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.MapBaseActivity;
 import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkMoment;
+import com.muyu.mapnote.app.okayapi.OkayApi;
 import com.muyu.mapnote.app.okayapi.callback.CommonCallback;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.mapnote.note.comment.CommentController;
+import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.StringUtils;
 import com.muyu.minimalism.view.MediaLoader;
@@ -140,6 +142,9 @@ public class DetailActivity extends MapBaseActivity {
         CheckBox checkBox = titleBar.getRightCustomView().findViewById(R.id.detail_like);
         checkBox.setChecked(LikeManager.get().hadPut(poi.id));
         checkable = !LikeManager.get().hadPut(poi.id);
+        if (!OkayApi.get().isLogined()) {
+            checkable = false;
+        }
         checkBox.setClickable(checkable);
         checkBox.setFocusable(checkable);
         checkBox.setEnabled(checkable);

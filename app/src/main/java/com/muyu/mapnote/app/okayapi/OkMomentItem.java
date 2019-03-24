@@ -18,5 +18,4 @@ public class OkMomentItem extends OkObject {
     public String moment_place = "";
     public String moment_nickname = "";
     public String moment_headimg = "";
-    public String ext_data = "";
 }

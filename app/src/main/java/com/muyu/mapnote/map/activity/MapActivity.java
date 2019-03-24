@@ -92,7 +92,7 @@ public class MapActivity extends MapBaseActivity
         findViewById(R.id.view_home_refresh).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateMoments();
+                updateMoments(true);
             }
         });
         initMenu();
@@ -110,13 +110,20 @@ public class MapActivity extends MapBaseActivity
         addController(mUserController);
     }
 
-    public void updateMoments() {
-        loading.show("地图刷新中……");
+    public void updateMoments(boolean showLoading) {
+        if (showLoading) {
+            loading.show("地图刷新中……");
+        }
 //        if (OkayApi.get().isLogined()) {
             OkMoment.getAllMoment(new MomentListCallback() {
                 @Override
                 public void onSuccess(ArrayList<OkMomentItem> list) {
-                    loading.cancel();
+                    SysUtils.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loading.cancel();
+                        }
+                    });
                     mMomentlist = list;
                     Collections.sort(mMomentlist, new Comparator<OkMomentItem>() {
                         @Override
@@ -375,7 +382,7 @@ public class MapActivity extends MapBaseActivity
     @Override
     public void onStyleLoaded(@NonNull Style style) {
         if (mMomentlist == null) {
-            updateMoments();
+            updateMoments(false);
         } else {
             showMoments(mMomentlist);
         }
@@ -397,7 +404,7 @@ public class MapActivity extends MapBaseActivity
                 }
                 break;
             case MapOptEvent.MAP_EVENT_DATA_UPDATE:
-                updateMoments();
+                updateMoments(false);
                 break;
         }
     }
