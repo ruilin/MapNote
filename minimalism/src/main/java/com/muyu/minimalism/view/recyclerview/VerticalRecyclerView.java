@@ -24,9 +24,15 @@ public class VerticalRecyclerView extends RecyclerView {
     public void setAdapter(Adapter adapter) {
         super.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
-//                layoutManager.getOrientation());
-//        addItemDecoration(dividerItemDecoration);
+        setLayoutManager(layoutManager);
+    }
+
+    public void setAdapterWithDivider(Adapter adapter) {
+        super.setAdapter(adapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(),
+                layoutManager.getOrientation());
+        addItemDecoration(dividerItemDecoration);
         setLayoutManager(layoutManager);
     }
 }

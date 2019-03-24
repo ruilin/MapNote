@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
     android:orientation="vertical"
     android:background="@color/white"
     tools:context=".note.PublishActivity">
@@ -28,70 +27,73 @@
         app:rightCustomView="@layout/view_like_check"
         />
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="2dp"
+        android:padding="10dp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="left|center_vertical"
+            android:layout_height="wrap_content">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/detail_head"
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:src="@drawable/head_def"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="6dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/detail_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="16sp"
+                    android:text="快乐"
+                    android:textColorHint="@color/textGray1"
+                    />
+                <TextView
+                    android:id="@+id/detail_time"
+                    android:layout_marginTop="1dp"
+                    android:paddingHorizontal="1dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textGray3"
+                    android:textSize="13sp"
+                    android:text="2019-2-3 13:32"/>
+            </LinearLayout>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/detail_like_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="2dp"
+            android:text="23"
+            android:textColor="@color/textGray4"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:drawableLeft="@mipmap/ic_like_count"/>
+    </LinearLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_below="@+id/detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingHorizontal="10dp"
+        android:layout_weight="1"
         android:scrollbars="none">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="2dp"
-                android:paddingTop="14dp"
-                android:paddingBottom="6dp"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:gravity="left|center_vertical"
-                    android:layout_height="wrap_content">
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/detail_head"
-                        android:layout_width="38dp"
-                        android:layout_height="38dp"
-                        android:src="@drawable/head_def"
-                        />
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:layout_marginLeft="6dp"
-                        android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/detail_user"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/colorPrimaryDark"
-                            android:textSize="16sp"
-                            android:text="快乐"
-                            android:textColorHint="@color/textGray1"
-                            />
-                        <TextView
-                            android:id="@+id/detail_time"
-                            android:layout_marginTop="1dp"
-                            android:paddingHorizontal="1dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/textGray3"
-                            android:textSize="13sp"
-                            android:text="2019-2-3 13:32"/>
-                    </LinearLayout>
-                </LinearLayout>
-                <TextView
-                    android:id="@+id/detail_like_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="2dp"
-                    android:text="23"
-                    android:textColor="@color/textGray4"
-                    android:textSize="14sp"
-                    android:gravity="center_vertical"
-                    android:drawableLeft="@mipmap/ic_like_count"/>
-            </LinearLayout>
 
             <TextView
                 android:id="@+id/detail_content"
@@ -99,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="2dp"
                 android:textColor="@color/black"
-                android:paddingVertical="10dp"
+                android:paddingBottom="10dp"
                 android:gravity="left|top"
                 android:text="帅哥就是多了就过了圣诞节噶死的更好了
     根深蒂固收到各位各位旅客据了解"
@@ -129,13 +131,13 @@
                 android:id="@+id/detail_place"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="14dp"
-                android:layout_marginHorizontal="6dp"
+                android:layout_marginVertical="12dp"
+                android:layout_marginHorizontal="0dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="21dp"
+                    android:layout_height="21dp"
                     android:tint="@color/black"
                     android:src="@mipmap/ic_place"/>
                 <TextView
@@ -144,7 +146,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
-                    android:layout_marginHorizontal="6dp"
+                    android:layout_marginHorizontal="2dp"
                     android:textSize="15sp"
                     android:lines="1"
                     android:ellipsize="end"
@@ -163,16 +165,107 @@
                 android:background="@color/gray0"
                 />
 
-            <!--<TextView-->
-                <!--android:id="@+id/detail_time"-->
-                <!--android:layout_marginTop="6dp"-->
-                <!--android:layout_marginBottom="20dp"-->
-                <!--android:paddingHorizontal="2dp"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:textColor="@color/textGray3"-->
-                <!--android:textSize="13sp"-->
-                <!--android:text="2019-2-3 13:32"/>-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="17sp"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:drawableLeft="@mipmap/ic_comment"
+                    android:drawablePadding="2dp"
+                    android:text="评论"/>
+
+                <TextView
+                    android:id="@+id/detail_comment_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="17sp"
+                    android:textColor="@color/black"
+                    android:drawablePadding="2dp"
+                    android:text="(0)"/>
+            </LinearLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="140dp">
+                <com.muyu.minimalism.view.recyclerview.VerticalRecyclerView
+                    android:id="@+id/detail_comment_list"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/detail_comment_empty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="@color/textGray1"
+                    android:text="来占个沙发吧"/>
+            </FrameLayout>
         </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/detail_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/white"
+            android:gravity="bottom"
+            android:paddingHorizontal="2dp"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/detail_comment_et"
+                android:drawableLeft="@mipmap/ic_edit"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:background="@color/trans"
+                android:textColor="@color/black"
+                android:paddingHorizontal="10dp"
+                android:drawablePadding="4dp"
+                android:drawableTint="@color/textGray1"
+                android:paddingVertical="12dp"
+                android:maxLength="100"
+                android:text=""
+                android:hint="添加你的评论..."
+                android:textSize="16sp"/>
+            <Button
+                android:id="@+id/detail_comment_bt"
+                android:layout_width="60dp"
+                android:layout_height="34dp"
+                android:paddingHorizontal="0dp"
+                android:layout_gravity="bottom"
+                android:paddingVertical="0dp"
+                android:textSize="14dp"
+                android:background="@drawable/selector_button_white"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="发布"/>
+        </LinearLayout>
+        <View
+            android:id="@+id/detail_input_line"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_height="1dp"
+            android:background="@color/bgGray"/>
+    </RelativeLayout>
     </ScrollView>
 </LinearLayout>

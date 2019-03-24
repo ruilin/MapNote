@@ -173,6 +173,7 @@ public class PoiController extends MapPluginController {
 
     public void addFootRecord(Location location) {
         if (FootManager.addFootMarker(getMapboxMap(), location)) {
+            getMap().processLocation();
             Msg.show("添加成功");
         } else {
             Msg.show("这里已经添加过了");

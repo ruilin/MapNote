@@ -44,12 +44,13 @@ public class OkFeedback extends OkObject {
                 sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
                 sb.append("&message_content=" + content);
                 sb.append("&message_nickname=" + OkayApi.get().getCurrentUser().getNickname());
+                sb.append("&message_key=" + "feedback");
                 String json = "";
                 if (!StringUtils.isEmpty(contact)) {
                     JsonObject obj = new JsonObject();
-                    obj.addProperty("contact", contact);
+                    obj.addProperty("message_contact", contact);
                     json = new Gson().toJson(obj);
-                    sb.append("&message_key=" + json);
+                    sb.append("&more_data=" + json);
                 }
 
                 SortedMap<String, String> map = new TreeMap<>();
@@ -59,8 +60,9 @@ public class OkFeedback extends OkObject {
                 map.put("token", OkayApi.get().getCurrentUser().getToken());
                 map.put("message_content", content);
                 map.put("message_nickname", OkayApi.get().getCurrentUser().getNickname());
+                map.put("message_key", "feedback");
                 if (!StringUtils.isEmpty(contact)) {
-                    map.put("message_key", json);
+                    map.put("more_data", json);
                 }
 
                 String sign = SignUtils.getSign(map);

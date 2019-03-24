@@ -3,7 +3,6 @@ package com.muyu.mapnote.note;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -19,9 +18,9 @@ import com.muyu.mapnote.app.okayapi.callback.CommonCallback;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.mapnote.map.map.poi.PoiManager;
+import com.muyu.mapnote.note.comment.CommentController;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.StringUtils;
-import com.muyu.minimalism.view.BottomMenu;
 import com.muyu.minimalism.view.MediaLoader;
 import com.muyu.minimalism.view.Msg;
 import com.muyu.minimalism.view.imagebox.ZzImageBox;
@@ -32,7 +31,8 @@ import com.yanzhenjie.album.AlbumConfig;
 import java.util.ArrayList;
 
 public class DetailActivity extends MapBaseActivity {
-    boolean checkable;
+    private boolean checkable;
+    private CommentController commentController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +41,12 @@ public class DetailActivity extends MapBaseActivity {
         Album.initialize(AlbumConfig.newBuilder(this)
                 .setAlbumLoader(new MediaLoader())
                 .build());
+
+//        Rect outRect = new Rect();
+//        getWindow().getDecorView().getWindowVisibleDisplayFrame(outRect);
+//        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) findViewById(R.id.detail_input).getLayoutParams();
+//        params.height = outRect.bottom - outRect.top;
+
 
         String id = getIntent().getStringExtra("MomentId");
         MomentPoi data = null;
@@ -169,6 +175,13 @@ public class DetailActivity extends MapBaseActivity {
                 }
             }
         });
+
+        initController(poi);
+    }
+
+    private void initController(MomentPoi poi) {
+        commentController = new CommentController(poi);
+        addController(commentController);
     }
 
     public static void startDetailPage(BaseActivity activity, String id) {

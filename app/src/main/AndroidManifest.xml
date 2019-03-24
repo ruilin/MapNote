@@ -93,7 +93,8 @@
         <activity
             android:name=".map.activity.SearchActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".note.DetailActivity" />
+        <activity android:name=".note.DetailActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".user.activity.FeedbackActivity" />
         <activity android:name=".user.activity.RegisterActivity"></activity>
     </application>

@@ -3,6 +3,7 @@ package com.muyu.minimalism.framework.controller;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.view.View;
 
 import com.muyu.minimalism.framework.app.BaseActivity;
 
