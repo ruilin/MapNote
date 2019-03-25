@@ -72,7 +72,7 @@ public class LocationController extends MapPluginController {
                     /* 刷新定位 */
                     originLocation = location;
                     if (isFirst) {
-                        setCameraPosition(location.getLatitude(), location.getLongitude());
+                        setCameraPosition(location.getLatitude(), location.getLongitude(), 8);
                         isFirst = false;
                     }
                     locationComponent.forceLocationUpdate(location);
@@ -91,6 +91,11 @@ public class LocationController extends MapPluginController {
     public void setCameraPosition(double lat, double lng) {
         getMapboxMap().animateCamera(CameraUpdateFactory.newLatLngZoom(
                     new LatLng(lat, lng), 12));
+    }
+
+    public void setCameraPosition(double lat, double lng, int zoom) {
+        getMapboxMap().animateCamera(CameraUpdateFactory.newLatLngZoom(
+                new LatLng(lat, lng), zoom));
     }
 
     @Override
