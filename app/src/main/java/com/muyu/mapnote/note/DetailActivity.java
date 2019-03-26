@@ -14,6 +14,7 @@ import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.MapBaseActivity;
 import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkMoment;
+import com.muyu.mapnote.app.okayapi.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.OkayApi;
 import com.muyu.mapnote.app.okayapi.callback.CommonCallback;
 import com.muyu.mapnote.map.MapOptEvent;
@@ -50,42 +51,65 @@ public class DetailActivity extends MapBaseActivity {
 //        params.height = outRect.bottom - outRect.top;
 
 
-        String id = getIntent().getStringExtra("MomentId");
-        MomentPoi data = null;
-        if (!StringUtils.isEmpty(id)) {
-            data = PoiManager.getMomentPoi(id);
-        }
-        final MomentPoi poi = data;
+        OkMomentItem data = getIntent().getParcelableExtra("MomentData");
+        final OkMomentItem poi = data;
         if (poi != null) {
             TextView userTv = findViewById(R.id.detail_user);
-            userTv.setText(poi.nickname);
+            userTv.setText(poi.moment_nickname);
 
-            if (!StringUtils.isEmpty(poi.headimg)) {
-                Glide.with(this).load(poi.headimg).into((ImageView) findViewById(R.id.detail_head));
+            if (!StringUtils.isEmpty(poi.moment_headimg)) {
+                Glide.with(this).load(poi.moment_headimg).into((ImageView) findViewById(R.id.detail_head));
             }
 
             TextView contentTv = findViewById(R.id.detail_content);
-            if (!StringUtils.isEmpty(poi.content)) {
-                contentTv.setText(poi.content);
+            if (!StringUtils.isEmpty(poi.moment_content)) {
+                contentTv.setText(poi.moment_content);
             } else {
                 contentTv.setVisibility(View.GONE);
             }
             TextView timeTv = findViewById(R.id.detail_time);
-            timeTv.setText(poi.createtime);
+            timeTv.setText(poi.moment_createtime);
             TextView placeTv = findViewById(R.id.detail_place_text);
-            placeTv.setText(poi.place);
+            placeTv.setText(poi.moment_place);
             TextView likeTv = findViewById(R.id.detail_like_count);
-            likeTv.setText(String.valueOf(poi.like));
+            likeTv.setText(String.valueOf(poi.moment_like));
 
             ZzImageBox imageBox = findViewById(R.id.detail_image_box);
-            if (poi.pictureUrlLiat.isEmpty()) {
+            if (StringUtils.isEmpty(poi.moment_picture1)) {
                 imageBox.setVisibility(View.GONE);
             } else {
-                imageBox.setImageSizeOneLine(poi.pictureUrlLiat.size());
-                for (String url : poi.pictureUrlLiat) {
+                ArrayList<String> list = new ArrayList<>();
+                if (!StringUtils.isEmpty(poi.moment_picture1)) {
+                    list.add(poi.moment_picture1);
+                }
+                if (!StringUtils.isEmpty(poi.moment_picture2)) {
+                    list.add(poi.moment_picture2);
+                }
+                if (!StringUtils.isEmpty(poi.moment_picture3)) {
+                    list.add(poi.moment_picture3);
+                }
+                if (!StringUtils.isEmpty(poi.moment_picture4)) {
+                    list.add(poi.moment_picture4);
+                }
+                if (!StringUtils.isEmpty(poi.moment_picture5)) {
+                    list.add(poi.moment_picture5);
+                }
+                if (!StringUtils.isEmpty(poi.moment_picture6)) {
+                    list.add(poi.moment_picture6);
+                }
+                if (!StringUtils.isEmpty(poi.moment_picture7)) {
+                    imageBox.addImageOnline(poi.moment_picture7);
+                }
+                if (!StringUtils.isEmpty(poi.moment_picture8)) {
+                    list.add(poi.moment_picture8);
+                }
+                if (!StringUtils.isEmpty(poi.moment_picture9)) {
+                    list.add(poi.moment_picture9);
+                }
+                imageBox.setImageSizeOneLine(list.size());
+                for (String url : list) {
                     imageBox.addImageOnline(url);
                 }
-
             }
             imageBox.setOnImageClickListener(new ZzImageBox.OnImageClickListener() {
 
@@ -184,14 +208,14 @@ public class DetailActivity extends MapBaseActivity {
         initController(poi);
     }
 
-    private void initController(MomentPoi poi) {
+    private void initController(OkMomentItem poi) {
         commentController = new CommentController(poi);
         addController(commentController);
     }
 
-    public static void startDetailPage(BaseActivity activity, String id) {
+    public static void startDetailPage(BaseActivity activity, OkMomentItem poi) {
         Intent intent = new Intent(activity, DetailActivity.class);
-        intent.putExtra("MomentId", id);
+        intent.putExtra("MomentData", poi);
         activity.startActivity(intent);
     }
 

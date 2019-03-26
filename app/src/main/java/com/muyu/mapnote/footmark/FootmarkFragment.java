@@ -164,7 +164,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                 View.OnClickListener clickDetail = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DetailActivity.startDetailPage(FootmarkFragment.this.baseActivity(), String.valueOf(poi.id));
+                        DetailActivity.startDetailPage(FootmarkFragment.this.baseActivity(), poi);
                         view.setSelected(true);
                         oldSelected = position;
                     }

@@ -73,6 +73,7 @@ public class PoiManager {
         GpsUtils.Gps gps = GpsUtils.gcj_To_Gps84(item.moment_lat, item.moment_lng);
         poi.lat = gps.getWgLat();
         poi.lng = gps.getWgLon();
+        poi.data = item;
         if (item.moment_picture1 != null) {
             poi.pictureUrlLiat.add(item.moment_picture1);
         }

@@ -15,6 +15,7 @@ import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.ImageLoader;
 import com.muyu.mapnote.app.okayapi.OkComment;
 import com.muyu.mapnote.app.okayapi.OkException;
+import com.muyu.mapnote.app.okayapi.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.OkayApi;
 import com.muyu.mapnote.app.okayapi.callback.CommentCallback;
 import com.muyu.mapnote.app.okayapi.callback.CommonCallback;
@@ -36,13 +37,13 @@ import java.util.ArrayList;
 
 public class CommentController extends ActivityController {
     private Loading loading;
-    private MomentPoi poi;
+    private OkMomentItem poi;
     VerticalRecyclerView listView;
     CommentViewModel mViewModel;
     private View emptyView;
     TextView countView;
 
-    public CommentController(MomentPoi poi) {
+    public CommentController(OkMomentItem poi) {
         this.poi = poi;
     }
 

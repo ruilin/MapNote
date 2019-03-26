@@ -70,7 +70,7 @@ public class MomentPopupView extends PopupWindow {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DetailActivity.startDetailPage(controller.getActivity(), poi.id);
+                DetailActivity.startDetailPage(controller.getActivity(), poi.data);
                 dismiss();
             }
         });

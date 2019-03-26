@@ -3,6 +3,7 @@ package com.muyu.mapnote.map.map.moment;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.muyu.mapnote.app.okayapi.OkMomentItem;
 import com.muyu.mapnote.map.map.poi.Poi;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class MomentPoi extends Poi implements Parcelable {
     public String headimg = "";
     public String content = "";
     public String place = "";
+    public OkMomentItem data;
 
     @Override
     public int describeContents() {
@@ -34,5 +36,6 @@ public class MomentPoi extends Poi implements Parcelable {
         out.writeString(headimg);
         out.writeString(content);
         out.writeString(place);
+        out.writeValue(data);
     }
 }
