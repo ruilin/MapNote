@@ -72,7 +72,7 @@ public class LocationController extends MapPluginController {
                     /* 刷新定位 */
                     originLocation = location;
                     if (isFirst) {
-                        setCameraPosition(location.getLatitude(), location.getLongitude(), 8);
+                        setCameraPosition(location.getLatitude(), location.getLongitude(), 4);
                         isFirst = false;
                     }
                     locationComponent.forceLocationUpdate(location);

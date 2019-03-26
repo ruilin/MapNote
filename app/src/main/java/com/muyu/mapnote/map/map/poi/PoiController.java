@@ -136,8 +136,8 @@ public class PoiController extends MapPluginController {
     }
 
     private void updateCamera(LatLng latLng) {
-        getMapboxMap().animateCamera(CameraUpdateFactory.newLatLngZoom(
-                latLng, 14));
+        getMapboxMap().animateCamera(CameraUpdateFactory.newLatLng(
+                latLng));
     }
 
     @Override

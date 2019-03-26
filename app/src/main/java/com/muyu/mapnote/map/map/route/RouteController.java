@@ -17,6 +17,7 @@ import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.map.MapController;
 import com.muyu.mapnote.map.map.MapPluginController;
+import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.note.PublishActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.Logs;
@@ -143,6 +144,10 @@ public class RouteController extends MapPluginController implements View.OnClick
     }
 
     public void route(Point origin, Point destination) {
+        if (LocationHelper.calculateLineDistance(origin.latitude(), origin.longitude(), destination.latitude(), destination.longitude()) > 3000000) {
+            Msg.show("距离太远");
+            return;
+        }
         BottomMenu.show(getActivity(), new String[]{"驾车", "骑行", "步行"}, new BottomMenu.OnItemClickedListener() {
             @Override
             public void OnItemClicked(int position) {
