@@ -17,8 +17,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.muyu.mapnote.R;
@@ -64,6 +66,8 @@ public class PublishActivity extends MapBaseActivity {
     private Loading loading;
     private boolean isPublished = false;
     private Location footRecord;
+    private Switch sw;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +80,7 @@ public class PublishActivity extends MapBaseActivity {
         initTitleBar();
         initImageBox();
         initPlace(footRecord);
+        initPermission();
 
         Album.initialize(AlbumConfig.newBuilder(this)
                 .setAlbumLoader(new MediaLoader())
@@ -116,6 +121,18 @@ public class PublishActivity extends MapBaseActivity {
         });
     }
 
+    private void initPermission() {
+        TextView tv = findViewById(R.id.publish_permission_text);
+        sw = findViewById(R.id.publish_permission);
+        sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                tv.setText(isChecked ? "所有人可见" : "仅自己可见");
+            }
+        });
+        sw.setChecked(true);
+    }
+
     private void initTitleBar() {
         CommonTitleBar titleBar = findViewById(R.id.publish_title);
         titleBar.setListener(new CommonTitleBar.OnTitleBarListener() {
@@ -138,6 +155,7 @@ public class PublishActivity extends MapBaseActivity {
                             loading.show("发表中，请耐心等待哦～");
                             OkMoment moment = OkMoment.newInstance()
                                     .setContent(editText.getText().toString())
+                                    .setPermission(sw.isChecked())
                                     .setLocation(LocationHelper.INSTANCE.getLastLocation(), placeTextView.getText().toString());
                             for (int i = 0; i < imageBox.getCount(); i++) {
                                 moment.addImage(new OkImage(imageBox.getImagePathAt(i), 98));

@@ -41,6 +41,7 @@ public class OkMoment extends OkObject {
     double lng = 0;
     String place = "";
     Call network;
+    int access = 0;
 
     public static OkMoment newInstance() {
         OkMoment moment = new OkMoment();
@@ -56,6 +57,12 @@ public class OkMoment extends OkObject {
         this.lat = MathUtils.round(location.getLatitude(), 8);
         this.lng = MathUtils.round(location.getLongitude(), 8);
         this.place = place;
+        return this;
+    }
+
+    public OkMoment setPermission(boolean isOpen) {
+        // 0公开，1登陆可见，2仅自己可见
+        access = isOpen ? 0 : 1;
         return this;
     }
 
@@ -77,7 +84,7 @@ public class OkMoment extends OkObject {
         map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
         map.put("token", OkayApi.get().getCurrentUser().getToken());
         map.put("moment_nickname", OkayApi.get().getCurrentUser().getNickname());
-        map.put("moment_access", "0");
+        map.put("moment_access", "" + access);
         map.put("moment_lat", String.valueOf(lat));
         map.put("moment_lng", String.valueOf(lng));
         map.put("moment_place", place);
@@ -91,7 +98,7 @@ public class OkMoment extends OkObject {
         sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
         sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
         sb.append("&moment_nickname=" + OkayApi.get().getCurrentUser().getNickname());
-        sb.append("&moment_access=" + "0");
+        sb.append("&moment_access=" + "" + access);
         sb.append("&moment_lat=" + String.valueOf(lat));
         sb.append("&moment_lng=" + String.valueOf(lng));
         sb.append("&moment_place=" + place);

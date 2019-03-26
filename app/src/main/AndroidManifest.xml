@@ -86,7 +86,8 @@
 
         <activity
             android:name=".note.PublishActivity"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:theme="@style/MySwitch"/>
         <activity
             android:name=".user.activity.LoginActivity"
             android:label="@string/title_activity_login" />
