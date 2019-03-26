@@ -126,7 +126,7 @@ public class CommentController extends ActivityController {
             public void onChanged(@Nullable ArrayList<OkCommentItem> items) {
                 adapter.setDataList(items);
                 emptyView.setVisibility(items.size() > 0 ? View.GONE : View.VISIBLE);
-                countView.setText("(" + items.size() + ")");
+                countView.setText(" " + items.size());
             }
         });
 
