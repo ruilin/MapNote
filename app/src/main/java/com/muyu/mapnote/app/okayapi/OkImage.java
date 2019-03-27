@@ -26,11 +26,11 @@ public class OkImage extends OkObject {
     private String path;
 
     public OkImage(@NotNull String filePath) {
-        path = BitmapUtils.compressImage(filePath, Config.genPhotoPathRandom(), 50);
+        path = BitmapUtils.compressImage(filePath, Config.genPhotoPathRandom(), 80, false);
     }
 
-    public OkImage(@NotNull String filePath, int quality) {
-        path = BitmapUtils.compressImage(filePath, Config.genPhotoPathRandom(), quality);
+    public OkImage(@NotNull String filePath, boolean isPicture) {
+        path = BitmapUtils.compressImage(filePath, Config.genPhotoPathRandom(), 95, true);
     }
 
     private String getUploadUrl() {

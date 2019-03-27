@@ -335,6 +335,7 @@ public class OkMoment extends OkObject {
                             Gson gson = new Gson();
                             for(JsonElement obj : array){
                                 OkMomentItem item = gson.fromJson( obj , OkMomentItem.class);
+                                item.moment_headimg = item.moment_url;
                                 if (!StringUtils.isEmpty(item.moment_content)) {
                                     item.moment_content = item.moment_content.replace("<br/>", "\n");
                                 }

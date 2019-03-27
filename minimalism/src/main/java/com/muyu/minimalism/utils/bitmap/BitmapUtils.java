@@ -54,8 +54,14 @@ public class BitmapUtils {
      * @param quality 要压缩到的质量（0-100）
      * @return
      */
-    public static String compressImage(String filePath, String targetPath, int quality)  {
-        Bitmap bm = getSmallBitmap(filePath);       // 获取一定尺寸的图片
+    public static String compressImage(String filePath, String targetPath, int quality, boolean isBigImage)  {
+        int width = 512;
+        int height = 512;
+        if (isBigImage) {
+            width = 720;
+            height = 720;
+        }
+        Bitmap bm = getSmallBitmap(filePath, width, height);       // 获取一定尺寸的图片
         int degree = readPictureDegree(filePath);   // 获取相片拍摄角度
         if (degree != 0) {                          // 旋转照片角度，防止头像横着显示
             bm = rotateBitmap(bm,degree);
@@ -69,7 +75,27 @@ public class BitmapUtils {
                 outputFile.delete();
             }
             FileOutputStream out = new FileOutputStream(outputFile);
-            bm.compress(Bitmap.CompressFormat.JPEG, quality, out);
+            bm.compress(Bitmap.CompressFormat.WEBP, quality, out);
+        } catch (Exception e) {}
+        return outputFile.getPath();
+    }
+
+    public static String compressPNG(String filePath, String targetPath)  {
+        Bitmap bm = getSmallBitmap(filePath, 480, 800);       // 获取一定尺寸的图片
+        int degree = readPictureDegree(filePath);   // 获取相片拍摄角度
+        if (degree != 0) {                          // 旋转照片角度，防止头像横着显示
+            bm = rotateBitmap(bm,degree);
+        }
+        File outputFile = new File(targetPath);
+        try {
+            if (!outputFile.exists()) {
+                outputFile.getParentFile().mkdirs();
+                //outputFile.createNewFile();
+            } else {
+                outputFile.delete();
+            }
+            FileOutputStream out = new FileOutputStream(outputFile);
+            bm.compress(Bitmap.CompressFormat.PNG, 100, out);
         } catch (Exception e) {}
         return outputFile.getPath();
     }
@@ -77,12 +103,12 @@ public class BitmapUtils {
     /**
      * 根据路径获得图片信息并按比例压缩，返回bitmap
      */
-    public static Bitmap getSmallBitmap(String filePath) {
+    public static Bitmap getSmallBitmap(String filePath, int width, int height) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;//只解析图片边沿，获取宽高
         BitmapFactory.decodeFile(filePath, options);
         // 计算缩放比
-        options.inSampleSize = calculateInSampleSize(options, 480, 800);
+        options.inSampleSize = calculateInSampleSize(options, width, height);
         // 完整解析图片返回bitmap
         options.inJustDecodeBounds = false;
         return BitmapFactory.decodeFile(filePath, options);
