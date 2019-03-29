@@ -12,7 +12,9 @@
         android:id="@+id/welcome_banner"
         app:indicator_drawable_selected="@drawable/indicator_selected"
         app:indicator_drawable_unselected="@drawable/indicator_unselected"
-        android:layout_marginBottom="20dp"
+        app:indicator_width="6dp"
+        app:indicator_height="6dp"
+        android:paddingBottom="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

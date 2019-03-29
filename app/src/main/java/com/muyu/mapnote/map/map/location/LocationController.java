@@ -72,7 +72,7 @@ public class LocationController extends MapPluginController {
                     /* 刷新定位 */
                     originLocation = location;
                     if (isFirst) {
-                        setCameraPosition(location.getLatitude(), location.getLongitude(), 4);
+                        setCameraPosition(location.getLatitude(), location.getLongitude(), 2);
                         isFirst = false;
                     }
                     locationComponent.forceLocationUpdate(location);
@@ -81,7 +81,7 @@ public class LocationController extends MapPluginController {
             Location lastLocation = LocationHelper.INSTANCE.getLastLocationCheckChina();
             if (lastLocation != null) {
                 originLocation = lastLocation;
-                setCameraPosition(lastLocation.getLatitude(), lastLocation.getLongitude());
+                setCameraPosition(lastLocation.getLatitude(), lastLocation.getLongitude(), 2);
             }
         } catch (Exception e) {
             e.printStackTrace();

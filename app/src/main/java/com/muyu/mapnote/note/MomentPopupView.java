@@ -99,6 +99,6 @@ public class MomentPopupView extends PopupWindow {
     public void show(View view) {
         //弹窗位置设置
 //        showAsDropDown(view, Math.abs((view.getWidth() - getWidth()) / 2), 10);
-        showAtLocation(view, Gravity.TOP | Gravity.CENTER, 0, 190);//有偏差
+        showAtLocation(view, Gravity.TOP | Gravity.CENTER, 0, 200);//有偏差
     }
 }

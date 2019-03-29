@@ -22,10 +22,10 @@
             <com.mapbox.mapboxsdk.maps.MapView
                 android:id="@+id/footmark_map"
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_height="230dp"
                 mapbox:mapbox_cameraTargetLat="39.9071567"
                 mapbox:mapbox_cameraTargetLng="116.39158504"
-                mapbox:mapbox_cameraZoom="7"
+                mapbox:mapbox_cameraZoom="1"
                 mapbox:mapbox_renderTextureMode="true"
                 mapbox:mapbox_uiRotateGestures="false"/>
 

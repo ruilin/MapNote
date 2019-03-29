@@ -25,6 +25,7 @@ import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.app.ImageLoader;
 import com.muyu.mapnote.app.okayapi.OkMomentItem;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.minimalism.framework.app.BaseActivity;
@@ -215,7 +216,7 @@ public class PoiManager {
     }
 
     public static void showMoment(BaseActivity activity, Style style, MomentPoi poi) {
-        Glide.with(activity).asBitmap().load(poi.pictureUrlLiat.get(0)).into(new SimpleTarget<Bitmap>() {
+        ImageLoader.loadPoi(activity, poi.pictureUrlLiat.get(0), new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                 Bitmap smallBitmap = BitmapUtils.changeBitmapSize(resource, 100, 100);

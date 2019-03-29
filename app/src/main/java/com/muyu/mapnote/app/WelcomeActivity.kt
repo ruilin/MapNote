@@ -34,12 +34,13 @@ class WelcomeActivity : MapBaseActivity() {
 
         adView = findViewById<View>(R.id.welcome_ad)
         banner = findViewById<Banner>(R.id.welcome_banner)
+        banner.setDelayTime(5000)
 
         adView.visibility = View.VISIBLE
         banner.visibility = View.GONE
         SysUtils.runOnUiThreadDelayed( {
             enter()
-        }, 1000)
+        }, 1200)
 
     }
 
@@ -50,8 +51,8 @@ class WelcomeActivity : MapBaseActivity() {
             adView.visibility = View.GONE
 
             banner.visibility = View.VISIBLE
-            list.add("你好")
-            list.add("欢迎")
+            list.add("一手掌握全球美景")
+            list.add("旅行足迹一览无余")
             banner.setPages(list) { CustomViewHolder() }
                     .setAutoPlay(true)
                     .setLoop(false)
@@ -92,7 +93,12 @@ class WelcomeActivity : MapBaseActivity() {
             if (position == list.size - 1) {
                 mButton!!.visibility = View.VISIBLE
             } else {
-                mButton!!.visibility = View.GONE
+                mButton!!.visibility = View.INVISIBLE
+            }
+            if (position == 0) {
+                mImageView!!.setImageResource(R.drawable.guide_0)
+            } else if (position == 1) {
+                mImageView!!.setImageResource(R.drawable.guide_1)
             }
         }
     }
