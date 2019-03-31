@@ -314,67 +314,67 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                 }
 
                 /* 显示效果 */
-                /*
-                LatLng latLng = new LatLng(23.1337054, 113.3249672);
-                latLngs.add(latLng);
-                Point point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
-                points.add(point);
 
-                latLng = new LatLng(23.4387, 117.025);
-                latLngs.add(latLng);
-                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
-                points.add(point);
+//                LatLng latLng = new LatLng(23.1337054, 113.3249672);
+//                latLngs.add(latLng);
+//                Point point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+//                points.add(point);
+//
+//                latLng = new LatLng(23.4387, 117.025);
+//                latLngs.add(latLng);
+//                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+//                points.add(point);
+//
+//                latLng = new LatLng(25.0509, 113.7553);
+//                latLngs.add(latLng);
+//                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+//                points.add(point);
+//
+//                latLng = new LatLng(27.5958, 114.1473);
+//                latLngs.add(latLng);
+//                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+//                points.add(point);
+//
+//                latLng = new LatLng(28.2025, 112.9996);
+//                latLngs.add(latLng);
+//                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+//                points.add(point);
+//
+//                latLng = new LatLng( 37.492, 127.0267);
+//                latLngs.add(latLng);
+//                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+//                points.add(point);
+//
+//                latLng = new LatLng(34.2549, 108.9377);
+//                latLngs.add(latLng);
+//                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+//                points.add(point);
+//
+//                latLng = new LatLng(34.3197, 108.7178);
+//                latLngs.add(latLng);
+//                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+//                points.add(point);
+//
+//                latLng = new LatLng(25.6879, 100.1623);
+//                latLngs.add(latLng);
+//                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+//                points.add(point);
+//
+//                latLng = new LatLng(16.8142, 100.2717);
+//                latLngs.add(latLng);
+//                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+//                points.add(point);
+//
+//                latLng = new LatLng(13.736, 100.5582);
+//                latLngs.add(latLng);
+//                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+//                points.add(point);
+//
+//                latLng = new LatLng(1.3471, 103.8438);
+//                latLngs.add(latLng);
+//                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
+//                points.add(point);
 
-                latLng = new LatLng(25.0509, 113.7553);
-                latLngs.add(latLng);
-                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
-                points.add(point);
-
-                latLng = new LatLng(27.5958, 114.1473);
-                latLngs.add(latLng);
-                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
-                points.add(point);
-
-                latLng = new LatLng(28.2025, 112.9996);
-                latLngs.add(latLng);
-                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
-                points.add(point);
-
-                latLng = new LatLng( 37.492, 127.0267);
-                latLngs.add(latLng);
-                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
-                points.add(point);
-
-                latLng = new LatLng(34.2549, 108.9377);
-                latLngs.add(latLng);
-                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
-                points.add(point);
-
-                latLng = new LatLng(34.3197, 108.7178);
-                latLngs.add(latLng);
-                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
-                points.add(point);
-
-                latLng = new LatLng(25.6879, 100.1623);
-                latLngs.add(latLng);
-                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
-                points.add(point);
-
-                latLng = new LatLng(16.8142, 100.2717);
-                latLngs.add(latLng);
-                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
-                points.add(point);
-
-                latLng = new LatLng(13.736, 100.5582);
-                latLngs.add(latLng);
-                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
-                points.add(point);
-
-                latLng = new LatLng(1.3471, 103.8438);
-                latLngs.add(latLng);
-                point = Point.fromLngLat(latLng.getLongitude(), latLng.getLatitude());
-                points.add(point);
-                */
 
 
 

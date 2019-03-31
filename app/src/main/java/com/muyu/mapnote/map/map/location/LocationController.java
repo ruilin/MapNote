@@ -109,7 +109,7 @@ public class LocationController extends MapPluginController {
 //            originLocation = LocationHelper.INSTANCE.getLastLocationCheckChina();
         }
         if (originLocation == null) {
-            Msg.show("无法获取定位");
+            Msg.show("无法获取定位，请检查系统设置");
         } else {
             setCameraPosition(originLocation.getLatitude(), originLocation.getLongitude());
             locationComponent.forceLocationUpdate(originLocation);
