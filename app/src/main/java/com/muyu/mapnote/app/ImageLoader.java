@@ -26,7 +26,7 @@ public class ImageLoader {
 
     public static void loadPoi(Activity activity, String url, SimpleTarget<Bitmap> callback) {
         if (!StringUtils.isEmpty(url)) {
-            Glide.with(activity).asBitmap().load(url + "?imageView2/2/w/100/h/100").into(callback);
+            Glide.with(activity).asBitmap().load(url + "?imageView2/2/w/110/h/110").into(callback);
         }
     }
 }

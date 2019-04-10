@@ -220,7 +220,7 @@ public class PoiManager {
         ImageLoader.loadPoi(activity, poi.pictureUrlLiat.get(0), new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                int size = ScreenUtils.dip2px(activity, 30);
+                int size = ScreenUtils.dip2px(activity, 32);
                 Bitmap smallBitmap = BitmapUtils.changeBitmapSize(resource, size, size);
                 Bitmap circle = CanvasUtils.drawCircleBitmap(smallBitmap);
                 String layerId = addMarker(style, poi.id, poi.lat, poi.lng, circle);
