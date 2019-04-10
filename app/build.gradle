@@ -12,8 +12,8 @@ android {
         applicationId "com.muyu.mapnote"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 102
-        versionName "1.1"
+        versionCode 106
+        versionName "1.2.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         // Enabling multidex support.
         multiDexEnabled true

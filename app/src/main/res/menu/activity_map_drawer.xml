@@ -2,10 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
-
-    <item android:title="地图设置">
+    <item android:title="游记显示">
         <menu>
-            <group android:menuCategory="container" android:checkableBehavior="single">
+            <group
+                android:id="@+id/nav_display"
+                android:menuCategory="container"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_display_all"
+                    android:icon="@drawable/menu_all"
+                    android:title="显示所有" />
+                <item
+                    android:id="@+id/nav_display_mine"
+                    android:icon="@drawable/menu_mine"
+                    android:title="仅显示我的" />
+            </group>
+        </menu>
+    </item>
+    <item android:title="地图风格">
+        <menu>
+            <group
+                android:id="@+id/nav_map"
+                android:menuCategory="container" android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_gallery"
                     android:icon="@drawable/menu_map_default"

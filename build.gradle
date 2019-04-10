@@ -6,14 +6,15 @@ buildscript {
     
     repositories {
         google()
-        jcenter()
         mavenCentral()
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
         //这里是 LeanCloud 的包仓库
         maven { url "http://mvn.leancloud.cn/nexus/content/repositories/public" }
         //mapbox
         maven { url "https://mapbox.bintray.com/mapbox" }
         //jitpack
         maven { url 'https://jitpack.io' }
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.1'
@@ -27,7 +28,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
         mavenCentral()
         maven { url 'https://maven.google.com' }
         // 这里是 LeanCloud 的包仓库
@@ -40,7 +41,7 @@ allprojects {
         maven { url 'https://jitpack.io' }
         // 友盟
         maven { url 'https://dl.bintray.com/umsdk/release' }
-
+        jcenter()
     }
 }
 

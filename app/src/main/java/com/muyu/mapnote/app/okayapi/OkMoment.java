@@ -127,7 +127,7 @@ public class OkMoment extends OkObject {
         sb.append("&app_key=" + OkayApi.get().getAppKey());
 //        sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
 //        sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
-//        sb.append("&perpage=100");
+        sb.append("&perpage=100");
 
         SortedMap<String, String> map = new TreeMap<>();
         map.put("s", apiKey);
@@ -135,7 +135,7 @@ public class OkMoment extends OkObject {
 //        map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
 //        map.put("token", OkayApi.get().getCurrentUser().getToken());
         //map.put("lastid", "2");
-//        map.put("perpage", "100");
+        map.put("perpage", "100");
         String sign = SignUtils.getSign(map);
 
         sb.append("&sign=" + sign);
@@ -151,6 +151,7 @@ public class OkMoment extends OkObject {
         sb.append("&app_key=" + OkayApi.get().getAppKey());
         sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
         sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
+        sb.append("&perpage=100");
 //        sb.append("&moment_lat=" + lat);
 //        sb.append("&moment_lng=" + lng);
 //        sb.append("&moment_place=" + place);
@@ -160,6 +161,7 @@ public class OkMoment extends OkObject {
         map.put("app_key", OkayApi.get().getAppKey());
         map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
         map.put("token", OkayApi.get().getCurrentUser().getToken());
+        map.put("perpage", "100");
 //        map.put("moment_lat", String.valueOf(lat));
 //        map.put("moment_lng", String.valueOf(lng));
 //        map.put("moment_place", String.valueOf(place));

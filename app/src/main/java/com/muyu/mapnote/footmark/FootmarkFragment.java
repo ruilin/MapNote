@@ -566,15 +566,25 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
         OkMoment.getMyMoment(new MomentListCallback() {
             @Override
             public void onSuccess(ArrayList<OkMomentItem> list) {
-                mViewModel.getMyMoment().postValue(list);
-                mRefreshView.setRefreshing(false);
-                Msg.show("数据已刷新");
+                SysUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mViewModel.getMyMoment().postValue(list);
+                        mRefreshView.setRefreshing(false);
+                        Msg.show("数据已刷新");
+                    }
+                });
             }
 
             @Override
             public void onFail(OkException e) {
-                mRefreshView.setRefreshing(false);
-                Msg.show("网络异常");
+                SysUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRefreshView.setRefreshing(false);
+                        Msg.show("网络异常");
+                    }
+                });
             }
         });
     }

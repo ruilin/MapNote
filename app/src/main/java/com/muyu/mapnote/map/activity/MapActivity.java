@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.Group;
 import android.support.design.widget.FloatingActionButton;
 import android.view.Gravity;
 import android.view.View;
@@ -70,6 +71,10 @@ public class MapActivity extends MapBaseActivity
     private int lastMemuIndex = MAIN_MENU_HOME;
     private Loading loading;
 
+    private static final int MOMENT_DISPLAY_ALL = 0;
+    private static final int MOMENT_DISPLAY_MINE = 1;
+    private int momentDisplay = MOMENT_DISPLAY_ALL;
+
     private ArrayList<OkMomentItem> mMomentlist = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,34 +116,44 @@ public class MapActivity extends MapBaseActivity
     }
 
     public void updateMoments(boolean showLoading) {
+        if (momentDisplay == MOMENT_DISPLAY_MINE && !OkayApi.get().isLogined()) {
+            startActivity(LoginActivity.class);
+            return;
+        }
         if (showLoading) {
             loading.show("地图刷新中……");
         }
 //        if (OkayApi.get().isLogined()) {
-            OkMoment.getAllMoment(new MomentListCallback() {
-                @Override
-                public void onSuccess(ArrayList<OkMomentItem> list) {
-                    SysUtils.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            loading.cancel();
-                        }
-                    });
-                    mMomentlist = list;
-                    Collections.sort(mMomentlist, new Comparator<OkMomentItem>() {
-                        @Override
-                        public int compare(OkMomentItem o1, OkMomentItem o2) {
-                            return o1.moment_like > o2.moment_like ? 1 : -1;
-                        }
-                    });
-                    showMoments(list);
-                }
+        MomentListCallback callback = new MomentListCallback() {
+            @Override
+            public void onSuccess(ArrayList<OkMomentItem> list) {
+                SysUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loading.cancel();
+                    }
+                });
+                mMomentlist = list;
+                //System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
+                Collections.sort(mMomentlist, new Comparator<OkMomentItem>() {
+                    @Override
+                    public int compare(OkMomentItem o1, OkMomentItem o2) {
+                        return o1.moment_like - o2.moment_like;
+                    }
+                });
+                showMoments(mMomentlist);
+            }
 
-                @Override
-                public void onFail(OkException e) {
-                    loading.cancel();
-                }
-            });
+            @Override
+            public void onFail(OkException e) {
+                loading.cancel();
+            }
+        };
+        if (momentDisplay == MOMENT_DISPLAY_ALL) {
+            OkMoment.getAllMoment(callback);
+        } else if (momentDisplay == MOMENT_DISPLAY_MINE) {
+            OkMoment.getMyMoment(callback);
+        }
 //        }
     }
 
@@ -283,6 +298,7 @@ public class MapActivity extends MapBaseActivity
         });
         leftNavigationView = findViewById(R.id.nav_view);
         leftNavigationView.setItemIconTintList(null);
+
         leftNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -311,7 +327,14 @@ public class MapActivity extends MapBaseActivity
                     ShareUtils.shareToWeChat(MapActivity.this, "下载<" + getResources().getString(R.string.app_name) + ">APP，记录你的旅行足迹！");
                 } else if (id == R.id.nav_feedback) {
                     startActivity(FeedbackActivity.class);
+                } else if (id == R.id.nav_display_all) {
+                    momentDisplay = MOMENT_DISPLAY_ALL;
+                    updateMoments(true);
+                } else if (id == R.id.nav_display_mine) {
+                    momentDisplay = MOMENT_DISPLAY_MINE;
+                    updateMoments(true);
                 }
+
 
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
@@ -349,7 +372,7 @@ public class MapActivity extends MapBaseActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogUtils.show(MapActivity.this, "标记", "先标记当前位置，标记后可点击该位置发布游记哦~", new DialogUtils.DialogCallback() {
+                DialogUtils.show(MapActivity.this, "打卡", "打卡当前位置——即在地图上保存坐标，之后可随时点击该位置发布游记哦~", new DialogUtils.DialogCallback() {
                     @Override
                     public void onPositiveClick(DialogInterface dialog) {
                         mMapController.getPoi().addFootRecord(LocationHelper.INSTANCE.getLastLocationCheckChina());
@@ -404,6 +427,9 @@ public class MapActivity extends MapBaseActivity
                 }
                 break;
             case MapOptEvent.MAP_EVENT_DATA_UPDATE:
+                updateMoments(false);
+                break;
+            case MapOptEvent.MAP_EVENT_LOGIN_SUCCESS:
                 updateMoments(false);
                 break;
         }

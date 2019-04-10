@@ -3,7 +3,7 @@
 icon
 
 侧边菜单
-https://www.easyicon.net/1188522-Traffic_ights_icon.html
+https://www.easyicon.net/iconsearch/iconset:single-color-Flat-Icons/1/?m=yes&f=iconsetid&s=
 
 绿色圆形
 https://www.easyicon.net/iconsearch/iconset:Travel-Ecology-icons/
