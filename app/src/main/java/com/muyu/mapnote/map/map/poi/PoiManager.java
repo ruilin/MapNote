@@ -31,6 +31,7 @@ import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.app.BaseApplication;
 import com.muyu.minimalism.utils.MathUtils;
+import com.muyu.minimalism.utils.ScreenUtils;
 import com.muyu.minimalism.utils.bitmap.BitmapUtils;
 import com.muyu.minimalism.utils.GpsUtils;
 import com.muyu.minimalism.utils.bitmap.CanvasUtils;
@@ -219,7 +220,8 @@ public class PoiManager {
         ImageLoader.loadPoi(activity, poi.pictureUrlLiat.get(0), new SimpleTarget<Bitmap>() {
             @Override
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                Bitmap smallBitmap = BitmapUtils.changeBitmapSize(resource, 100, 100);
+                int size = ScreenUtils.dip2px(activity, 30);
+                Bitmap smallBitmap = BitmapUtils.changeBitmapSize(resource, size, size);
                 Bitmap circle = CanvasUtils.drawCircleBitmap(smallBitmap);
                 String layerId = addMarker(style, poi.id, poi.lat, poi.lng, circle);
                 mMomentPoiMap.put(poi.id, poi);

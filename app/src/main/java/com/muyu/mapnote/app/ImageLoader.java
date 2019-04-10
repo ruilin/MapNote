@@ -21,12 +21,12 @@ public class ImageLoader {
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(R.drawable.head_def);
         requestOptions.error(R.drawable.head_def);
-        Glide.with(activity).load(url + "?imageView2/2/w/128/h/128").apply(requestOptions).into(imageView);
+        Glide.with(activity).load(url + "?imageView2/2/w/100/h/100").apply(requestOptions).into(imageView);
     }
 
     public static void loadPoi(Activity activity, String url, SimpleTarget<Bitmap> callback) {
         if (!StringUtils.isEmpty(url)) {
-            Glide.with(activity).asBitmap().load(url + "?imageView2/2/w/128/h/128").into(callback);
+            Glide.with(activity).asBitmap().load(url + "?imageView2/2/w/100/h/100").into(callback);
         }
     }
 }

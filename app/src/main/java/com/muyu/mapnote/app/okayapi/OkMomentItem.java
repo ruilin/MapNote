@@ -39,6 +39,11 @@ public class OkMomentItem implements Parcelable {
         moment_picture2 = in.readString();
         moment_picture3 = in.readString();
         moment_picture4 = in.readString();
+        moment_picture5 = in.readString();
+        moment_picture6 = in.readString();
+        moment_picture7 = in.readString();
+        moment_picture8 = in.readString();
+        moment_picture9 = in.readString();
         moment_lat = in.readDouble();
         moment_lng = in.readDouble();
         moment_place = in.readString();
@@ -75,6 +80,11 @@ public class OkMomentItem implements Parcelable {
         dest.writeString(moment_picture2);
         dest.writeString(moment_picture3);
         dest.writeString(moment_picture4);
+        dest.writeString(moment_picture5);
+        dest.writeString(moment_picture6);
+        dest.writeString(moment_picture7);
+        dest.writeString(moment_picture8);
+        dest.writeString(moment_picture9);
         dest.writeDouble(moment_lat);
         dest.writeDouble(moment_lng);
         dest.writeString(moment_place);
