@@ -118,31 +118,28 @@ public class OkMoment extends OkObject {
         return sb.toString();
     }
 
-    private static String getAllMomentUrl() {
+    private static String getAllMomentUrl(int page, int pageSize) {
         String apiKey = "App.Market_Minimoments.ShowMoment";
 
         StringBuffer sb = new StringBuffer();
         sb.append(OkayApi.get().getHost());
         sb.append("/?s=" + apiKey);
         sb.append("&app_key=" + OkayApi.get().getAppKey());
-//        sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
-//        sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
-        sb.append("&perpage=100");
+        sb.append("&page=" + page);
+        sb.append("&perpage=" + pageSize);
 
         SortedMap<String, String> map = new TreeMap<>();
         map.put("s", apiKey);
         map.put("app_key", OkayApi.get().getAppKey());
-//        map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
-//        map.put("token", OkayApi.get().getCurrentUser().getToken());
-        //map.put("lastid", "2");
-        map.put("perpage", "100");
+        map.put("page", "" + page);
+        map.put("perpage", "" + pageSize);
         String sign = SignUtils.getSign(map);
 
         sb.append("&sign=" + sign);
         return sb.toString();
     }
 
-    private static String getMyMomentUrl() {
+    private static String getMyMomentUrl(int page, int pageSize) {
         String apiKey = "App.Market_Minimoments.GetMyMoment";
 
         StringBuffer sb = new StringBuffer();
@@ -151,20 +148,16 @@ public class OkMoment extends OkObject {
         sb.append("&app_key=" + OkayApi.get().getAppKey());
         sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
         sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
-        sb.append("&perpage=100");
-//        sb.append("&moment_lat=" + lat);
-//        sb.append("&moment_lng=" + lng);
-//        sb.append("&moment_place=" + place);
+        sb.append("&page=" + page);
+        sb.append("&perpage=" + pageSize);
 
         SortedMap<String, String> map = new TreeMap<>();
         map.put("s", apiKey);
         map.put("app_key", OkayApi.get().getAppKey());
         map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
         map.put("token", OkayApi.get().getCurrentUser().getToken());
-        map.put("perpage", "100");
-//        map.put("moment_lat", String.valueOf(lat));
-//        map.put("moment_lng", String.valueOf(lng));
-//        map.put("moment_place", String.valueOf(place));
+        map.put("page", "" + page);
+        map.put("perpage", "" + pageSize);
         String sign = SignUtils.getSign(map);
 
         sb.append("&sign=" + sign);
@@ -400,12 +393,59 @@ public class OkMoment extends OkObject {
         });
     }
 
+    public static class MomentRequest {
+        public final static int TYPE_ALL = 0;
+        public final static int TYPE_MINE = 1;
+        final int PAGE_SIZE = 10;
+        ArrayList<OkMomentItem> mainList = new ArrayList<>();
+        MomentListCallback finalCallback;
+        int type = TYPE_ALL;
+        int maxRequestCount = 3;
+        int requestCount = 0;
+
+        public MomentRequest(int type, MomentListCallback callback) {
+            this.finalCallback = callback;
+            this.type = type;
+        }
+
+        public void getAllPages(int page) {
+            String url;
+            if (type == TYPE_ALL) {
+                url = getAllMomentUrl(page, PAGE_SIZE);
+            } else {
+                url = getMyMomentUrl(page, PAGE_SIZE);
+            }
+            getMoments(new MomentListCallback() {
+                @Override
+                public void onSuccess(ArrayList<OkMomentItem> list) {
+                    requestCount++;
+                    mainList.addAll(list);
+                    if (list.size() == PAGE_SIZE && requestCount < maxRequestCount) {
+                        getAllPages(page + 1);
+                    } else {
+                        finalCallback.onSuccess(mainList);
+                    }
+                }
+
+                @Override
+                public void onFail(OkException e) {
+                    finalCallback.onFail(e);
+                }
+            }, url);
+        }
+
+        public void doRequest() {
+            getAllPages(1);
+        }
+
+    }
+
     public static void getAllMoment(MomentListCallback callback) {
-        getMoments(callback, getAllMomentUrl());
+        getMoments(callback, getAllMomentUrl(1, 100));
     }
 
     public static void getMyMoment(MomentListCallback callback) {
-        getMoments(callback, getMyMomentUrl());
+        getMoments(callback, getMyMomentUrl(1, 100));
     }
 
     public static void postLike(String id, CommonCallback callback) {

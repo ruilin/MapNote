@@ -40,7 +40,7 @@
         android:drawableTint="@color/textGray2"
         android:adjustViewBounds="true"
         android:gravity="center"
-        android:text="搜索"
+        android:text="搜索附近"
         android:textColor="@color/textGray2"
         android:textSize="18dp" />
 

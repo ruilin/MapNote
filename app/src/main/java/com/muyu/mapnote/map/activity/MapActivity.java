@@ -150,9 +150,11 @@ public class MapActivity extends MapBaseActivity
             }
         };
         if (momentDisplay == MOMENT_DISPLAY_ALL) {
-            OkMoment.getAllMoment(callback);
+//            OkMoment.getAllMoment(callback);
+            new OkMoment.MomentRequest(OkMoment.MomentRequest.TYPE_ALL, callback).doRequest();
         } else if (momentDisplay == MOMENT_DISPLAY_MINE) {
-            OkMoment.getMyMoment(callback);
+//            OkMoment.getMyMoment(callback);
+            new OkMoment.MomentRequest(OkMoment.MomentRequest.TYPE_MINE, callback).doRequest();
         }
 //        }
     }
