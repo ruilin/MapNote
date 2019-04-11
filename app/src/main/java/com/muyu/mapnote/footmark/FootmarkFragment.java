@@ -531,7 +531,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
             mMap.removeMarker(marker);
         }
         mMarkerList.clear();
-        if (points.size() > 2) {
+        if (points.size() >= 2) {
             IconFactory iconFactory = IconFactory.getInstance(BaseApplication.getInstance());
             Icon icon = iconFactory.fromResource(R.mipmap.ic_foot_end);
             Marker marker = mMap.addMarker(new MarkerOptions()

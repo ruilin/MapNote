@@ -37,4 +37,6 @@
     <!-- image selector -->
     <string name="image_selector_title">Album</string>
     <string name="image_previewer_title">Preview</string>
+
+    <string name="search_hint">Search</string>
 </resources>

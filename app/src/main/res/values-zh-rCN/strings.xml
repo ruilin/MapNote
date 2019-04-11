@@ -37,4 +37,6 @@
     <!-- image selector -->
     <string name="image_selector_title">手机相册</string>
     <string name="image_previewer_title">预览</string>
+
+    <string name="search_hint">搜索</string>
 </resources>

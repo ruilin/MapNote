@@ -419,7 +419,7 @@ public class MapActivity extends MapBaseActivity
         switch (event.eventId) {
             case MapOptEvent.MAP_EVENT_GOTO_LOCATION:
                 Poi poi = (Poi) event.object;
-                String defText = getResources().getString(R.string.action_search);
+                String defText = getResources().getString(R.string.search_hint);
                 if (!searchKeyWord.getText().equals(defText)) {
                     mMapController.cleanKeywordPois();
                     searchKeyWord.setText(defText);

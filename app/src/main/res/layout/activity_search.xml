@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:iconifiedByDefault="false"
         android:searchIcon="@mipmap/ic_search"
-        android:queryHint="搜索附近" />
+        android:queryHint="@string/search_hint" />
 
     <FrameLayout
         android:layout_width="match_parent"
