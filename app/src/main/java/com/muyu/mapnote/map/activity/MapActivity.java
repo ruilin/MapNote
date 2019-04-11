@@ -147,6 +147,7 @@ public class MapActivity extends MapBaseActivity
             @Override
             public void onFail(OkException e) {
                 loading.cancel();
+                Msg.show("网络连接失败");
             }
         };
         if (momentDisplay == MOMENT_DISPLAY_ALL) {

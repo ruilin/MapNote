@@ -118,20 +118,24 @@ public class OkMoment extends OkObject {
         return sb.toString();
     }
 
-    private static String getAllMomentUrl(int page, int pageSize) {
+    private static String getAllMomentUrl(int lastid, int pageSize) {
         String apiKey = "App.Market_Minimoments.ShowMoment";
 
         StringBuffer sb = new StringBuffer();
         sb.append(OkayApi.get().getHost());
         sb.append("/?s=" + apiKey);
         sb.append("&app_key=" + OkayApi.get().getAppKey());
-        sb.append("&page=" + page);
+        if (lastid > 2) {
+            sb.append("&lastid=" + lastid);
+        }
         sb.append("&perpage=" + pageSize);
 
         SortedMap<String, String> map = new TreeMap<>();
         map.put("s", apiKey);
         map.put("app_key", OkayApi.get().getAppKey());
-        map.put("page", "" + page);
+        if (lastid > 2) {
+            map.put("lastid", "" + lastid);
+        }
         map.put("perpage", "" + pageSize);
         String sign = SignUtils.getSign(map);
 
@@ -148,7 +152,9 @@ public class OkMoment extends OkObject {
         sb.append("&app_key=" + OkayApi.get().getAppKey());
         sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
         sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
-        sb.append("&page=" + page);
+        if (page > 1) {
+            sb.append("&page=" + page);
+        }
         sb.append("&perpage=" + pageSize);
 
         SortedMap<String, String> map = new TreeMap<>();
@@ -156,7 +162,9 @@ public class OkMoment extends OkObject {
         map.put("app_key", OkayApi.get().getAppKey());
         map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
         map.put("token", OkayApi.get().getCurrentUser().getToken());
-        map.put("page", "" + page);
+        if (page > 1) {
+            map.put("page", "" + page);
+        }
         map.put("perpage", "" + pageSize);
         String sign = SignUtils.getSign(map);
 
@@ -396,11 +404,11 @@ public class OkMoment extends OkObject {
     public static class MomentRequest {
         public final static int TYPE_ALL = 0;
         public final static int TYPE_MINE = 1;
-        final int PAGE_SIZE = 10;
+        final int PAGE_SIZE = 100;
         ArrayList<OkMomentItem> mainList = new ArrayList<>();
         MomentListCallback finalCallback;
         int type = TYPE_ALL;
-        int maxRequestCount = 3;
+        int maxRequestCount = 5;
         int requestCount = 0;
 
         public MomentRequest(int type, MomentListCallback callback) {
@@ -408,12 +416,12 @@ public class OkMoment extends OkObject {
             this.type = type;
         }
 
-        public void getAllPages(int page) {
+        public void getAllPages(int pageIndex) {
             String url;
             if (type == TYPE_ALL) {
-                url = getAllMomentUrl(page, PAGE_SIZE);
+                url = getAllMomentUrl(pageIndex, PAGE_SIZE);
             } else {
-                url = getMyMomentUrl(page, PAGE_SIZE);
+                url = getMyMomentUrl(pageIndex, PAGE_SIZE);
             }
             getMoments(new MomentListCallback() {
                 @Override
@@ -421,7 +429,11 @@ public class OkMoment extends OkObject {
                     requestCount++;
                     mainList.addAll(list);
                     if (list.size() == PAGE_SIZE && requestCount < maxRequestCount) {
-                        getAllPages(page + 1);
+                        if (type == TYPE_ALL) {
+                            getAllPages(Integer.valueOf(list.get(list.size() - 1).id));
+                        } else {
+                            getAllPages(pageIndex + 1);
+                        }
                     } else {
                         finalCallback.onSuccess(mainList);
                     }
