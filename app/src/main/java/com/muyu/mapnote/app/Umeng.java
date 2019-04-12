@@ -19,7 +19,8 @@ public class Umeng {
          * 参数4:设备类型，UMConfigure.DEVICE_TYPE_PHONE为手机、UMConfigure.DEVICE_TYPE_BOX为盒子，默认为手机
          * 参数5:Push推送业务的secret
          */
-        UMConfigure.init(context, "5c768e52b465f59b8900046c", "Common_Channel", UMConfigure.DEVICE_TYPE_PHONE, null);
+//        UMConfigure.init(context, "5c768e52b465f59b8900046c", "Common_Channel", UMConfigure.DEVICE_TYPE_PHONE, null);
+        UMConfigure.init(context, UMConfigure.DEVICE_TYPE_PHONE, null);
         /**
          * 设置组件化的Log开关
          * 参数: boolean 默认为false，如需查看LOG设置为true
