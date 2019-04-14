@@ -105,6 +105,9 @@ public class LocationController extends MapPluginController {
                 Msg.show("无法获取定位权限");
                 return true;
             }
+            if (locationComponent == null) {
+                enableLocationComponent();
+            }
             originLocation = locationComponent.getLastKnownLocation();
 //            originLocation = LocationHelper.INSTANCE.getLastLocationCheckChina();
         }

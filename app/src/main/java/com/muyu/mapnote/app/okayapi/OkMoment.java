@@ -1,14 +1,13 @@
 package com.muyu.mapnote.app.okayapi;
 
 import android.location.Location;
-import android.text.Html;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.muyu.mapnote.app.Network;
+import com.muyu.mapnote.app.okayapi.been.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.callback.CommonCallback;
 import com.muyu.mapnote.app.okayapi.callback.MomentListCallback;
 import com.muyu.mapnote.app.okayapi.callback.MomentPostCallback;
@@ -18,12 +17,10 @@ import com.muyu.minimalism.utils.Logs;
 import com.muyu.minimalism.utils.MathUtils;
 import com.muyu.minimalism.utils.StringUtils;
 
-import org.intellij.lang.annotations.RegExp;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -129,6 +126,7 @@ public class OkMoment extends OkObject {
             sb.append("&lastid=" + lastid);
         }
         sb.append("&perpage=" + pageSize);
+        sb.append("&more_select=uuid");
 
         SortedMap<String, String> map = new TreeMap<>();
         map.put("s", apiKey);
@@ -137,6 +135,7 @@ public class OkMoment extends OkObject {
             map.put("lastid", "" + lastid);
         }
         map.put("perpage", "" + pageSize);
+        map.put("more_select", "uuid");
         String sign = SignUtils.getSign(map);
 
         sb.append("&sign=" + sign);
@@ -156,6 +155,7 @@ public class OkMoment extends OkObject {
             sb.append("&page=" + page);
         }
         sb.append("&perpage=" + pageSize);
+        sb.append("&more_select=uuid");
 
         SortedMap<String, String> map = new TreeMap<>();
         map.put("s", apiKey);
@@ -166,6 +166,7 @@ public class OkMoment extends OkObject {
             map.put("page", "" + page);
         }
         map.put("perpage", "" + pageSize);
+        map.put("more_select", "uuid");
         String sign = SignUtils.getSign(map);
 
         sb.append("&sign=" + sign);

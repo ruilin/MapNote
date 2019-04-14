@@ -3,7 +3,7 @@ package com.muyu.mapnote.note.comment;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.muyu.mapnote.app.okayapi.OkCommentItem;
+import com.muyu.mapnote.app.okayapi.been.OkCommentItem;
 
 import java.util.ArrayList;
 

@@ -18,6 +18,7 @@ import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.map.MapOptEvent;
@@ -28,6 +29,7 @@ import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.note.MomentPopupView;
 import com.muyu.mapnote.note.PublishActivity;
+import com.muyu.minimalism.utils.Logs;
 import com.muyu.minimalism.utils.MathUtils;
 import com.muyu.minimalism.view.BottomMenu;
 import com.muyu.minimalism.view.Msg;
@@ -116,6 +118,13 @@ public class PoiController extends MapPluginController {
             }
         });
 //        markerViewManager = new MarkerViewManager(mMapView, mMap);
+
+        getMapView().addOnSourceChangedListener(new MapView.OnSourceChangedListener() {
+            @Override
+            public void onSourceChangedListener(String id) {
+//                Logs.e("xxxxxxxx > " + id);
+            }
+        });
     }
 
     MomentPopupView dialog;

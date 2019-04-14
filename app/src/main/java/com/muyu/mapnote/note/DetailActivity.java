@@ -13,15 +13,14 @@ import com.bumptech.glide.Glide;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.MapBaseActivity;
 import com.muyu.mapnote.app.okayapi.OkException;
+import com.muyu.mapnote.app.okayapi.OkMessage;
 import com.muyu.mapnote.app.okayapi.OkMoment;
-import com.muyu.mapnote.app.okayapi.OkMomentItem;
+import com.muyu.mapnote.app.okayapi.been.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.OkayApi;
 import com.muyu.mapnote.app.okayapi.callback.CommonCallback;
 import com.muyu.mapnote.map.MapOptEvent;
-import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.mapnote.note.comment.CommentController;
-import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.StringUtils;
 import com.muyu.minimalism.view.MediaLoader;
@@ -36,6 +35,7 @@ import java.util.ArrayList;
 public class DetailActivity extends MapBaseActivity {
     private boolean checkable;
     private CommentController commentController;
+    TextView likeTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,7 @@ public class DetailActivity extends MapBaseActivity {
             timeTv.setText(poi.moment_createtime);
             TextView placeTv = findViewById(R.id.detail_place_text);
             placeTv.setText(poi.moment_place);
-            TextView likeTv = findViewById(R.id.detail_like_count);
+            likeTv = findViewById(R.id.detail_like_count);
             likeTv.setText(String.valueOf(poi.moment_like));
 
             ZzImageBox imageBox = findViewById(R.id.detail_image_box);
@@ -185,7 +185,22 @@ public class DetailActivity extends MapBaseActivity {
                             LikeManager.get().put(poi.id);
                             checkBox.setChecked(true);
                             checkBox.setClickable(false);
-                            Msg.show("点赞成功");
+                            poi.moment_like++;
+                            OkMessage.postMessage(poi.uuid, OkayApi.get().getCurrentUser().getNickname()
+                                    + " 赞了你在<"
+                                    + poi.moment_place
+                                    + ">发表的游记!",
+                                    poi.moment_picture1,
+                                    OkMessage.TYPE_MOMENT_LIKE,
+                                    poi.id);
+                            likeTv.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    likeTv.setText(String.valueOf(poi.moment_like));
+                                    PoiManager.updateLike(poi.id, poi.moment_like);
+                                    Msg.show("点赞成功");
+                                }
+                            });
                         }
 
                         @Override

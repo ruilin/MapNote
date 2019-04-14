@@ -39,9 +39,8 @@ public class MomentPopupView extends PopupWindow {
         LayoutInflater inflater = LayoutInflater.from(controller.getActivity());
         View view = inflater.inflate(R.layout.view_dialog_moment, null);
 
-        if (!poi.pictureUrlLiat.isEmpty()) {
-            Glide.with(controller.getActivity()).load(poi.pictureUrlLiat.get(0)).into((ImageView) view.findViewById(R.id.moment_pupup_iv));
-        }
+        ImageLoader.loadMoment(controller.getActivity(), poi.pictureUrlLiat.get(0), (ImageView) view.findViewById(R.id.moment_pupup_iv));
+
         TextView tv = view.findViewById(R.id.footmark_content);
         tv.setText(poi.content);
         tv = view.findViewById(R.id.footmark_username);

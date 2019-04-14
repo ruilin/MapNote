@@ -1,14 +1,10 @@
 package com.muyu.mapnote.map.map.poi;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.PointF;
-import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.mapbox.geojson.Feature;
@@ -26,11 +22,10 @@ import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.ImageLoader;
-import com.muyu.mapnote.app.okayapi.OkMomentItem;
+import com.muyu.mapnote.app.okayapi.been.OkMomentItem;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.app.BaseApplication;
-import com.muyu.minimalism.utils.MathUtils;
 import com.muyu.minimalism.utils.ScreenUtils;
 import com.muyu.minimalism.utils.bitmap.BitmapUtils;
 import com.muyu.minimalism.utils.GpsUtils;
@@ -227,6 +222,13 @@ public class PoiManager {
                 mMomentPoiMap.put(poi.id, poi);
             }
         });
+    }
+
+    public static void updateLike(String id, int like) {
+        MomentPoi poi = mMomentPoiMap.get(id);
+        if (poi != null) {
+            poi.like = like;
+        }
     }
 
     private static void removeMarker(Style style, String id) {

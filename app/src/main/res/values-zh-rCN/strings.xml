@@ -15,6 +15,7 @@
     <string name="main_menu_home">发现</string>
     <string name="main_menu_route">足迹</string>
     <string name="main_menu_discovery">发现</string>
+    <string name="main_menu_message">消息</string>
     <string name="main_menu_more">更多</string>
 
     <!-- Strings related to login -->

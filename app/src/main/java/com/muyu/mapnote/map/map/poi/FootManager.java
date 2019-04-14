@@ -1,18 +1,8 @@
 package com.muyu.mapnote.map.map.poi;
 
-import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.PointF;
 import android.location.Location;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
@@ -20,25 +10,14 @@ import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
-import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.MapApplication;
-import com.muyu.mapnote.app.okayapi.OkMomentItem;
-import com.muyu.mapnote.map.map.moment.MomentPoi;
-import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.app.BaseApplication;
-import com.muyu.minimalism.utils.GpsUtils;
 import com.muyu.minimalism.utils.MathUtils;
 import com.muyu.minimalism.utils.SPUtils;
-import com.muyu.minimalism.utils.bitmap.BitmapUtils;
-import com.muyu.minimalism.utils.bitmap.CanvasUtils;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;

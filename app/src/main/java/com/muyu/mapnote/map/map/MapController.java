@@ -1,7 +1,6 @@
 package com.muyu.mapnote.map.map;
 
 import android.graphics.PointF;
-import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -29,7 +28,7 @@ import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
 import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.muyu.mapnote.R;
-import com.muyu.mapnote.app.okayapi.OkMomentItem;
+import com.muyu.mapnote.app.okayapi.been.OkMomentItem;
 import com.muyu.mapnote.map.map.location.LocationController;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.mapnote.map.map.poi.Poi;

@@ -29,4 +29,13 @@ public class ImageLoader {
             Glide.with(activity).asBitmap().load(url + "?imageView2/2/w/110/h/110").into(callback);
         }
     }
+
+    public static void loadMoment(Activity activity, String url, ImageView imageView) {
+        if (!StringUtils.isEmpty(url)) {
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions.placeholder(R.drawable.def_photo);
+            requestOptions.error(R.drawable.def_photo);
+            Glide.with(activity).load(url).apply(requestOptions).into(imageView);
+        }
+    }
 }

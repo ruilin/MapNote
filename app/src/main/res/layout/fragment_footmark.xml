@@ -57,7 +57,7 @@
                     android:background="@drawable/selector_round_button_footmark"
                     android:tint="@color/white"
                     android:padding="8dp"
-                    android:src="@mipmap/ic_change"/>
+                    android:src="@mipmap/ic_refresh"/>
 
                 <ImageView
                     android:id="@+id/footmark_map_reset"

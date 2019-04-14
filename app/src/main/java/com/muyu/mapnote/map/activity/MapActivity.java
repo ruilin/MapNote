@@ -5,8 +5,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.Group;
-import android.support.design.widget.FloatingActionButton;
 import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,13 +15,14 @@ import android.widget.TextView;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
+import com.ashokvarma.bottomnavigation.ShapeBadgeItem;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.MapBaseActivity;
 import com.muyu.mapnote.app.okayapi.OkException;
-import com.muyu.mapnote.app.okayapi.OkMomentItem;
+import com.muyu.mapnote.app.okayapi.been.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.OkayApi;
 import com.muyu.mapnote.app.okayapi.OkMoment;
 import com.muyu.mapnote.app.okayapi.callback.MomentListCallback;
@@ -31,15 +30,15 @@ import com.muyu.mapnote.footmark.FootmarkFragment;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.MapController;
 import com.muyu.mapnote.map.map.OnMapEventListener;
-import com.muyu.mapnote.map.map.moment.MomentPoi;
 import com.muyu.mapnote.map.map.poi.Poi;
-import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.map.user.UserController;
+import com.muyu.mapnote.message.MessageFragment;
 import com.muyu.mapnote.note.PublishActivity;
 import com.muyu.mapnote.user.activity.FeedbackActivity;
 import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.utils.ShareUtils;
+import com.muyu.minimalism.utils.StatusBarUtils;
 import com.muyu.minimalism.utils.SysUtils;
 import com.muyu.minimalism.view.DialogUtils;
 import com.muyu.minimalism.view.Loading;
@@ -64,10 +63,12 @@ public class MapActivity extends MapBaseActivity
     private DrawerLayout mLeftSideView;
     private TextView searchKeyWord;
     private FootmarkFragment footmarkFragment;
+    private MessageFragment messageFragment;
 
     private final int MAIN_MENU_HOME = 0;
     private final int MAIN_MENU_PATH = 1;
-    private final int MAIN_MENU_MORE = 2;
+    private final int MAIN_MENU_MESSAGE = 2;
+    private final int MAIN_MENU_MORE = 3;
     private int lastMemuIndex = MAIN_MENU_HOME;
     private Loading loading;
 
@@ -82,6 +83,8 @@ public class MapActivity extends MapBaseActivity
         setContentView(R.layout.activity_map);
 //        setStatusBarColor(Color.WHITE);
         setStatusBarTrans(true);
+        StatusBarUtils.setMIUIStatusBarTextMode(this, true);
+        StatusBarUtils.setFlymeStatusBarTextMode(this, true);
 
         EventBus.getDefault().register(this);
         loading = new Loading(this);
@@ -94,6 +97,13 @@ public class MapActivity extends MapBaseActivity
         });
         searchKeyWord = findViewById(R.id.view_home_tv);
 
+
+        findViewById(R.id.view_home_feedback).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(FeedbackActivity.class);
+            }
+        });
         findViewById(R.id.view_home_refresh).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,16 +180,54 @@ public class MapActivity extends MapBaseActivity
         });
     }
 
+    boolean hasOpenMessage;
+    ShapeBadgeItem shapeBadgeItem;
+    MessageFragment.OnNewMessageListener newMessageCallback = new MessageFragment.OnNewMessageListener() {
+        @Override
+        public void onNewMessage(int newCount) {
+            //消息
+            if (!hasOpenMessage) {
+                SysUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        shapeBadgeItem.show();
+                    }
+                });
+            }
+        }
+    };
+
     /**
      * 主菜单
      */
     private void initMenu() {
+        hasOpenMessage = false;
+        shapeBadgeItem = new ShapeBadgeItem()
+                .setShape(ShapeBadgeItem.SHAPE_OVAL) //形状
+                .setShapeColor(Color.RED) //颜色
+                .setEdgeMarginInDp(this,0) //距离Item的margin，dp
+                .setSizeInDp(this,6,6) //宽高，dp
+                .setAnimationDuration(200) //隐藏和展示的动画速度，单位毫秒,和setHideOnSelect一起使用
+                .setGravity(Gravity.RIGHT) //位置，默认右上角
+                .setHideOnSelect(false)
+                .hide(); //true：当选中状态时消失，非选中状态显示,moren false
+
+        BottomNavigationItem messageItem = new BottomNavigationItem(
+                R.mipmap.main_message,
+                R.string.main_menu_message)
+                .setInactiveIconResource(R.mipmap.main_message_disable)
+                .setInActiveColor(R.color.black)
+                .setBadgeItem(shapeBadgeItem)
+                .setActiveColorResource(R.color.colorPrimaryDark);
+
+        MessageFragment.Companion.updateNewMessageCount(newMessageCallback);
         /*1.首先进行fvb*/
         bottomNavigationBar = findViewById(R.id.bottom_nav_bar);
         /*2.进行必要的设置*/
         bottomNavigationBar.setBarBackgroundColor(R.color.mapbox_plugins_white);
         bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
         bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);//适应大小
+
         /*3.添加Tab*/
         bottomNavigationBar.addItem(new BottomNavigationItem(
                         R.mipmap.main_home,
@@ -195,6 +243,8 @@ public class MapActivity extends MapBaseActivity
                         .setInActiveColor(R.color.black)
                         .setActiveColorResource(R.color.colorPrimaryDark)
                 )
+                .addItem(messageItem
+                )
                 .addItem(new BottomNavigationItem(
                         R.mipmap.main_more,
                         R.string.main_menu_more)
@@ -209,23 +259,31 @@ public class MapActivity extends MapBaseActivity
             @Override
             public void onTabSelected(int position) {
                 mMapController.cleanDialog();
-                switch (position) {
-                    case MAIN_MENU_HOME:
-                        lastMemuIndex = MAIN_MENU_HOME;
+                if (position != MAIN_MENU_MORE) {
+                    lastMemuIndex = position;
+
+                    if (position != MAIN_MENU_PATH) {
                         if (footmarkFragment != null && !footmarkFragment.isHidden()) {
                             getSupportFragmentManager()
                                     .beginTransaction()
                                     .hide(footmarkFragment)
                                     .commit();
                         }
+                    }
+                    if (position != MAIN_MENU_MESSAGE) {
+                        if (messageFragment != null && !messageFragment.isHidden()) {
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .hide(messageFragment)
+                                    .commit();
+                        }
+                    }
+                }
+                switch (position) {
+                    case MAIN_MENU_HOME:
+
                         break;
                     case MAIN_MENU_PATH:
-//                        if (!OkayApi.get().isLogined()) {
-//                            bottomNavigationBar.selectTab(MAIN_MENU_HOME);
-//                            startActivity(LoginActivity.class);
-//                            return;
-//                        }
-                        lastMemuIndex = MAIN_MENU_PATH;
                         if (footmarkFragment == null) {
                             footmarkFragment = FootmarkFragment.newInstance();
                             getSupportFragmentManager()
@@ -236,6 +294,23 @@ public class MapActivity extends MapBaseActivity
                             getSupportFragmentManager()
                                     .beginTransaction()
                                     .show(footmarkFragment)
+                                    .commit();
+                        }
+                        break;
+                    case MAIN_MENU_MESSAGE:
+                        hasOpenMessage = true;
+                        MessageFragment.Companion.saveCount();
+                        shapeBadgeItem.hide();
+                        if (messageFragment == null) {
+                            messageFragment = MessageFragment.Companion.newInstance();
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .replace(R.id.map_frag_mesage, messageFragment)
+                                    .commit();
+                        } else {
+                            getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .show(messageFragment)
                                     .commit();
                         }
                         break;
@@ -375,12 +450,16 @@ public class MapActivity extends MapBaseActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogUtils.show(MapActivity.this, "打卡", "打卡当前位置——即在地图上保存坐标，之后可随时点击该位置发布游记哦~", new DialogUtils.DialogCallback() {
-                    @Override
-                    public void onPositiveClick(DialogInterface dialog) {
-                        mMapController.getPoi().addFootRecord(LocationHelper.INSTANCE.getLastLocationCheckChina());
-                    }
-                });
+                if (LocationHelper.INSTANCE.getLastLocation() != null) {
+                    DialogUtils.show(MapActivity.this, "打卡", "打卡当前位置——即在地图上保存坐标，之后可随时点击该位置发布游记哦~", new DialogUtils.DialogCallback() {
+                        @Override
+                        public void onPositiveClick(DialogInterface dialog) {
+                            mMapController.getPoi().addFootRecord(LocationHelper.INSTANCE.getLastLocationCheckChina());
+                        }
+                    });
+                } else {
+                    Msg.show("无法获取定位，请检查系统设置");
+                }
             }
         });
 
@@ -434,6 +513,7 @@ public class MapActivity extends MapBaseActivity
                 break;
             case MapOptEvent.MAP_EVENT_LOGIN_SUCCESS:
                 updateMoments(false);
+                MessageFragment.Companion.updateNewMessageCount(newMessageCallback);
                 break;
         }
     }

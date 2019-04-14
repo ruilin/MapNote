@@ -1,4 +1,4 @@
-package com.muyu.mapnote.app.okayapi;
+package com.muyu.mapnote.app.okayapi.been;
 
 public class OkCommentItem {
     public String message_nickname;

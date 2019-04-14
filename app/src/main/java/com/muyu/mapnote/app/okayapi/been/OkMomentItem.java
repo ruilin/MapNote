@@ -1,13 +1,12 @@
-package com.muyu.mapnote.app.okayapi;
+package com.muyu.mapnote.app.okayapi.been;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-
 public class OkMomentItem implements Parcelable {
     public boolean isValid = true;
     public String id;
+    public String uuid = "";
     public String moment_content = "";
     public String moment_url = "";
     public String moment_createtime = "";
@@ -31,6 +30,7 @@ public class OkMomentItem implements Parcelable {
     protected OkMomentItem(Parcel in) {
         isValid = in.readByte() != 0;
         id = in.readString();
+        uuid = in.readString();
         moment_content = in.readString();
         moment_url = in.readString();
         moment_createtime = in.readString();
@@ -72,6 +72,7 @@ public class OkMomentItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeByte((byte) (isValid ? 1 : 0));
         dest.writeString(id);
+        dest.writeString(uuid);
         dest.writeString(moment_content);
         dest.writeString(moment_url);
         dest.writeString(moment_createtime);

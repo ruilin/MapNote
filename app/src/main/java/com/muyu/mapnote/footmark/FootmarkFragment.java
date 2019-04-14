@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -40,13 +39,12 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
-import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
-import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.app.Styles;
 import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkMoment;
-import com.muyu.mapnote.app.okayapi.OkMomentItem;
+import com.muyu.mapnote.app.okayapi.been.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.OkayApi;
 import com.muyu.mapnote.app.okayapi.callback.CommonCallback;
 import com.muyu.mapnote.app.okayapi.callback.MomentListCallback;
@@ -56,7 +54,6 @@ import com.muyu.mapnote.map.map.MapSettings;
 import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.note.DetailActivity;
-import com.muyu.mapnote.note.LikeManager;
 import com.muyu.minimalism.framework.app.BaseApplication;
 import com.muyu.minimalism.framework.app.BaseFragment;
 import com.muyu.minimalism.utils.StringUtils;
@@ -231,9 +228,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
 
         /** refresh */
         mRefreshView = mLayout.findViewById(R.id.footmark_refresh);
-        mRefreshView.setColorSchemeColors(getResources().getColor(R.color.orange),
-                                        getResources().getColor(R.color.colorPrimary),
-                                        getResources().getColor(R.color.tomato));
+        Styles.refreshView(getActivity(), mRefreshView);
         mRefreshView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -295,7 +290,10 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
 
     private synchronized void updateMap() {
         ArrayList<OkMomentItem> okMomentItems = mOkMomentItems;
-        if (mMap != null && okMomentItems != null && !okMomentItems.isEmpty()) {
+        if (mMap == null) {
+            return;
+        }
+        if (okMomentItems != null && !okMomentItems.isEmpty()) {
             if (okMomentItems.size() > 1) {
                 /* 标记当前选择 */
                 LatLng latlng = LocationHelper.getChinaLatlng(okMomentItems.get(0).moment_lat, okMomentItems.get(0).moment_lng);
@@ -571,7 +569,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                     public void run() {
                         mViewModel.getMyMoment().postValue(list);
                         mRefreshView.setRefreshing(false);
-                        Msg.show("数据已刷新");
+                        //Msg.show("数据已刷新");
                     }
                 });
             }
