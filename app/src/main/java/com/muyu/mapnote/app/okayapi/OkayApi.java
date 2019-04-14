@@ -13,6 +13,7 @@ public class OkayApi {
     private static final String SP_KEY_USER_NICKNAME = "SP_KEY_USER_NICKNAME";
     private static final String SP_KEY_USER_SEX = "SP_KEY_USER_SEX";
     private static final String SP_KEY_USER_HEAD = "SP_KEY_USER_HEAD";
+    public static final String SP_KEY_MESSAGE_COUNT = "sp_key_message_count";
     private static OkayApi instance = null;
     private String host = "";
     private String appKey = "";
@@ -70,6 +71,8 @@ public class OkayApi {
             SPUtils.remove(BaseApplication.getInstance(), SP_KEY_USER_UUID);
             SPUtils.remove(BaseApplication.getInstance(), SP_KEY_USER_NAME);
             SPUtils.remove(BaseApplication.getInstance(), SP_KEY_USER_PASSWORD);
+            SPUtils.remove(BaseApplication.getInstance(), SP_KEY_USER_PASSWORD);
+            SPUtils.remove(BaseApplication.getInstance(), SP_KEY_MESSAGE_COUNT);
             setUser(null);
         }
     }

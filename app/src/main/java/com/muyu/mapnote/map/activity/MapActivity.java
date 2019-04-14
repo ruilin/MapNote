@@ -298,6 +298,11 @@ public class MapActivity extends MapBaseActivity
                         }
                         break;
                     case MAIN_MENU_MESSAGE:
+                        if (!OkayApi.get().isLogined()) {
+                            startActivity(LoginActivity.class);
+                            bottomNavigationBar.selectTab(MAIN_MENU_HOME);
+                            return;
+                        }
                         hasOpenMessage = true;
                         MessageFragment.Companion.saveCount();
                         shapeBadgeItem.hide();
@@ -513,7 +518,12 @@ public class MapActivity extends MapBaseActivity
                 break;
             case MapOptEvent.MAP_EVENT_LOGIN_SUCCESS:
                 updateMoments(false);
-                MessageFragment.Companion.updateNewMessageCount(newMessageCallback);
+                SysUtils.runOnUiThreadDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        MessageFragment.Companion.updateNewMessageCount(newMessageCallback);
+                    }
+                }, 1000);
                 break;
         }
     }

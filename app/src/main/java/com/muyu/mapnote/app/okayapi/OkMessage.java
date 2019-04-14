@@ -50,14 +50,12 @@ public class OkMessage {
                 sb.append("/?s=" + apiKey);
                 sb.append("&app_key=" + OkayApi.get().getAppKey());
                 sb.append("&model_name=" + MODEL_NAME);
-                sb.append("&perpage=100");
                 sb.append("&data=" + json);
 
                 SortedMap<String, String> map = new TreeMap<>();
                 map.put("s", apiKey);
                 map.put("app_key", OkayApi.get().getAppKey());
                 map.put("model_name", MODEL_NAME);
-                map.put("perpage", ""+100);
                 map.put("data", json);
 
                 String sign = SignUtils.getSign(map);
@@ -101,6 +99,7 @@ public class OkMessage {
                 sb.append("/?s=" + apiKey);
                 sb.append("&app_key=" + OkayApi.get().getAppKey());
                 sb.append("&model_name=" + MODEL_NAME);
+                sb.append("&perpage=99");
                 sb.append("&select=user_id,message_type,message_source,message,icon,add_time");
                 sb.append("&where=[[\"user_id\",\"=\",\"" + OkayApi.get().getCurrentUser().getUuid() + "\"]]");
                 sb.append("&order=[\"add_time DESC\"]");
@@ -109,6 +108,7 @@ public class OkMessage {
                 map.put("s", apiKey);
                 map.put("app_key", OkayApi.get().getAppKey());
                 map.put("model_name", MODEL_NAME);
+                map.put("perpage","99");
                 map.put("select", "user_id,message_type,message_source,message,icon,add_time");
                 map.put("where", "[[\"user_id\",\"=\",\"" + OkayApi.get().getCurrentUser().getUuid() + "\"]]");
                 map.put("order", "[\"add_time DESC\"]");
@@ -120,46 +120,46 @@ public class OkMessage {
         });
     }
 
-    public static void requestMessageCount(CommonCallback callback) {
-        if (!OkayApi.get().isLogined()) {
-            return;
-        }
-        new OkObject().postCommonRequest(new CommonCallback() {
-            @Override
-            public void onSuccess(String result) {
-                Logs.e(result);
-                Gson gson = new Gson();
-                JsonObject object = gson.fromJson(result, JsonObject.class);
-                String count = object.get("total").getAsString();
-                callback.onSuccess(count);
-            }
-
-            @Override
-            public void onFail(OkException e) {
-                Logs.e(e.getMessage());
-                callback.onFail(e);
-            }
-        }, new OkObject.UrlCallback() {
-            @Override
-            public String getUrl() {
-                String apiKey = "App.Table.Count";
-
-                StringBuffer sb = new StringBuffer();
-                sb.append(OkayApi.get().getHost());
-                sb.append("/?s=" + apiKey);
-                sb.append("&app_key=" + OkayApi.get().getAppKey());
-                sb.append("&model_name=" + MODEL_NAME);
-
-                SortedMap<String, String> map = new TreeMap<>();
-                map.put("s", apiKey);
-                map.put("app_key", OkayApi.get().getAppKey());
-                map.put("model_name", MODEL_NAME);
-
-                String sign = SignUtils.getSign(map);
-                sb.append("&sign=" + sign);
-                return sb.toString();
-            }
-        });
-    }
+//    public static void requestMessageCount(CommonCallback callback) {
+//        if (!OkayApi.get().isLogined()) {
+//            return;
+//        }
+//        new OkObject().postCommonRequest(new CommonCallback() {
+//            @Override
+//            public void onSuccess(String result) {
+//                Logs.e(result);
+//                Gson gson = new Gson();
+//                JsonObject object = gson.fromJson(result, JsonObject.class);
+//                String count = object.get("total").getAsString();
+//                callback.onSuccess(count);
+//            }
+//
+//            @Override
+//            public void onFail(OkException e) {
+//                Logs.e(e.getMessage());
+//                callback.onFail(e);
+//            }
+//        }, new OkObject.UrlCallback() {
+//            @Override
+//            public String getUrl() {
+//                String apiKey = "App.Table.Count";
+//
+//                StringBuffer sb = new StringBuffer();
+//                sb.append(OkayApi.get().getHost());
+//                sb.append("/?s=" + apiKey);
+//                sb.append("&app_key=" + OkayApi.get().getAppKey());
+//                sb.append("&model_name=" + MODEL_NAME);
+//
+//                SortedMap<String, String> map = new TreeMap<>();
+//                map.put("s", apiKey);
+//                map.put("app_key", OkayApi.get().getAppKey());
+//                map.put("model_name", MODEL_NAME);
+//
+//                String sign = SignUtils.getSign(map);
+//                sb.append("&sign=" + sign);
+//                return sb.toString();
+//            }
+//        });
+//    }
 
 }

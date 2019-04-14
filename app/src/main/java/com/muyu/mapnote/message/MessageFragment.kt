@@ -38,35 +38,38 @@ class MessageFragment : Fragment() {
     private var mRefreshView: SwipeRefreshLayout? = null
 
     private lateinit var viewModel: MessageViewModel
+    var list = ArrayList<OkMessageItem>()
 
     interface OnNewMessageListener {
         fun onNewMessage(newCount : Int)
     }
 
     companion object {
-        var key = "message_count"
         var newCount = 0
         fun newInstance() = MessageFragment()
         fun updateNewMessageCount(l : OnNewMessageListener): Boolean {
-            OkMessage.requestMessageCount(object : CommonCallback {
-                override fun onSuccess(result: String?) {
-                    var originalCount = SPUtils.get(key, 0)
-                    var count = Integer.parseInt(result)
-                    if (count != originalCount) {
+            if (!OkayApi.get().isLogined) {
+                return false
+            }
+            OkMessage.requestMessages(object : MessageListCallback{
+                override fun onSuccess(list: ArrayList<OkMessageItem>?) {
+//                    list!!.clear()
+//                    list.addAll(list)
+                    var originalCount = SPUtils.get(OkayApi.SP_KEY_MESSAGE_COUNT, 0)
+                    var count = list!!.size
+                    if (count > 0 && count != originalCount) {
                         l.onNewMessage(count - originalCount)
                         newCount = count
-                    } else {
                     }
                 }
-
                 override fun onFail(e: OkException?) {
                     Logs.e(e!!.message)
                 }
             })
-            return false
+            return true
         }
         fun saveCount() {
-            SPUtils.put(key, newCount)
+            SPUtils.put(OkayApi.SP_KEY_MESSAGE_COUNT, newCount)
         }
     }
 
@@ -104,10 +107,8 @@ class MessageFragment : Fragment() {
                 ImageLoader.loadMoment(activity, msg.icon, icon)
             }
         }
-        var list = ArrayList<OkMessageItem>()
         adapter.setDataList(list)
         listView.setAdapterWithDivider(adapter)
-
 
         mRefreshView!!.setOnRefreshListener {
             update()
@@ -122,6 +123,7 @@ class MessageFragment : Fragment() {
             mRefreshView!!.isRefreshing = false
             return
         }
+        list.clear()
         OkMessage.requestMessages(object : MessageListCallback{
             override fun onSuccess(list: ArrayList<OkMessageItem>?) {
                 SysUtils.runOnUiThread {
