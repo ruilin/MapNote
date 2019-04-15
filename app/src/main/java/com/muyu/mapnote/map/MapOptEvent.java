@@ -13,6 +13,7 @@ public class MapOptEvent<T> {
     public static final byte MAP_EVENT_LOGOUT = 3;
     public static final byte MAP_EVENT_DATA_UPDATE = 4;
     public static final byte MAP_EVENT_REMOVE_FOOT = 5;
+    public static final byte MAP_EVENT_NEW_MESSAGE = 6;
 
     public byte eventId = 0;
     public T object;
@@ -38,5 +39,9 @@ public class MapOptEvent<T> {
 
     public static void removeFootRecord(Location location) {
         EventBus.getDefault().post(new MapOptEvent<>(MAP_EVENT_REMOVE_FOOT, location, "remove foot"));
+    }
+
+    public static void postNewMessage() {
+        EventBus.getDefault().post(new MapOptEvent<>(MAP_EVENT_NEW_MESSAGE, null, "new message"));
     }
 }

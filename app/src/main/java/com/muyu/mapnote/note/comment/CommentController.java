@@ -12,6 +12,7 @@ import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.ImageLoader;
 import com.muyu.mapnote.app.okayapi.OkComment;
 import com.muyu.mapnote.app.okayapi.OkException;
+import com.muyu.mapnote.app.okayapi.OkMessage;
 import com.muyu.mapnote.app.okayapi.been.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.OkayApi;
 import com.muyu.mapnote.app.okayapi.callback.CommentCallback;
@@ -68,6 +69,11 @@ public class CommentController extends ActivityController {
                     @Override
                     public void onSuccess(String result) {
                         update();
+                        OkMessage.postMessage(poi.uuid, OkayApi.get().getCurrentUser().getNickname() + " 评论<"
+                                + poi.moment_place + ">发表的游记: \n" + content,
+                                OkayApi.get().getCurrentUser().getHeadimg(),
+                                OkMessage.TYPE_MOMENT_COMMENT,
+                                poi.id);
                         SysUtils.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

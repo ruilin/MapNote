@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.muyu.mapnote.R;
+import com.muyu.mapnote.app.ImageLoader;
 import com.muyu.mapnote.app.MapBaseActivity;
 import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkMessage;
@@ -57,9 +58,7 @@ public class DetailActivity extends MapBaseActivity {
             TextView userTv = findViewById(R.id.detail_user);
             userTv.setText(poi.moment_nickname);
 
-            if (!StringUtils.isEmpty(poi.moment_headimg)) {
-                Glide.with(this).load(poi.moment_headimg).into((ImageView) findViewById(R.id.detail_head));
-            }
+            ImageLoader.loadHead(this, poi.moment_headimg, findViewById(R.id.detail_head));
 
             TextView contentTv = findViewById(R.id.detail_content);
             if (!StringUtils.isEmpty(poi.moment_content)) {

@@ -21,6 +21,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.MapBaseActivity;
+import com.muyu.mapnote.app.Umeng;
 import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.been.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.OkayApi;
@@ -174,7 +175,7 @@ public class MapActivity extends MapBaseActivity
         SysUtils.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Msg.show("地图已刷新");
+                //Msg.show("地图已刷新");
                 mMapController.showMoments(list);
             }
         });
@@ -525,6 +526,14 @@ public class MapActivity extends MapBaseActivity
                     }
                 }, 1000);
                 break;
+            case MapOptEvent.MAP_EVENT_NEW_MESSAGE:
+                SysUtils.runOnUiThreadDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        MessageFragment.Companion.updateNewMessageCount(newMessageCallback);
+                    }
+                }, 1000);
+                break;
         }
     }
 
@@ -555,6 +564,13 @@ public class MapActivity extends MapBaseActivity
     @Override
     public void onResume() {
         super.onResume();
+        Umeng.onResume(this);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Umeng.onPause(this);
     }
 }

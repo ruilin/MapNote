@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 
 import com.muyu.mapnote.R
 import com.muyu.mapnote.app.ImageLoader
@@ -51,17 +53,35 @@ class MessageFragment : Fragment() {
             if (!OkayApi.get().isLogined) {
                 return false
             }
-            OkMessage.requestMessages(object : MessageListCallback{
-                override fun onSuccess(list: ArrayList<OkMessageItem>?) {
-//                    list!!.clear()
-//                    list.addAll(list)
+            OkMessage.requestMessageCount(object : CommonCallback {
+                override fun onSuccess(result: String?) {
                     var originalCount = SPUtils.get(OkayApi.SP_KEY_MESSAGE_COUNT, 0)
-                    var count = list!!.size
+                    var count = result!!.toInt()
                     if (count > 0 && count != originalCount) {
                         l.onNewMessage(count - originalCount)
                         newCount = count
                     }
+                    if (count == 0) {
+                        OkMessage.postSystemMessage("你的故事，值得与世界分享!!!\n<地图笔记>开发团队欢迎你🌹")
+                    }
+//                    if (list!!.size > 0 && list[0].read_status == 0) {
+//                        l.onNewMessage(count - originalCount)
+//                        newCount = count
+//                    }
                 }
+
+//                override fun onSuccess(list: ArrayList<OkMessageItem>?) {
+//                    var originalCount = SPUtils.get(OkayApi.SP_KEY_MESSAGE_COUNT, 0)
+//                    var count = list!!.size
+////                    if (count > 0 && count != originalCount) {
+////                        l.onNewMessage(count - originalCount)
+////                        newCount = count
+////                    }
+//                    if (list!!.size > 0 && list[0].read_status == 0) {
+//                        l.onNewMessage(count - originalCount)
+//                        newCount = count
+//                    }
+//                }
                 override fun onFail(e: OkException?) {
                     Logs.e(e!!.message)
                 }
@@ -104,7 +124,7 @@ class MessageFragment : Fragment() {
                 var icon = view.findViewById<ImageView>(R.id.item_msg_icon)
                 text.text = msg.message
                 time.text = msg.add_time
-                ImageLoader.loadMoment(activity, msg.icon, icon)
+                ImageLoader.loadMessage(activity, msg.icon, icon)
             }
         }
         adapter.setDataList(list)
@@ -115,6 +135,13 @@ class MessageFragment : Fragment() {
         }
 
         update()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden && adapter.itemCount == 0) {
+            update()
+        }
     }
 
 

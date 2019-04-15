@@ -13,4 +13,12 @@ public class Styles {
                 activity.getResources().getColor(R.color.darkorange),
                 activity.getResources().getColor(R.color.greenyellow));
     }
+
+    public static String formatContentToHtml(String content) {
+        return content.replace("\n", "<br/>");
+    }
+
+    public static String formatContentToText(String content) {
+        return content.replace("<br/>", "\n");
+    }
 }

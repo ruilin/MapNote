@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.MapBaseActivity;
+import com.muyu.mapnote.app.Umeng;
 import com.muyu.mapnote.app.okayapi.OkException;
 import com.muyu.mapnote.app.okayapi.OkUser;
 import com.muyu.mapnote.app.okayapi.callback.LoginCallback;
@@ -162,6 +163,18 @@ public class LoginActivity extends MapBaseActivity {
                 });
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Umeng.onResume(this);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Umeng.onPause(this);
     }
 
     private boolean isMobileNumberValid(String mobile) {

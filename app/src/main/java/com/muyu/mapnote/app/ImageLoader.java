@@ -38,4 +38,13 @@ public class ImageLoader {
             Glide.with(activity).load(url).apply(requestOptions).into(imageView);
         }
     }
+
+    public static void loadMessage(Activity activity, String url, ImageView imageView) {
+        if (!StringUtils.isEmpty(url)) {
+            RequestOptions requestOptions = new RequestOptions();
+            requestOptions.placeholder(R.drawable.def_photo);
+            requestOptions.error(R.drawable.def_photo);
+            Glide.with(activity).load(url + "?imageView2/2/w/100/h/100").apply(requestOptions).into(imageView);
+        }
+    }
 }
