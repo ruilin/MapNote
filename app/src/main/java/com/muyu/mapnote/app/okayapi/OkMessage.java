@@ -83,7 +83,6 @@ public class OkMessage {
         new OkObject().postCommonRequest(new CommonCallback() {
             @Override
             public void onSuccess(String result) {
-                Logs.e(result);
                 Gson gson = new Gson();
                 JsonObject object = gson.fromJson(result, JsonObject.class);
                 JsonArray array = object.get("list").getAsJsonArray();

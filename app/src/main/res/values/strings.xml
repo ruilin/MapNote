@@ -18,6 +18,8 @@
     <string name="main_menu_message">Message</string>
     <string name="main_menu_more">More</string>
 
+    <string name="message_title">Message</string>
+
     <!-- Strings related to login -->
     <string name="title_activity_login">Sign in</string>
     <string name="login_title">Mobile number login</string>

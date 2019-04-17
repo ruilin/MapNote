@@ -1,6 +1,7 @@
 package com.muyu.mapnote.map.map;
 
 import android.graphics.PointF;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -65,6 +66,7 @@ public class MapController extends ActivityController implements PermissionsList
     private View mLayout;
     private View mMainLayout;
     private SupportMapFragment mMapFragment;
+    ;
     private Style.OnStyleLoaded styleLoadListener;
     private OnMapEventListener mListener;
 
@@ -108,11 +110,65 @@ public class MapController extends ActivityController implements PermissionsList
         mMapFragment.getMapAsync(this);
     }
 
+    public void hideMapView(boolean hide) {
+        mapView.setVisibility(hide ? View.GONE : View.VISIBLE);
+    }
+
     @Override
     public void onDestroy() {
         LocationHelper.INSTANCE.stop();
         super.onDestroy();
-        mapView.onDestroy();
+        if (mapView != null) {
+            mapView.onDestroy();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mapView != null) {
+            mapView.onStart();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mapView != null) {
+            mapView.onPause();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mapView != null) {
+            mapView.onStop();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mapView != null) {
+            mapView.onResume();
+        }
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        if (mapView != null) {
+            mapView.onLowMemory();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mapView != null) {
+            mapView.onSaveInstanceState(outState);
+        }
     }
 
     @Override

@@ -81,11 +81,13 @@ public class FootManager {
     }
 
     public static void removeFootMarker(MapboxMap map, Location location) {
-        String id = getId(location);
-        if (!mFootPoiMap.isEmpty() && mFootPoiMap.get(id) != null) {
-            map.removeMarker(mFootPoiMap.get(id));
-            mFootPoiMap.remove(id);
-            SPUtils.remove(MapApplication.getInstance(), id);
+        if (location != null) {
+            String id = getId(location);
+            if (!mFootPoiMap.isEmpty() && mFootPoiMap.get(id) != null) {
+                map.removeMarker(mFootPoiMap.get(id));
+                mFootPoiMap.remove(id);
+                SPUtils.remove(MapApplication.getInstance(), id);
+            }
         }
     }
 }

@@ -10,6 +10,8 @@ import com.muyu.mapnote.app.okayapi.callback.UploadCallback;
 import com.muyu.mapnote.app.okayapi.utils.SignUtils;
 import com.muyu.minimalism.utils.Logs;
 import com.muyu.minimalism.utils.StringUtils;
+import com.muyu.minimalism.utils.SysUtils;
+import com.muyu.minimalism.view.Msg;
 
 import java.io.IOException;
 import java.util.SortedMap;
@@ -31,6 +33,15 @@ public class OkFeedback extends OkObject {
     }
 
     public void postInBackground(CommonCallback callback) {
+        if (!OkayApi.get().isLogined()) {
+            SysUtils.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onFail(new OkException("请先登录"));
+                }
+            });
+            return;
+        }
         postCommonRequest(callback, new UrlCallback() {
             @Override
             public String getUrl() {

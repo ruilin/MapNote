@@ -3,6 +3,7 @@ package com.muyu.mapnote.map.map.location;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 
 import com.mapbox.android.core.location.LocationEngine;
@@ -12,6 +13,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.modes.CameraMode;
 import com.mapbox.mapboxsdk.location.modes.RenderMode;
+import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.plugins.locationlayer.LocationLayerPlugin;
 import com.muyu.mapnote.map.map.MapController;
 import com.muyu.mapnote.map.map.MapPluginController;
@@ -33,31 +35,38 @@ public class LocationController extends MapPluginController {
     @SuppressWarnings( {"MissingPermission"})
     private void enableLocationComponent() {
         initializeLocationEngine();
+        try {
+            // Get an instance of the component
+            locationComponent = getMapboxMap().getLocationComponent();
 
-        // Get an instance of the component
-        locationComponent = getMapboxMap().getLocationComponent();
+            // Activate with options
+            locationComponent.activateLocationComponent(getActivity(), getMapboxMap().getStyle());
 
-        // Activate with options
-        locationComponent.activateLocationComponent(getActivity(), getMapboxMap().getStyle());
+            // Enable to make component visible
+            locationComponent.setLocationComponentEnabled(true);
 
-        // Enable to make component visible
-        locationComponent.setLocationComponentEnabled(true);
+            // Set the component's camera mode
+            locationComponent.setCameraMode(CameraMode.TRACKING);
 
-        // Set the component's camera mode
-        locationComponent.setCameraMode(CameraMode.TRACKING);
+            // Set the component's render mode
+            locationComponent.setRenderMode(RenderMode.COMPASS);
 
-        // Set the component's render mode
-        locationComponent.setRenderMode(RenderMode.COMPASS);
+            locationComponent.setLocationEngine(null);
+        } catch (Exception e) {
 
-        locationComponent.setLocationEngine(null);
-
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(boolean granted) {
         if (granted) {
 //            enableLocationPlugin();
-            enableLocationComponent();
+            getMapboxMap().getStyle(new Style.OnStyleLoaded() {
+                @Override
+                public void onStyleLoaded(@NonNull Style style) {
+                    enableLocationComponent();
+                }
+            });
         }
     }
 

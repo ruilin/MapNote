@@ -12,11 +12,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,14 +31,17 @@ import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.MapboxMapOptions;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.maps.SupportMapFragment;
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
@@ -83,6 +88,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
     private View mLayout;
     private MapView mMapView;
     private MapboxMap mMap;
+    private SupportMapFragment mMapFragment;
     private Marker mMarker;
     private int oldSelected = -1;
     private SwipeRefreshLayout mRefreshView;
@@ -104,6 +110,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                              @Nullable Bundle savedInstanceState) {
         mLayout = inflater.inflate(R.layout.fragment_footmark, container, false);
         emptyView = mLayout.findViewById(R.id.foot_empty);
+
         EventBus.getDefault().register(this);
         return mLayout;
     }
@@ -217,9 +224,6 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
         };
         listView.setAdapter(adapter);
 
-        mMapView = mLayout.findViewById(R.id.footmark_map);
-        mMapView.onCreate(savedInstanceState);
-        mMapView.getMapAsync(this);
 
         mLayout.findViewById(R.id.footmark_map_reset).setOnClickListener(this);
         mLayout.findViewById(R.id.footmark_publish_btn).setOnClickListener(this);
@@ -235,6 +239,50 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                 update();
             }
         });
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //        MapboxMapOptions options = new MapboxMapOptions().textureMode(true);
+//        mMapView = new MapView(getActivity(), options);
+//        ((ViewGroup)mLayout.findViewById(R.id.footmark_map_contain)).addView(mMapView);
+
+//        mMapView = mLayout.findViewById(R.id.footmark_map);
+//        mMapView.onCreate(savedInstanceState);
+//        mMapView.getMapAsync(this);
+
+        initMap();
+    }
+
+    private void initMap() {
+        if (mMapFragment == null ||
+                getChildFragmentManager().findFragmentByTag("com.muyu.track") == null) {
+            MapboxMapOptions options = new MapboxMapOptions();
+            options.textureMode(true);
+            options.maxZoomPreference(19);
+            LatLng paris = new LatLng(39.9071567, 116.39158504);
+            options.camera(new CameraPosition.Builder()
+                    .target(paris)
+                    .zoom(1)
+                    .build());
+            // Create map fragment
+            mMapFragment = SupportMapFragment.newInstance(options);
+            mMapFragment.getMapAsync(this);
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            transaction.add(R.id.footmark_map_contain, mMapFragment, "com.muyu.track");
+            transaction.commit();
+
+        }
+    }
+
+    private void removeMap() {
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.remove(mMapFragment);
+        transaction.commit();
+        mMapFragment = null;
+        mMap = null;
+        mMapView = null;
     }
 
     /**
@@ -466,6 +514,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
 
     @Override
     public void onMapReady(MapboxMap mapboxMap) {
+        mMapView = (MapView) mMapFragment.getView();
         mMap = mapboxMap;
         mMap.setMaxZoomPreference(15);
         setMapStyle(true);
@@ -633,43 +682,55 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
     @Override
     public void onResume() {
         super.onResume();
-        mMapView.onResume();
+//        mMapView.onResume();
+        initMap();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mMapView.onStart();
+//        removeFromSuperview(mMapView);
+//        ((ViewGroup)mLayout.findViewById(R.id.footmark_map_contain)).addView(mMapView);
+//        mMapView.onStart();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mMapView.onStop();
+//        mMapView.onStop();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mMapView.onPause();
+//        mMapView.onPause();
+        removeMap();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mMapView.onLowMemory();
+//        mMapView.onLowMemory();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mMapView.onDestroy();
+//        mMapView.onDestroy();
+//        removeFromSuperview(mMapView);
         EventBus.getDefault().unregister(this);
+    }
+
+    private void removeFromSuperview(View view) {
+        ViewParent parent = view.getParent();
+        if (parent != null && parent instanceof ViewGroup) {
+            ((ViewGroup) parent).removeView(view);
+        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mMapView.onSaveInstanceState(outState);
+//        mMapView.onSaveInstanceState(outState);
     }
 }

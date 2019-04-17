@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -279,22 +280,30 @@ public class MapActivity extends MapBaseActivity
                                     .commit();
                         }
                     }
+                    if (position != MAIN_MENU_HOME) {
+//                        mMapController.hideMapView(true);
+                    } else {
+//                        mMapController.hideMapView(false);
+                    }
                 }
+
                 switch (position) {
                     case MAIN_MENU_HOME:
 
                         break;
                     case MAIN_MENU_PATH:
-                        if (footmarkFragment == null) {
+                        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.map_frag_footmark);
+                        if (fragment == null) {
                             footmarkFragment = FootmarkFragment.newInstance();
+                            fragment = footmarkFragment;
                             getSupportFragmentManager()
                                     .beginTransaction()
-                                    .replace(R.id.map_frag_footmark, footmarkFragment)
+                                    .replace(R.id.map_frag_footmark, fragment)
                                     .commit();
                         } else {
                             getSupportFragmentManager()
                                     .beginTransaction()
-                                    .show(footmarkFragment)
+                                    .show(fragment)
                                     .commit();
                         }
                         break;
@@ -572,5 +581,27 @@ public class MapActivity extends MapBaseActivity
     public void onPause() {
         super.onPause();
         Umeng.onPause(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+//        removeTrackPage();
+    }
+
+    private void removeTrackPage() {
+        bottomNavigationBar.selectTab(MAIN_MENU_HOME);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.map_frag_footmark);
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .remove(fragment)
+                    .commit();
+        }
     }
 }

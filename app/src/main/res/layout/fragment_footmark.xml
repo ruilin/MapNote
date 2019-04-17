@@ -19,15 +19,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.mapbox.mapboxsdk.maps.MapView
-                android:id="@+id/footmark_map"
+            <FrameLayout
+                android:id="@+id/footmark_map_contain"
                 android:layout_width="match_parent"
-                android:layout_height="230dp"
-                mapbox:mapbox_cameraTargetLat="39.9071567"
-                mapbox:mapbox_cameraTargetLng="116.39158504"
-                mapbox:mapbox_cameraZoom="1"
-                mapbox:mapbox_renderTextureMode="true"
-                mapbox:mapbox_uiRotateGestures="false"/>
+                android:layout_height="230dp">
+            <!--<com.mapbox.mapboxsdk.maps.MapView-->
+                <!--android:id="@+id/footmark_map"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--mapbox:mapbox_cameraTargetLat="39.9071567"-->
+                <!--mapbox:mapbox_cameraTargetLng="116.39158504"-->
+                <!--mapbox:mapbox_cameraZoom="1"-->
+                <!--mapbox:mapbox_renderTextureMode="true"-->
+                <!--mapbox:mapbox_uiRotateGestures="false"/>-->
+            </FrameLayout>
 
             <ImageView
                 android:id="@+id/footmark_map_share"

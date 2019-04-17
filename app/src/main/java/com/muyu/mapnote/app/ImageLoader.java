@@ -18,6 +18,9 @@ import com.muyu.minimalism.utils.bitmap.CanvasUtils;
 public class ImageLoader {
 
     public static void loadHead(Activity activity, String url, ImageView imageView) {
+        if (activity.isFinishing()) {
+            return;
+        }
         RequestOptions requestOptions = new RequestOptions();
         requestOptions.placeholder(R.drawable.head_def);
         requestOptions.error(R.drawable.head_def);
@@ -25,12 +28,18 @@ public class ImageLoader {
     }
 
     public static void loadPoi(Activity activity, String url, SimpleTarget<Bitmap> callback) {
+        if (activity.isFinishing()) {
+            return;
+        }
         if (!StringUtils.isEmpty(url)) {
             Glide.with(activity).asBitmap().load(url + "?imageView2/2/w/110/h/110").into(callback);
         }
     }
 
     public static void loadMoment(Activity activity, String url, ImageView imageView) {
+        if (activity.isFinishing()) {
+            return;
+        }
         if (!StringUtils.isEmpty(url)) {
             RequestOptions requestOptions = new RequestOptions();
             requestOptions.placeholder(R.drawable.def_photo);
@@ -40,6 +49,9 @@ public class ImageLoader {
     }
 
     public static void loadMessage(Activity activity, String url, ImageView imageView) {
+        if (activity.isFinishing()) {
+            return;
+        }
         if (!StringUtils.isEmpty(url)) {
             RequestOptions requestOptions = new RequestOptions();
             requestOptions.placeholder(R.drawable.def_photo);
