@@ -45,13 +45,13 @@ public class Msg {
     public static void show(final Context context, final String text, final boolean showLong) {
         if (text != null) {
             if (SysUtils.isMainThread()) {
-                createToast(text).show();
+                createToast(text, showLong).show();
 //                Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
             } else {
                 SysUtils.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        createToast(text).show();
+                        createToast(text, showLong).show();
 //                        Toast.makeText(context, text, (showLong ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT)).show();
                     }
                 });
@@ -62,13 +62,14 @@ public class Msg {
     }
 
 
-    private static Toast createToast(String messages) {
+    private static Toast createToast(String messages, boolean showLong) {
         LayoutInflater inflater = (LayoutInflater) sAppContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.view_toast, null);
         TextView textView = layout.findViewById(R.id.toast_text);
         textView.setText(messages);
         Toast toast = new Toast(sAppContext);
         toast.setView(layout);
+        toast.setDuration(!showLong ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, ScreenUtils.dip2px(sAppContext, 60));
         return toast;
     }

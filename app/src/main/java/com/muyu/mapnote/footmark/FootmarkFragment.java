@@ -62,6 +62,7 @@ import com.muyu.mapnote.map.navigation.location.LocationHelper;
 import com.muyu.mapnote.note.DetailActivity;
 import com.muyu.minimalism.framework.app.BaseApplication;
 import com.muyu.minimalism.framework.app.BaseFragment;
+import com.muyu.minimalism.utils.SPUtils;
 import com.muyu.minimalism.utils.StringUtils;
 import com.muyu.minimalism.utils.SysUtils;
 import com.muyu.minimalism.view.BottomMenu;
@@ -132,6 +133,11 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
                 adapter.setDataList(okMomentItems);
 
                 updateMap();
+
+                if (!SPUtils.contains("FOOTMARK_FIRST")) {
+                    SPUtils.put("FOOTMARK_FIRST", 1);
+                    Msg.showLong("<长按>可编辑\n<点击图片>查看详情");
+                }
             }
         });
 
