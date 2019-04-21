@@ -7,6 +7,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.muyu.mapnote.app.Network;
+import com.muyu.mapnote.app.Styles;
 import com.muyu.mapnote.app.okayapi.been.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.callback.CommonCallback;
 import com.muyu.mapnote.app.okayapi.callback.MomentListCallback;
@@ -16,6 +17,7 @@ import com.muyu.mapnote.app.okayapi.utils.SignUtils;
 import com.muyu.minimalism.utils.Logs;
 import com.muyu.minimalism.utils.MathUtils;
 import com.muyu.minimalism.utils.StringUtils;
+import com.muyu.minimalism.utils.SysUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -549,9 +551,54 @@ public class OkMoment extends OkObject {
         });
     }
 
-    public void cancel() {
-        if (network != null) {
-            network.cancel();
+    public static void updateMomentContent(String id, String content, CommonCallback callback) {
+        if (!OkayApi.get().isLogined()) {
+            SysUtils.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onFail(new OkException("请先登录"));
+                }
+            });
+            return;
         }
+        if (StringUtils.isEmpty(content)) {
+            SysUtils.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onFail(new OkException("请输入内容"));
+                }
+            });
+            return;
+        }
+        final String newContent = Styles.formatContentToHtml(content);
+        postCommonRequest(callback, new UrlCallback() {
+            @Override
+            public String getUrl() {
+                String apiKey = "App.Table.Update";
+
+                StringBuffer sb = new StringBuffer();
+                sb.append(OkayApi.get().getHost());
+                sb.append("/?s=" + apiKey);
+                sb.append("&app_key=" + OkayApi.get().getAppKey());
+                sb.append("&uuid=" + OkayApi.get().getCurrentUser().getUuid());
+                sb.append("&token=" + OkayApi.get().getCurrentUser().getToken());
+                sb.append("&model_name=okayapi_moment");
+                sb.append("&id=" + id);
+                sb.append("&data={\"moment_content\":\"" + newContent + "\"}");
+
+                SortedMap<String, String> map = new TreeMap<>();
+                map.put("s", apiKey);
+                map.put("app_key", OkayApi.get().getAppKey());
+                map.put("uuid", OkayApi.get().getCurrentUser().getUuid());
+                map.put("token", OkayApi.get().getCurrentUser().getToken());
+                map.put("model_name", "okayapi_moment");
+                map.put("id", id);
+                map.put("data", "{\"moment_content\":\"" + newContent + "\"}");
+
+                String sign = SignUtils.getSign(map);
+                sb.append("&sign=" + sign);
+                return sb.toString();
+            }
+        });
     }
 }

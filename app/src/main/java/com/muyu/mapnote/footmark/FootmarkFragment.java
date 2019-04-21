@@ -48,6 +48,7 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.Styles;
 import com.muyu.mapnote.app.okayapi.OkException;
+import com.muyu.mapnote.app.okayapi.OkMessage;
 import com.muyu.mapnote.app.okayapi.OkMoment;
 import com.muyu.mapnote.app.okayapi.been.OkMomentItem;
 import com.muyu.mapnote.app.okayapi.OkayApi;
@@ -63,6 +64,7 @@ import com.muyu.minimalism.framework.app.BaseApplication;
 import com.muyu.minimalism.framework.app.BaseFragment;
 import com.muyu.minimalism.utils.StringUtils;
 import com.muyu.minimalism.utils.SysUtils;
+import com.muyu.minimalism.view.BottomMenu;
 import com.muyu.minimalism.view.DialogUtils;
 import com.muyu.minimalism.view.Msg;
 import com.muyu.minimalism.view.recyclerview.CommonRecyclerAdapter;
@@ -190,32 +192,68 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
 
                     @Override
                     public void onItemLongClickListener(int position) {
-                        DialogUtils.show(getContext(), "删除", "确定删除该条记录吗？", new DialogUtils.DialogCallback() {
+                        BottomMenu.show(getActivity(), new String[]{"编辑描述", "删除"}, new BottomMenu.OnItemClickedListener() {
                             @Override
-                            public void onPositiveClick(DialogInterface dialog) {
-                                OkMoment.postDelete(String.valueOf(poi.id), new CommonCallback() {
-                                    @Override
-                                    public void onSuccess(String result) {
-                                        Msg.show("删除成功");
-                                        MapOptEvent.updateMap();
-                                        mRefreshView.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                mRefreshView.setRefreshing(true);
-                                            }
-                                        });
-                                    }
+                            public void OnItemClicked(int position) {
+                                if (position == 0) {
+                                    EditDialog.showDialog(getActivity(), poi.moment_content, new EditDialog.OnEditCallback() {
+                                        @Override
+                                        public void onEdit(String text) {
+                                            OkMoment.updateMomentContent(poi.id, text, new CommonCallback() {
+                                                @Override
+                                                public void onSuccess(String result) {
+                                                    MapOptEvent.updateMap();
+                                                    mRefreshView.post(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            mRefreshView.setRefreshing(true);
+                                                        }
+                                                    });
+                                                }
 
-                                    @Override
-                                    public void onFail(OkException e) {
-                                        SysUtils.runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Msg.show(e.getMessage());
-                                            }
-                                        });
-                                    }
-                                });
+                                                @Override
+                                                public void onFail(OkException e) {
+                                                    SysUtils.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Msg.show(e.getMessage());
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    });
+
+                                } else if (position == 1) {
+                                    DialogUtils.show(getContext(), "删除", "确定删除该条记录吗？", new DialogUtils.DialogCallback() {
+                                        @Override
+                                        public void onPositiveClick(DialogInterface dialog) {
+                                            OkMoment.postDelete(String.valueOf(poi.id), new CommonCallback() {
+                                                @Override
+                                                public void onSuccess(String result) {
+                                                    Msg.show("删除成功");
+                                                    MapOptEvent.updateMap();
+                                                    mRefreshView.post(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            mRefreshView.setRefreshing(true);
+                                                        }
+                                                    });
+                                                }
+
+                                                @Override
+                                                public void onFail(OkException e) {
+                                                    SysUtils.runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            Msg.show(e.getMessage());
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
                             }
                         });
                     }

@@ -18,7 +18,9 @@ public class Logs {
     }
 
     public static void e(String text) {
-        Log.e(getTag(), text);
+        if (!StringUtils.isEmpty(text)) {
+            Log.e(getTag(), text);
+        }
     }
 
     private static String getTag() {

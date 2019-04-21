@@ -54,7 +54,7 @@
                 android:tint="@color/colorPrimaryDark"
                 android:background="@drawable/selector_round_button"
                 android:elevation="2dp"
-                app:srcCompat="@mipmap/ic_plus"/>
+                app:srcCompat="@mipmap/ic_photo"/>
 
             <ImageView
                 android:id="@+id/map_fab_foot"

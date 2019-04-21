@@ -205,7 +205,7 @@ public class OkObject {
         });
     }
 
-    public void postCommonRequest(CommonCallback callback, UrlCallback getUrl) {
+    public static void postCommonRequest(CommonCallback callback, UrlCallback getUrl) {
         OkHttpClient client = Network.getClient();
         final Request req = new Request.Builder()
                 .url(getUrl.getUrl())
