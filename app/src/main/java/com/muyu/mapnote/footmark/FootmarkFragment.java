@@ -136,7 +136,7 @@ public class FootmarkFragment extends BaseFragment implements OnMapReadyCallback
 
                 if (!SPUtils.contains("FOOTMARK_FIRST")) {
                     SPUtils.put("FOOTMARK_FIRST", 1);
-                    Msg.showLong("<长按>可编辑\n<点击图片>查看详情");
+                    Msg.showLong("<长按描述>可编辑\n<点击图片>看详情");
                 }
             }
         });
