@@ -390,6 +390,10 @@ public class MapController extends ActivityController implements PermissionsList
         });
     }
 
+    public boolean isMapReady() {
+        return mapboxMap != null;
+    }
+
     public void cleanKeywordPois() {
         PoiManager.removePoiByType(mapboxMap, PoiManager.POI_TYPE_SEARCH_OTHER);
     }

@@ -132,6 +132,9 @@ public class MapActivity extends MapBaseActivity
             startActivity(LoginActivity.class);
             return;
         }
+        if (!mMapController.isMapReady()) {
+            return;
+        }
         if (showLoading) {
             loading.show("地图刷新中……");
         }
