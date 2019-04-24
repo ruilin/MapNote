@@ -2,7 +2,7 @@ package com.muyu.mapnote.message
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel;
-import com.muyu.mapnote.app.okayapi.been.OkMessageItem
+import com.muyu.mapnote.app.network.okayapi.been.OkMessageItem
 
 class MessageViewModel : ViewModel() {
     private var msgItems: MutableLiveData<ArrayList<OkMessageItem>>? = null

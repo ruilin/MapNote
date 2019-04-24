@@ -2,12 +2,11 @@ package com.muyu.mapnote.footmark;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
-import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -16,11 +15,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.muyu.mapnote.R;
-import com.muyu.minimalism.framework.app.BaseActivity;
+import com.muyu.mapnote.app.MapApplication;
+import com.muyu.mapnote.app.network.okayapi.OkayApi;
 import com.muyu.minimalism.utils.FileUtils;
 
-import java.io.File;
-
+import com.muyu.minimalism.utils.ScreenUtils;
 import com.muyu.minimalism.utils.Share2;
 import com.muyu.minimalism.utils.ShareContentType;
 
@@ -59,7 +58,9 @@ public class ShareDialog {
             editText.setSelection(editText.getText().length());
         }
 
-        ((ImageView)dialogView.findViewById(R.id.dialog_share_image)).setImageBitmap(bmp);
+        final Bitmap newBmp = drawWaterMark(bmp);
+
+        ((ImageView)dialogView.findViewById(R.id.dialog_share_image)).setImageBitmap(newBmp);
         dialogView.findViewById(R.id.dialog_share_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,9 +72,7 @@ public class ShareDialog {
             @Override
             public void onClick(View v) {
 
-
-
-                Uri uri = FileUtils.getImageUri(context, bmp);
+                Uri uri = FileUtils.getImageUri(context, newBmp);
                 new Share2.Builder(context)
                         // 指定分享的文件类型
                         .setContentType(ShareContentType.IMAGE)
@@ -88,5 +87,26 @@ public class ShareDialog {
                 mDialog.dismiss();
             }
         });
+    }
+
+    public static Bitmap drawWaterMark(Bitmap bitmap) {
+        Paint paint = new Paint();
+        paint.reset();
+        paint.setColor(Color.GRAY);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        paint.setTextSize(ScreenUtils.dip2px(MapApplication.getInstance(), 12));
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setStrokeWidth(1f);
+
+        Bitmap newBmp = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(newBmp);
+        canvas.drawColor(Color.WHITE);
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        String text = MapApplication.getInstance().getAppName();
+        if (OkayApi.get().isLogined()) {
+            text += (" @" + OkayApi.get().getCurrentUser().getNickname());
+        }
+        canvas.drawText(text, bitmap.getWidth() / 2, bitmap.getHeight() - 30, paint);
+        return newBmp;
     }
 }

@@ -1,6 +1,7 @@
 package com.muyu.mapnote.note;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -11,17 +12,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.muyu.mapnote.R;
-import com.muyu.mapnote.app.ImageLoader;
+import com.muyu.mapnote.app.network.ImageLoader;
 import com.muyu.mapnote.app.MapBaseActivity;
-import com.muyu.mapnote.app.okayapi.OkException;
-import com.muyu.mapnote.app.okayapi.OkMessage;
-import com.muyu.mapnote.app.okayapi.OkMoment;
-import com.muyu.mapnote.app.okayapi.been.OkMomentItem;
-import com.muyu.mapnote.app.okayapi.OkayApi;
-import com.muyu.mapnote.app.okayapi.callback.CommonCallback;
+import com.muyu.mapnote.app.network.okayapi.OkException;
+import com.muyu.mapnote.app.network.okayapi.OkMessage;
+import com.muyu.mapnote.app.network.okayapi.OkMoment;
+import com.muyu.mapnote.app.network.okayapi.been.OkMomentItem;
+import com.muyu.mapnote.app.network.okayapi.OkayApi;
+import com.muyu.mapnote.app.network.okayapi.callback.CommonCallback;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.poi.PoiManager;
 import com.muyu.mapnote.note.comment.CommentController;
+import com.muyu.mapnote.user.activity.RegisterActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.utils.StringUtils;
 import com.muyu.minimalism.view.MediaLoader;
@@ -31,6 +33,9 @@ import com.wuhenzhizao.titlebar.widget.CommonTitleBar;
 import com.yanzhenjie.album.Action;
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumConfig;
+import com.yanzhenjie.album.AlbumFile;
+import com.yanzhenjie.album.api.widget.Widget;
+
 import java.util.ArrayList;
 
 public class DetailActivity extends MapBaseActivity {
@@ -58,7 +63,23 @@ public class DetailActivity extends MapBaseActivity {
             TextView userTv = findViewById(R.id.detail_user);
             userTv.setText(poi.moment_nickname);
 
-            ImageLoader.loadHead(this, poi.moment_headimg, findViewById(R.id.detail_head));
+            ImageView headView = findViewById(R.id.detail_head);
+            ImageLoader.loadHead(this, poi.moment_headimg, headView);
+            headView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!StringUtils.isEmpty(poi.moment_headimg)) {
+                        // 放大预览头像
+                        ArrayList<String> list = new ArrayList<>();
+                        list.add(poi.moment_headimg);
+                        Album.gallery(DetailActivity.this)
+                                .checkedList(list) // List of image to view: ArrayList<String>.
+                                .currentPosition(0)
+                                .checkable(false) // Whether there is a selection function.
+                                .start();
+                    }
+                }
+            });
 
             TextView contentTv = findViewById(R.id.detail_content);
             if (!StringUtils.isEmpty(poi.moment_content)) {

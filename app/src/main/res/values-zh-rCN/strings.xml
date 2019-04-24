@@ -28,6 +28,7 @@
     <string name="prompt_password">密码(6~20位字母或数字)</string>
     <string name="action_sign_in">登录</string>
     <string name="action_sign_up">快速注册</string>
+    <string name="action_find_pwd">忘记密码?</string>
     <string name="action_to_sign_in">已有账号，去登录</string>
     <string name="action_sign_in_short">登录</string>
     <string name="error_invalid_mobile">手机号码不正确</string>

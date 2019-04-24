@@ -28,6 +28,7 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">sign in</string>
     <string name="action_sign_up">Quick sign up</string>
+    <string name="action_find_pwd">Forget password?</string>
     <string name="action_to_sign_in">To sign in</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_mobile">This email address is invalid</string>

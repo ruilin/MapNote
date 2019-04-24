@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import com.muyu.mapnote.R
-import com.muyu.mapnote.app.okayapi.OkException
-import com.muyu.mapnote.app.okayapi.OkFeedback
-import com.muyu.mapnote.app.okayapi.callback.CommonCallback
+import com.muyu.mapnote.app.network.okayapi.OkException
+import com.muyu.mapnote.app.network.okayapi.OkFeedback
+import com.muyu.mapnote.app.network.okayapi.callback.CommonCallback
 import com.muyu.minimalism.view.Loading
 import com.muyu.minimalism.view.Msg
 import com.wuhenzhizao.titlebar.widget.CommonTitleBar

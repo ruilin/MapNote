@@ -3,7 +3,7 @@ package com.muyu.mapnote.footmark;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.muyu.mapnote.app.okayapi.been.OkMomentItem;
+import com.muyu.mapnote.app.network.okayapi.been.OkMomentItem;
 
 import java.util.ArrayList;
 

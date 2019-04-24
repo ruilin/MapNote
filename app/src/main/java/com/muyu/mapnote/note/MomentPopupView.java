@@ -11,18 +11,13 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.muyu.mapnote.R;
-import com.muyu.mapnote.app.ImageLoader;
+import com.muyu.mapnote.app.network.ImageLoader;
 import com.muyu.mapnote.map.map.MapPluginController;
 import com.muyu.mapnote.map.map.moment.MomentPoi;
-import com.muyu.mapnote.map.map.route.RouteController;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
-import com.muyu.minimalism.framework.app.BaseActivity;
-
-import org.w3c.dom.Text;
 
 public class MomentPopupView extends PopupWindow {
     private MapPluginController controller;

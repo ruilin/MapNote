@@ -134,24 +134,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal">
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/login_to_forget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|bottom"
-                android:padding="10dp"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimaryDark"
-                android:text="忘记密码"/>
-            <View
-                android:visibility="gone"
-                android:layout_width="2px"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:background="@color/lineGray"/>
             <TextView
                 android:id="@+id/login_to_register"
                 android:layout_width="wrap_content"
@@ -161,6 +145,23 @@
                 android:textSize="14sp"
                 android:textColor="@color/colorPrimaryDark"
                 android:text="@string/action_sign_up"/>
+            <View
+                android:visibility="gone"
+                android:layout_width="2px"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:background="@color/lineGray"/>
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/login_to_forget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:padding="10dp"
+                android:textSize="14sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="@string/action_find_pwd"/>
+
         </LinearLayout>
     </RelativeLayout>
 

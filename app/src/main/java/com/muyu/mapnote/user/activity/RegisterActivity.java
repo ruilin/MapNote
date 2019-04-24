@@ -1,6 +1,7 @@
 package com.muyu.mapnote.user.activity;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -9,13 +10,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -27,21 +26,18 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.muyu.mapnote.R;
-import com.muyu.mapnote.app.Config;
+import com.muyu.mapnote.app.configure.Config;
 import com.muyu.mapnote.app.MapBaseActivity;
-import com.muyu.mapnote.app.Umeng;
-import com.muyu.mapnote.app.okayapi.OkException;
-import com.muyu.mapnote.app.okayapi.OkUser;
-import com.muyu.mapnote.app.okayapi.callback.LoginCallback;
-import com.muyu.mapnote.app.okayapi.callback.RegisterCallback;
-import com.muyu.mapnote.map.MapOptEvent;
-import com.muyu.mapnote.note.PublishActivity;
-import com.muyu.minimalism.framework.app.BaseActivity;
+import com.muyu.mapnote.app.network.Umeng;
+import com.muyu.mapnote.app.network.okayapi.OkException;
+import com.muyu.mapnote.app.network.okayapi.OkUser;
+import com.muyu.mapnote.app.network.okayapi.callback.RegisterCallback;
 import com.muyu.minimalism.utils.LoginUtils;
-import com.muyu.minimalism.utils.Logs;
 import com.muyu.minimalism.utils.SPUtils;
+import com.muyu.minimalism.utils.StringUtils;
 import com.muyu.minimalism.utils.SysUtils;
 import com.muyu.minimalism.view.BottomMenu;
+import com.muyu.minimalism.view.DialogUtils;
 import com.muyu.minimalism.view.Loading;
 import com.muyu.minimalism.view.MediaLoader;
 import com.muyu.minimalism.view.Msg;
@@ -53,7 +49,6 @@ import com.yanzhenjie.album.api.widget.Widget;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 public class RegisterActivity extends MapBaseActivity {
     private EditText mMobileView;
@@ -117,19 +112,23 @@ public class RegisterActivity extends MapBaseActivity {
         (headView = findViewById(R.id.register_head)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomMenu.show(RegisterActivity.this, new String[]{"拍照", "从相册选取"}, new BottomMenu.OnItemClickedListener() {
-                    @Override
-                    public void OnItemClicked(int position) {
-                        switch (position) {
-                            case 0:
-                                takePhotoToDir();
-                                break;
-                            case 1:
-                                showSelector();
-                                break;
-                        }
-                    }
-                });
+                requestPhoto();
+            }
+        });
+    }
+
+    private void requestPhoto() {
+        BottomMenu.show(RegisterActivity.this, new String[]{"拍照", "从相册选取"}, new BottomMenu.OnItemClickedListener() {
+            @Override
+            public void OnItemClicked(int position) {
+                switch (position) {
+                    case 0:
+                        takePhotoToDir();
+                        break;
+                    case 1:
+                        showSelector();
+                        break;
+                }
             }
         });
     }
@@ -247,56 +246,74 @@ public class RegisterActivity extends MapBaseActivity {
             focusView = mNicknameView;
             cancel = true;
         } else if (TextUtils.isEmpty(mobile)) {
-//            mMobileView.setError(getString(R.string.error_field_required));
             Msg.show(getString(R.string.error_field_required));
             focusView = mMobileView;
             cancel = true;
         } else if (!isMobileNumberValid(mobile)) {
-//            mMobileView.setError(getString(R.string.error_invalid_mobile));
             Msg.show(getString(R.string.error_invalid_mobile));
             focusView = mMobileView;
             cancel = true;
         } else if (!isPasswordValid(password)) {
-//            mPasswordView.setError(getString(R.string.error_invalid_password));
             Msg.show(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            mLoading.show("注册中……");
-
-            OkUser user = new OkUser();
-            user.setNickname(nickname);
-            user.setSex(0);
-            user.setUsername(mobile);
-            user.setPassword(password);
-            user.registerInBackground(imagePath, new RegisterCallback() {
-                @Override
-                public void done(OkException e) {
-                    SysUtils.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mLoading.dismiss();
-                            if (e == null) {
-                                SPUtils.saveObject(LoginActivity.SP_KEY_USERNAME, mobile);
-                                startActivity(LoginActivity.class);
-                                finish();
-                                Msg.show("注册成功，请登录！");
-                            } else {
-                                Msg.show(e.getMessage());
+            if (StringUtils.isEmpty(imagePath)) {
+                DialogUtils.getBaseDialogBuilder(this)
+                        .setTitle("头像")
+                        .setMessage("给自己添加一个头像，能提升魅力值喔~")
+                        .setIcon(R.mipmap.dialog_head)
+                        .setPositiveButton("添加", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                requestPhoto();
+                                dialog.dismiss();
                             }
-                        }
-                    });
-                }
-            });
+                        })
+                        .setNegativeButton("继续注册", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                doRegister(nickname, mobile, password);
+                                dialog.dismiss();
+                            }
+                        }).create().show();
+            } else {
+                doRegister(nickname, mobile, password);
+            }
         }
+    }
+
+    private void doRegister(String nickname, String mobile, String password) {
+        mLoading.show("注册中……");
+
+        OkUser user = new OkUser();
+        user.setNickname(nickname);
+        user.setSex(0);
+        user.setUsername(mobile);
+        user.setPassword(password);
+        user.registerInBackground(imagePath, new RegisterCallback() {
+            @Override
+            public void done(OkException e) {
+                SysUtils.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mLoading.dismiss();
+                        if (e == null) {
+                            SPUtils.saveObject(LoginActivity.SP_KEY_USERNAME, mobile);
+                            startActivity(LoginActivity.class);
+                            finish();
+                            Msg.show("注册成功，请登录！");
+                        } else {
+                            Msg.show(e.getMessage());
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private boolean isMobileNumberValid(String mobile) {

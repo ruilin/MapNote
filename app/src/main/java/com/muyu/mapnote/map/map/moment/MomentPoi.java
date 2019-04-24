@@ -3,7 +3,7 @@ package com.muyu.mapnote.map.map.moment;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.muyu.mapnote.app.okayapi.been.OkMomentItem;
+import com.muyu.mapnote.app.network.okayapi.been.OkMomentItem;
 import com.muyu.mapnote.map.map.poi.Poi;
 
 import java.util.ArrayList;

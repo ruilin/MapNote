@@ -29,7 +29,7 @@ public class CanvasUtils {
         canvas.drawCircle(radius, radius, radius, paint);
         canvas.drawBitmap(newBmp, 0, 0, paint);
         paint.reset();
-        paint.setColor(Color.GRAY);
+        paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(1f);
         canvas.drawCircle(radius, radius, radius - 1, paint);

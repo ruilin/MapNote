@@ -22,12 +22,12 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.MapBaseActivity;
-import com.muyu.mapnote.app.Umeng;
-import com.muyu.mapnote.app.okayapi.OkException;
-import com.muyu.mapnote.app.okayapi.been.OkMomentItem;
-import com.muyu.mapnote.app.okayapi.OkayApi;
-import com.muyu.mapnote.app.okayapi.OkMoment;
-import com.muyu.mapnote.app.okayapi.callback.MomentListCallback;
+import com.muyu.mapnote.app.network.Umeng;
+import com.muyu.mapnote.app.network.okayapi.OkException;
+import com.muyu.mapnote.app.network.okayapi.been.OkMomentItem;
+import com.muyu.mapnote.app.network.okayapi.OkayApi;
+import com.muyu.mapnote.app.network.okayapi.OkMoment;
+import com.muyu.mapnote.app.network.okayapi.callback.MomentListCallback;
 import com.muyu.mapnote.footmark.FootmarkFragment;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.MapController;
@@ -226,7 +226,7 @@ public class MapActivity extends MapBaseActivity
         /*1.首先进行fvb*/
         bottomNavigationBar = findViewById(R.id.bottom_nav_bar);
         /*2.进行必要的设置*/
-        bottomNavigationBar.setBarBackgroundColor(R.color.mapbox_plugins_white);
+        bottomNavigationBar.setBarBackgroundColor(R.color.white);
         bottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
         bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);//适应大小
 
@@ -466,7 +466,10 @@ public class MapActivity extends MapBaseActivity
             @Override
             public void onClick(View view) {
                 if (LocationHelper.INSTANCE.getLastLocation() != null) {
-                    DialogUtils.show(MapActivity.this, "打卡", "打卡当前位置——即在地图上保存坐标，之后可随时点击该位置发布游记哦~", new DialogUtils.DialogCallback() {
+                    DialogUtils.show(MapActivity.this, R.mipmap.ic_foot,
+                            "打卡",
+                            "打卡——在地图上保存当前位置，之后可随时点击该位置发表游记哦~",
+                            new DialogUtils.DialogCallback() {
                         @Override
                         public void onPositiveClick(DialogInterface dialog) {
                             mMapController.getPoi().addFootRecord(LocationHelper.INSTANCE.getLastLocationCheckChina());

@@ -24,14 +24,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.muyu.mapnote.R;
-import com.muyu.mapnote.app.Config;
+import com.muyu.mapnote.app.configure.Config;
 import com.muyu.mapnote.app.MapApplication;
 import com.muyu.mapnote.app.MapBaseActivity;
-import com.muyu.mapnote.app.Umeng;
-import com.muyu.mapnote.app.okayapi.OkException;
-import com.muyu.mapnote.app.okayapi.OkImage;
-import com.muyu.mapnote.app.okayapi.OkMoment;
-import com.muyu.mapnote.app.okayapi.callback.MomentPostCallback;
+import com.muyu.mapnote.app.network.Umeng;
+import com.muyu.mapnote.app.network.okayapi.OkException;
+import com.muyu.mapnote.app.network.okayapi.OkImage;
+import com.muyu.mapnote.app.network.okayapi.OkMoment;
+import com.muyu.mapnote.app.network.okayapi.callback.MomentPostCallback;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.poi.SearchHelper;
 import com.muyu.mapnote.map.navigation.location.LocationHelper;
@@ -53,9 +53,7 @@ import com.yanzhenjie.album.AlbumFile;
 import com.yanzhenjie.album.api.widget.Widget;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class PublishActivity extends MapBaseActivity {

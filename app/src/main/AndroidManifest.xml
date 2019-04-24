@@ -55,7 +55,7 @@
         <meta-data android:value="5c768e52b465f59b8900046c" android:name="UMENG_APPKEY"/>
         <meta-data android:value="Common_Channel" android:name="UMENG_CHANNEL"/>
 
-        <activity android:name=".app.WelcomeActivity">
+        <activity android:name=".welcome.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

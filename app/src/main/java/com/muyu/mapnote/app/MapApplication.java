@@ -6,7 +6,10 @@ import android.support.multidex.MultiDex;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.muyu.mapnote.BuildConfig;
 import com.muyu.mapnote.R;
-import com.muyu.mapnote.app.okayapi.OkayApi;
+import com.muyu.mapnote.app.configure.Config;
+import com.muyu.mapnote.app.network.Network;
+import com.muyu.mapnote.app.network.Umeng;
+import com.muyu.mapnote.app.network.okayapi.OkayApi;
 import com.muyu.minimalism.framework.app.BaseApplication;
 import com.tencent.bugly.crashreport.CrashReport;
 

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    tools:context=".app.WelcomeActivity">
+    tools:context=".welcome.WelcomeActivity">
 
     <com.ms.banner.Banner
         android:id="@+id/welcome_banner"

@@ -1,21 +1,15 @@
 package com.muyu.mapnote.map.user;
 
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.muyu.mapnote.R;
-import com.muyu.mapnote.app.okayapi.OkUser;
-import com.muyu.mapnote.app.okayapi.OkayApi;
+import com.muyu.mapnote.app.network.okayapi.OkUser;
+import com.muyu.mapnote.app.network.okayapi.OkayApi;
 import com.muyu.mapnote.map.MapOptEvent;
-import com.muyu.mapnote.map.map.poi.Poi;
-import com.muyu.mapnote.user.activity.LoginActivity;
 import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.framework.controller.ActivityController;
 import com.muyu.minimalism.utils.StringUtils;

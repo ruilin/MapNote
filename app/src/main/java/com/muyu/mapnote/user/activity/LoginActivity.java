@@ -1,8 +1,5 @@
 package com.muyu.mapnote.user.activity;
 
-import android.annotation.TargetApi;
-
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -10,8 +7,6 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -19,11 +14,10 @@ import android.widget.TextView;
 
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.MapBaseActivity;
-import com.muyu.mapnote.app.Umeng;
-import com.muyu.mapnote.app.okayapi.OkException;
-import com.muyu.mapnote.app.okayapi.OkUser;
-import com.muyu.mapnote.app.okayapi.callback.LoginCallback;
-import com.muyu.mapnote.app.okayapi.callback.RegisterCallback;
+import com.muyu.mapnote.app.network.Umeng;
+import com.muyu.mapnote.app.network.okayapi.OkException;
+import com.muyu.mapnote.app.network.okayapi.OkUser;
+import com.muyu.mapnote.app.network.okayapi.callback.LoginCallback;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.minimalism.utils.LoginUtils;
 import com.muyu.minimalism.view.Loading;
@@ -151,7 +145,8 @@ public class LoginActivity extends MapBaseActivity {
                             public void run() {
                                 mLoading.dismiss();
                                 if (e == null) {
-                                    Msg.show("登录成功!");
+                                    //Msg.show("登录成功!");
+                                    Umeng.login(mobile);
                                     MapOptEvent.loginSuccess();
                                     finish();
                                 } else {

@@ -11,11 +11,10 @@ import android.widget.SearchView;
 
 import com.muyu.mapnote.R;
 import com.muyu.mapnote.app.MapBaseActivity;
-import com.muyu.mapnote.app.Umeng;
+import com.muyu.mapnote.app.network.Umeng;
 import com.muyu.mapnote.map.MapOptEvent;
 import com.muyu.mapnote.map.map.poi.Poi;
 import com.muyu.mapnote.map.map.poi.SearchHelper;
-import com.muyu.minimalism.framework.app.BaseActivity;
 import com.muyu.minimalism.view.recyclerview.CommonRecyclerAdapter;
 import com.muyu.minimalism.view.recyclerview.CommonViewHolder;
 import com.muyu.minimalism.view.recyclerview.VerticalRecyclerView;
